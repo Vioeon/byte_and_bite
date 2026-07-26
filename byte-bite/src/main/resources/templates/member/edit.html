@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 정보 수정 및 탈퇴</title>
+  <link rel="stylesheet" href="/board/css/common.css">
+  <link rel="stylesheet" href="/board/css/write.css">
+  <link rel="stylesheet" href="/board/css/list.css">
+  <style>
+    input[type="password"], input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>회원 정보 수정</h1>
+    <form action="/member/edit" method="post" th:object="${memberForm}">
+      <input type="hidden" th:field="*{id}" value="1">
+      <div class="form-group">
+        <label for="username">아이디</label>
+        <input type="text" id="username" th:field="*{username}" value="haru" readonly> <!--readonly 읽기전용(수정 불가)-->
+        <div class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">에러 메시지</div>
+      </div>
+      <div class="form-group">
+        <label for="password">새 비밀번호</label>
+        <input type="password" id="password" th:field="*{password}" required>
+        <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">에러 메시지</div>
+      </div>
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="email" id="email" th:field="*{email}" value="user1@example.com">
+        <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">에러 메시지</div>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn">수정하기</button>
+        <a href="list.html" class="btn btn-secondary">목록으로</a>
+      </div>
+    </form>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+    <h1>회원 탈퇴</h1>
+    <form th:action="@{withdraw(id=${memberForm.id})}" method="post">
+      <!--form에서 memberForm.id 값을 가지고 있으므로 input 없어도 됨
+      <input type="hidden" name="id" th:value="${memberForm.id}">-->
+      <div class="form-group">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('정말로 탈퇴하시겠습니까?');">탈퇴하기</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
