@@ -1,0 +1,53 @@
+name: Discord PR Notification
+
+on:
+  pull_request:
+    types: [opened, closed]
+
+jobs:
+  discord:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Discord Notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ "${{ github.event.action }}" = "opened" ]; then
+            TITLE="🔔 새로운 PR 생성"
+            COLOR=581478
+          elif [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            TITLE="✅ PR Merge 완료"
+            COLOR=5763719
+          else
+            TITLE="❌ PR 닫힘"
+            COLOR=15548997
+          fi
+
+          jq -n \
+          --arg title "$TITLE" \
+          --argjson color "$COLOR" \
+          --arg url "${{ github.event.pull_request.html_url }}" \
+          --arg content "$(printf '작성자: %s\nPR 번호: #%s\n제목: %s\n브랜치: %s' \
+          "${{ github.actor }}" \
+          "${{ github.event.pull_request.number }}" \
+          "${{ github.event.pull_request.title }}" \
+          "${{ github.event.pull_request.head.ref }}")" \
+          '{
+            embeds: [
+              {
+                title: $title,
+                url: $url,
+                description: $content,
+                color: $color,
+                footer: {
+                  text: "GitHub Pull Request Notification"
+                },
+                timestamp: now | todate
+              }
+            ]
+          }' \
+          | curl \
+            -H "Content-Type: application/json" \
+            -d @- \
+            "$DISCORD_WEBHOOK"
