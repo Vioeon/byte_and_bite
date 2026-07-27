@@ -22,7 +22,7 @@ erDiagram
         int member_id PK
         varchar_100 email
         varchar_255 password
-        varchar_50 name
+        varchar_50 nickname
         boolean is_manager
         datetime created_at
         datetime updated_at
@@ -31,7 +31,10 @@ erDiagram
     RESTAURANT {
         int restaurant_id PK
         int member_id FK
+        int category
         varchar_100 name
+        varchar_255 address
+        varchar_20 phone
     }
 
     POST {
@@ -39,6 +42,7 @@ erDiagram
         int member_id FK
         varchar_200 title
         text content
+        int view_count
         datetime created_at
         datetime updated_at
     }
@@ -67,7 +71,7 @@ erDiagram
 - member_id: INT, PRIMARY KEY, AUTO_INCREMENT (회원 고유 식별자)
 - email: VARCHAR(100), NOT NULL (이메일 아이디)
 - password: VARCHAR(255), NOT NULL (비밀번호)
-- name: VARCHAR(50), NOT NULL (회원 이름)
+- nickname: VARCHAR(50), NOT NULL (회원 이름)
 - is_manager: BOOLEAN, NOT NULL DEFAULT FALSE (0: 일반회원, 1: 식당관계자)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (가입 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (정보 수정시 갱신)
@@ -75,7 +79,10 @@ erDiagram
 ### 1.2.2 restaurant (식당 테이블)
 - id: INT, PRIMARY KEY, AUTO_INCREMENT (식당 고유 식별자)
 - member_id: INT UNIQUE, FOREIGN KEY (식당 관계자와 식당 이름 연결)
+- category: INT, NOT NULL (음식 카테고리)
 - name: VARCHAR(100), NOT NULL (식당 이름)
+- address: VARCHAR(255), NOT NULL (식당 주소)
+- phone: VARCHAR(20), NOT NULL (식당 연락처)
 
 ### 1.2.3 post (게시글 테이블)
 - post_id: INT, PRIMARY KEY, AUTO_INCREMENT (게시글 고유 식별자)
@@ -105,35 +112,35 @@ erDiagram
 
 ```sql
 CREATE TABLE member (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    name VARCHAR(50) NOT NULL,
-    phone VARCHAR(20),
-    recommender_id INT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_member_recommender FOREIGN KEY (recommender_id) REFERENCES member(id) ON DELETE SET NULL
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        email VARCHAR(100) NOT NULL,
+                        password VARCHAR(255) NOT NULL,
+                        name VARCHAR(50) NOT NULL,
+                        phone VARCHAR(20),
+                        recommender_id INT,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        CONSTRAINT fk_member_recommender FOREIGN KEY (recommender_id) REFERENCES member(id) ON DELETE SET NULL
 );
 
 CREATE TABLE post (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    member_id INT NULL,
-    writer_name VARCHAR(50) NULL,
-    password VARCHAR(255) NULL,
-    title VARCHAR(200) NOT NULL,
-    content TEXT NOT NULL,
-    view_count INT NOT NULL DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE SET NULL
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      member_id INT NULL,
+                      writer_name VARCHAR(50) NULL,
+                      password VARCHAR(255) NULL,
+                      title VARCHAR(200) NOT NULL,
+                      content TEXT NOT NULL,
+                      view_count INT NOT NULL DEFAULT 0,
+                      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                      CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE SET NULL
 );
 
 CREATE TABLE reply (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT NOT NULL,
-    member_id INT NOT NULL,
-    content TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
-    CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE CASCADE
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       post_id INT NOT NULL,
+                       member_id INT NOT NULL,
+                       content TEXT NOT NULL,
+                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                       CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+                       CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE CASCADE
 );
 ```
