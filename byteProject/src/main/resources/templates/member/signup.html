@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+
+    <link rel="stylesheet" th:href="@{/css/signup.css}">
+</head>
+<body>
+<div class="wrapper">
+    <!-- 슬로건 -->
+    <div class="slogan">
+        <p>맛있는 한입을<br>함께 나누다.</p>
+        <h1>Byte &amp; Bite</h1>
+    </div>
+
+    <!-- 회원가입 박스 -->
+    <div class="signup-box">
+        <h2>회원가입</h2>
+
+        <form>
+            <input type="text" placeholder="이름" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" required>
+            <input type="password" placeholder="Password 확인" required>
+
+            <div class="member-type">
+                <label>
+                    <input type="radio" name="role" checked>사용자
+                </label>
+
+                <label>
+                    <input type="radio" name="role">식당 관계자
+                </label>
+            </div>
+
+            <button type="submit">회원가입</button>
+        </form>
+
+        <div class="links">
+            <span>이미 계정이 있으신가요?</span>
+            <a href="/bytebite/member/login">로그인</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
