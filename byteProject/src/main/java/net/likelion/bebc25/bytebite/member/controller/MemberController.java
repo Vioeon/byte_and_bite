@@ -37,6 +37,11 @@ public class MemberController {
         return "member/login";
     }
 
+    @GetMapping("/signup")
+    public String signup() {
+        return "member/signup";
+    }
+
     /**
      * 전체 회원 목록을 조회하고 회원 목록 정적 화면으로 유도합니다.
      *

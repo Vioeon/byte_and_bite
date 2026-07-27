@@ -51,33 +51,24 @@ body::after {
     margin-bottom: 10px;
 }
 
-/* 로그인 박스 */
-.login-box {
-    width: 380px;
+/* 회원가입 박스 */
+.signup-box {
+    width: 420px;
     padding: 40px;
 
-    /* 반투명 */
-    background: rgba(255, 255, 255, 0.25);
-
-    /* 모서리 둥글게 */
-    border-radius: 20px;
-
-    /* 그림자 */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-
-    /* 유리 느낌 */
+    background: rgba(255,255,255,0.25);
     backdrop-filter: blur(8px);
+
+    border-radius: 20px;
 
     text-align: center;
 }
 
-/* 제목 */
-.login-box h2 {
-    margin-bottom: 30px;
+.signup-box h2 {
+    margin-bottom: 25px;
 }
 
-/* 입력창 */
-.login-box input {
+.signup-box input {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
@@ -86,8 +77,27 @@ body::after {
     border-radius: 8px;
 }
 
-/* 로그인 버튼 */
-.login-box button {
+.member-type {
+    display: flex;
+    justify-content: space-evenly;
+
+    margin: 15px 0 20px;
+}
+
+.member-type label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    white-space: nowrap;
+}
+
+.member-type input {
+    margin: 0;
+    transform: translateY(1px);
+}
+
+.signup-box button {
     width: 100%;
     padding: 12px;
 
