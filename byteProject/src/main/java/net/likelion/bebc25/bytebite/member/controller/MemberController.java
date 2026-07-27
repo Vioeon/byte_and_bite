@@ -32,6 +32,11 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "member/login";
+    }
+
     /**
      * 전체 회원 목록을 조회하고 회원 목록 정적 화면으로 유도합니다.
      *
