@@ -14,35 +14,48 @@
 erDiagram
     MEMBER ||--o{ POST : writes
     MEMBER ||--o{ REPLY : writes
+    MEMBER ||--o| RESTAURANT : contains
+    POST ||--o{ LIKE : contains
     POST ||--o{ REPLY : contains
 
     MEMBER {
-        int id PK
+        int member_id PK
         varchar_100 email
         varchar_255 password
         varchar_50 name
-        varchar_20 phone
-        int recommender_id FK
+        boolean is_manager
         datetime created_at
+        datetime updated_at
+    }
+    
+    RESTAURANT {
+        int restaurant_id PK
+        int member_id FK
+        varchar_100 name
     }
 
     POST {
-        int id PK
+        int post_id PK
         int member_id FK
-        varchar_50 writer_name
-        varchar_255 password
         varchar_200 title
         text content
-        int view_count
         datetime created_at
+        datetime updated_at
+    }
+    
+    LIKE {
+        int post_id PK, FK
+        int member_id PK, FK
+        boolean is_checked
     }
 
     REPLY {
-        int id PK
+        int reply_id PK
         int post_id FK
         int member_id FK
         text content
         datetime created_at
+        datetime updated_at
     }
 ```
 
@@ -51,30 +64,40 @@ erDiagram
 ## 1.2 테이블 상세 명세서
 
 ### 1.2.1 member (회원 테이블)
-- id: INT, PRIMARY KEY, AUTO_INCREMENT (회원 고유 식별자)
+- member_id: INT, PRIMARY KEY, AUTO_INCREMENT (회원 고유 식별자)
 - email: VARCHAR(100), NOT NULL (이메일 아이디)
 - password: VARCHAR(255), NOT NULL (비밀번호)
 - name: VARCHAR(50), NOT NULL (회원 이름)
-- phone: VARCHAR(20), NULL (전화번호)
-- recommender_id: INT, FOREIGN KEY (추천인 식별자)
+- is_manager: BOOLEAN, NOT NULL DEFAULT FALSE (0: 일반회원, 1: 식당관계자)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (가입 일시)
+- updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (정보 수정시 갱신)
 
-### 1.2.2 post (게시글 테이블)
-- id: INT, PRIMARY KEY, AUTO_INCREMENT (게시글 고유 식별자)
-- member_id: INT, FOREIGN KEY, NULL (작성자 회원 식별자, 익명 글인 경우 NULL)
-- writer_name: VARCHAR(50), NULL (익명 작성자 이름)
-- password: VARCHAR(255), NULL (익명 게시글 삭제용 비밀번호)
+### 1.2.2 restaurant (식당 테이블)
+- id: INT, PRIMARY KEY, AUTO_INCREMENT (식당 고유 식별자)
+- member_id: INT UNIQUE, FOREIGN KEY (식당 관계자와 식당 이름 연결)
+- name: VARCHAR(100), NOT NULL (식당 이름)
+
+### 1.2.3 post (게시글 테이블)
+- post_id: INT, PRIMARY KEY, AUTO_INCREMENT (게시글 고유 식별자)
+- member_id: INT, FOREIGN KEY (작성자 회원 식별자)
 - title: VARCHAR(200), NOT NULL (게시글 제목)
 - content: TEXT, NOT NULL (게시글 본문)
 - view_count: INT, DEFAULT 0 (조회수)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (작성 일시)
+- updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (글 수정시 갱신)
 
-### 1.2.3 reply (댓글 테이블)
-- id: INT, PRIMARY KEY, AUTO_INCREMENT (댓글 고유 식별자)
+### 1.2.4 like (좋아요 테이블)
+- post_id: INT, PRIMARY KEY, FOREIGN KEY (대상 게시글 식별자)
+- member_id: INT, PRIMARY KEY, FOREIGN KEY (좋아요 누른 회원 식별자)
+- is_checked: BOOLEAN, NOT NULL DEFAULT FALSE (좋아요 여부)
+
+### 1.2.5 reply (댓글 테이블)
+- reply_id: INT, PRIMARY KEY, AUTO_INCREMENT (댓글 고유 식별자)
 - post_id: INT, FOREIGN KEY (대상 게시글 식별자)
 - member_id: INT, FOREIGN KEY (댓글 작성자 식별자)
 - content: TEXT, NOT NULL (댓글 내용)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (작성 일시)
+- updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (댓글 수정시 갱신)
 
 ---
 
