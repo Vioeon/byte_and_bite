@@ -48,8 +48,9 @@ erDiagram
     }
     
     LIKE {
-        int post_id PK, FK
-        int member_id PK, FK
+        int like_id PK
+        int post_id FK, UK
+        int member_id FK, UK
         boolean is_checked
     }
 
@@ -77,7 +78,7 @@ erDiagram
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (정보 수정시 갱신)
 
 ### 1.2.2 restaurant (식당 테이블)
-- id: INT, PRIMARY KEY, AUTO_INCREMENT (식당 고유 식별자)
+- restaurant_id: INT, PRIMARY KEY, AUTO_INCREMENT (식당 고유 식별자)
 - member_id: INT UNIQUE, FOREIGN KEY (식당 관계자와 식당 이름 연결)
 - category: INT, NOT NULL (음식 카테고리)
 - name: VARCHAR(100), NOT NULL (식당 이름)
@@ -94,8 +95,9 @@ erDiagram
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (글 수정시 갱신)
 
 ### 1.2.4 like (좋아요 테이블)
-- post_id: INT, PRIMARY KEY, FOREIGN KEY (대상 게시글 식별자)
-- member_id: INT, PRIMARY KEY, FOREIGN KEY (좋아요 누른 회원 식별자)
+- like_id: INT, PRIMARY KEY, AUTO_INCREMENT (좋아요 고유 식별자)
+- post_id: INT, FOREIGN KEY, UNIQUE KEY (대상 게시글 식별자)
+- member_id: INT, FOREIGN KEY, UNIQUE KEY (좋아요 누른 회원 식별자, 유니크 키 조합으로 중복 방지)
 - is_checked: BOOLEAN, NOT NULL DEFAULT FALSE (좋아요 여부)
 
 ### 1.2.5 reply (댓글 테이블)
@@ -112,35 +114,56 @@ erDiagram
 
 ```sql
 CREATE TABLE member (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        email VARCHAR(100) NOT NULL,
+                        member_id INT AUTO_INCREMENT PRIMARY KEY,
+                        email VARCHAR(100) NOT NULL UNIQUE,
                         password VARCHAR(255) NOT NULL,
-                        name VARCHAR(50) NOT NULL,
-                        phone VARCHAR(20),
-                        recommender_id INT,
+                        nickname VARCHAR(50) NOT NULL,
+                        is_manager BOOLEAN NOT NULL DEFAULT FALSE,
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        CONSTRAINT fk_member_recommender FOREIGN KEY (recommender_id) REFERENCES member(id) ON DELETE SET NULL
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE restaurant (
+                            restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
+                            member_id INT NOT NULL UNIQUE,
+                            category INT NOT NULL,
+                            name VARCHAR(100) NOT NULL,
+                            address VARCHAR(255) NOT NULL,
+                            phone VARCHAR(20) NOT NULL,
+                            CONSTRAINT fk_restaurant_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
 
 CREATE TABLE post (
-                      id INT AUTO_INCREMENT PRIMARY KEY,
-                      member_id INT NULL,
-                      writer_name VARCHAR(50) NULL,
-                      password VARCHAR(255) NULL,
+                      post_id INT AUTO_INCREMENT PRIMARY KEY,
+                      member_id INT NOT NULL,
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                      CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE SET NULL
+                      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE `like` (
+                      like_id INT AUTO_INCREMENT PRIMARY KEY,
+                      post_id INT NOT NULL,
+                      member_id INT NOT NULL,
+                      is_checked BOOLEAN NOT NULL DEFAULT FALSE,
+                      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                      UNIQUE KEY uk_post_member (post_id, member_id),  -- 중복 좋아요 방지
+                      FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
+                      FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
 
 CREATE TABLE reply (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       reply_id INT AUTO_INCREMENT PRIMARY KEY,
                        post_id INT NOT NULL,
                        member_id INT NOT NULL,
                        content TEXT NOT NULL,
                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                       CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
-                       CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE CASCADE
+                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                       CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
+                       CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
 ```
