@@ -34,7 +34,7 @@
 
 [맛집 리뷰 목록]
 
-<img src="../images/01_post_list.png" width="500" alt="맛집 리뷰 목록 화면 ">
+<img src="../images/01_post_list.png" width="400" alt="맛집 리뷰 목록 화면 ">
 
 - 출력 데이터 항목 (Output Data):
     - GNB(Global Navigation Bar) 영역 : 서비스 타이틀, 로그아웃, 맛집리뷰, 맛집소식, 마이페이지
@@ -55,7 +55,7 @@
 
 [맛집 리뷰 상세]
 
-<img src="../images/02_post_detail1.png" width="200" alt="맛집 리뷰 상세 화면1">&nbsp;&nbsp;<img src="../images/02_post_detail2.png" width="200" alt="맛집 리뷰 상세 화면2">
+<img src="../images/02_post_detail1.png" width="400" alt="맛집 리뷰 상세 화면1">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/02_post_detail2.png" width="400" alt="맛집 리뷰 상세 화면2">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 댓글 :  공백 제출 제한, 최대 100자 이하
@@ -72,7 +72,7 @@
 
 [맛집 리뷰 작성]
 
-<img src="../images/03_post_detail_write.png" width="500" alt="맛집 리뷰 상세 작성 화면">
+<img src="../images/03_post_detail_write.png" width="400" alt="맛집 리뷰 상세 작성 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 제목: 필수 입력 항목, 공백 제출 제한, 최대 50자 이하
@@ -87,7 +87,7 @@
 
 [맛집 리뷰 수정]
 
-<img src="../images/04_post_edit.png" width="500" alt="맛집 리뷰 수정 화면">
+<img src="../images/04_post_edit.png" width="400" alt="맛집 리뷰 수정 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 제목: 필수 입력 항목, 공백 제출 제한, 최대 50자 이하
@@ -100,7 +100,7 @@
 
 ### 2.5 맛집 소식 목록 화면 (GET `/news`)
 
-<img src="../images/05_news_list.png" width="500" alt="맛집 소식 목록 화면">
+<img src="../images/05_news_list.png" width="400" alt="맛집 소식 목록 화면">
 
 - 출력 데이터 항목 (Output Data):
     - GNB(Global Navigation Bar) 영역 : 서비스 타이틀, 로그아웃, 맛집리뷰, 맛집소식, 마이페이지
@@ -119,7 +119,7 @@
 
 ### 2.6 맛집 소식 상세 화면 (GET `/news/{newsId}`)
 
-<img src="../images/06_news_detail.png" width="500" alt="맛집 소식 상세 화면">
+<img src="../images/06_news_detail.png" width="400" alt="맛집 소식 상세 화면">
 
 - 출력 데이터 항목 (Output Data):
     - 상단 영역: 식당 대표 이미지, 맛집 정보(식당명, 카테고리, 주소, 전화번호)
@@ -130,7 +130,7 @@
 
 ### 2.7 맛집 소식 작성 화면 (GET `/news/write`)
 
-<img src="../images/07_news_write.png" width="500" alt="맛집 소식 작성 화면">
+<img src="../images/07_news_write.png" width="400" alt="맛집 소식 작성 화면">
 
 출력 데이터 항목 (Output Data): 
 
@@ -144,7 +144,7 @@
 
 ### 2.8 맛집 소식 수정 화면 (GET `/news/edit`)
 
-<img src="../images/08_news_edit.png" width="500" alt="맛집 소식 수정 화면">
+<img src="../images/08_news_edit.png" width="400" alt="맛집 소식 수정 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 제목: 필수 입력 항목, 공백 제출 제한, 최대 50자 이하
@@ -156,7 +156,7 @@
 
 ### 2.9 마이페이지 화면 - 일반 사용자 (GET `/mypage`)
 
-<img src="../images/09_mypage_user.png" width="200" alt="마이페이지 화면 - 일반 사용자">&nbsp;&nbsp;<img src="../images/09_mypage_change_nickname.png" width="200" alt="마이페이지 화면 - 일반 사용자">
+<img src="../images/09_mypage_user.png" width="400" alt="마이페이지 화면 - 일반 사용자">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/09_mypage_change_nickname.png" width="200" alt="마이페이지 화면 - 일반 사용자">
 
 - 출력 데이터 항목 (Output Data):
     - 상단 영역: 내 정보(닉네임, 이메일, 계정 생성일)
@@ -169,7 +169,7 @@
 
 ### 2.10 마이페이지 화면 - 맛집 운영자 (GET `/mypage/restaurant`)
 
-<img src="../images/10_mypage_restaurant.png" width="500" alt="마이페이지 화면 - 맛집 운영자">
+<img src="../images/10_mypage_restaurant.png" width="400" alt="마이페이지 화면 - 맛집 운영자">
 
 - 출력 데이터 항목 (Output Data):
     - 상단 영역: 내 정보(닉네임, 이메일, 계정 생성일), 맛집 정보(식당명, 카테고리, 주소, 전화번호)
@@ -182,7 +182,7 @@
 
 ### 2.11 맛집 정보 수정 화면 (GET `/mypage/restaurant/edit`)
 
-<img src="../images/11_mypage_restaurant_edit.png" width="500" alt="맛집 정보 수정 화면">
+<img src="../images/11_mypage_restaurant_edit.png" width="400" alt="맛집 정보 수정 화면">
 
 - 출력 데이터 항목 (Output Data):
     - 등록되어있는 식당명, 카테고리, 주소, 전화번호, 이미지
@@ -197,7 +197,7 @@
 
 ### 2.12 로그인 (GET `/member/login`)
 
-<img src="../images/12_login.png" width="500" alt="로그인">
+<img src="../images/12_login.png" width="400" alt="로그인">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 이메일 : 필수 입력 항목, 공백 제출 제한, 최대 50자 이하
@@ -208,7 +208,7 @@
 
 ### 2.13 비밀번호 변경 (GET `/member/password/reset`)
 
-<img src="../images/13_password_reset1.png" width="200" alt="비밀번호 변경 본인 확인 검증 화면">&nbsp;&nbsp;<img src="../images/13_password_reset2.png" width="200" alt="비밀번호 변경 화면">
+<img src="../images/13_password_reset1.png" width="400" alt="비밀번호 변경 본인 확인 검증 화면">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/13_password_reset2.png" width="400" alt="비밀번호 변경 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 새 비밀번호 : 공백 제출 제한, 최소 8자 ~ 최대 20자 이하
@@ -218,7 +218,7 @@
 
 ### 2.14 회원가입 화면 (GET `/member/signup`)
 
-<img src="../images/14_signup.png" width="200" alt="회원가입 화면">
+<img src="../images/14_signup.png" width="400" alt="회원가입 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 닉네임 : 필수 입력 항목, 공백 제출 제한, 최대 20자 이하
@@ -231,7 +231,7 @@
 
 ### 2.15 식당정보 등록 화면 (GET `/member/signup/restaurant`)
 
-<img src="../images/15_signup_restaurant.png" width="200" alt="식당정보 등록 화면">
+<img src="../images/15_signup_restaurant.png" width="400" alt="식당정보 등록 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 식당명 : 필수 입력 항목, 공백 제출 제한, 최대 50자 이하
