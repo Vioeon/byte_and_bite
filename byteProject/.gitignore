@@ -242,4 +242,4 @@ out/
 application.properties
 
 # Uploaded images
-src/main/resources/static/uploads/
+**/src/main/resources/static/uploads/
