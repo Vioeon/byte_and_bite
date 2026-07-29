@@ -1,0 +1,171 @@
+/* 기본 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+c
+body {
+    background-color: #f5f6f7;
+    color: #333;
+    padding: 40px 20px;
+}
+
+/* 전체 컨테이너 */
+.mypage-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 헤더 */
+.mypage-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.mypage-header h1 {
+    font-size: 28px;
+    color: #111;
+}
+
+/* 회원 정보 카드 */
+.profile-section {
+    margin-bottom: 40px;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.profile-avatar {
+    font-size: 50px;
+    background-color: #e9ecef;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 25px;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+.profile-info .email {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.profile-info .join-date {
+    color: #999;
+    font-size: 13px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-secondary {
+    background-color: #fff;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+.btn-secondary:hover {
+    background-color: #f8f9fa;
+    border-color: #b1bbc4;
+}
+
+/* 활동 내역 섹션 */
+.activity-section h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* 가로 해상도가 낮아지면 1열로 변경 (모바일 대응) */
+@media (max-width: 768px) {
+    .activity-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.activity-box {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.activity-box h4 {
+    font-size: 16px;
+    color: #495057;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* 활동 리스트 */
+.activity-list {
+    list-style: none;
+}
+
+.activity-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.activity-list li:last-child {
+    border-bottom: none;
+}
+
+.activity-list a {
+    color: #343a40;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 75%;
+}
+
+.activity-list a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.activity-list .date {
+    font-size: 12px;
+    color: #adb5bd;
+}
