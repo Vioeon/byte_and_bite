@@ -108,6 +108,25 @@ body::after {
     cursor: pointer;
 }
 
+.image-upload {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.image-upload label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.image-upload input[type="file"] {
+    width: 100%;
+    padding: 10px;
+
+    background: white;
+    border-radius: 8px;
+}
+
 /* 하단 링크 */
 .links {
     margin-top: 20px;

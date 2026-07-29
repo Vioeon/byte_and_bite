@@ -1,9 +1,12 @@
 package net.likelion.bebc25.bytebite.member.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import net.likelion.bebc25.bytebite.member.dto.LoginDto;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
+import net.likelion.bebc25.bytebite.member.dto.SignupDto;
 import net.likelion.bebc25.bytebite.member.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +21,7 @@ import java.util.List;
  */
 @Controller
 @Slf4j
-@RequestMapping("/bytebite/member")
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -37,10 +40,70 @@ public class MemberController {
         return "member/login";
     }
 
+    // 회원가입 화면
     @GetMapping("/signup")
-    public String signup() {
+    public String getSignupForm(@ModelAttribute("SignupForm") SignupDto signupDto) {
         return "member/signup";
     }
+
+    // 회원가입
+    @PostMapping("/signup")
+    public String signup(@Valid @ModelAttribute("signupForm") SignupDto signupDto,
+                           BindingResult bindingResult, HttpSession session, Model model) {
+        // 비밀번호 일치 확인
+        if (!signupDto.getPassword().equals(signupDto.getPasswordConfirm())) {
+            bindingResult.rejectValue(
+                    "passwordConfirm",
+                    "passwordMismatch",
+                    "비밀번호가 일치하지 않습니다."
+            );
+        }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(
+                    "errorMessage",
+                    bindingResult.getAllErrors().get(0).getDefaultMessage()
+            );
+            return "member/signup";
+        }
+
+        // 맛집 운영자
+        if(signupDto.getRole() == 1){
+            session.setAttribute("signupForm", signupDto);
+            return "redirect:/member/signup/restaurant";
+        }
+
+        // 일반 사용자
+        memberService.signup(signupDto);
+        return "redirect:/member/login.html";
+    }
+
+    // 맛집 정보 등록 화면으로 이동
+    @GetMapping("/signup/restaurant")
+    public String getResSignupForm(@ModelAttribute("restaurantForm") RestaurantDto restaurantDto) {
+        return "member/resSignup";
+    }
+
+    @PostMapping("/signup/restaurant")
+    public String restaurantSignup(@Valid @ModelAttribute("restaurantForm") RestaurantDto restaurantDto,
+            BindingResult bindingResult, HttpSession session) {
+
+        // 식당 정보 검증
+        if (bindingResult.hasErrors()) {
+            return "member/resSignup";
+        }
+
+        // 회원가입 때 임시 저장한 회원정보 가져오기
+        SignupDto signupDto = (SignupDto) session.getAttribute("signupForm");
+
+        // 회원 + 식당 저장
+        memberService.signupWithRestaurant(signupDto, restaurantDto);
+
+        // 사용한 세션 제거
+        session.removeAttribute("signupForm");
+
+        return "redirect:/member/login";
+    }
+
 
     @GetMapping("/resSignup")
     public String resSignup() {
@@ -61,43 +124,10 @@ public class MemberController {
         return "member/list";
     }
 
-    /**
-     * 회원 가입 양식 화면으로 유도합니다.
-     *
-     * @return 회원 가입 화면으로의 redirect 경로
-     */
-    @GetMapping("/register.html") // 회원가입 버튼 누르면
-    public String getRegisterForm(@ModelAttribute("memberForm") MemberDto memberDto) {
-        // 실습 영역
-        return "member/register";
-    }
 
-    /**
-     * 신규 회원 가입 요청 데이터를 받아 등록 처리를 수행합니다.
-     *
-     * @param memberDto 회원 가입 폼 입력 데이터 DTO
-     * @return 로그인 화면으로의 redirect 경로
-     */
-    @PostMapping("/register")  // register.html에서 입력받은 데이터가 있는 memberForm객체를 MemberDto 타입의 memberDto 객체로 받아온다.
-    public String register(@Valid @ModelAttribute("memberForm") MemberDto memberDto, // Validation 검증 대상 객체
-                           BindingResult bindingResult) {
-        // 실습 영역
-        if (bindingResult.hasErrors()) { // 검증에 실패했을 경우
-            return "member/register"; // 작성중이던 페이지로 다시 보낸다.
-        }
-        memberService.register(memberDto);  // db에 데이터 저장
-
-        return "redirect:/member/login.html"; // 로그인 창 띄움
-    }
-
-    /**
-     * 로그인 양식 화면으로 유도합니다.
-     *
-     * @return 로그인 화면으로의 redirect 경로
-     */
+    // 로그인 화면으로 이동
     @GetMapping("/login.html")
     public String getLoginForm(@ModelAttribute("loginForm") MemberDto memberDto) {
-        // 실습 영역
         return "member/login";
     }
 
@@ -144,11 +174,11 @@ public class MemberController {
             return "member/login";
         }
         // 로그인 성공
-        else{
+        else {
             // RedirectAttributes 리다이렉트할 때 데이터를 잠깐 전달하기 위한 객체
             redirectAttributes.addFlashAttribute(
                     "successMessage",
-                    memberDto.getUsername() + " 님 환영합니다!");
+                    memberDto.getNickname() + " 님 환영합니다!");
 
             return "redirect:/member/list.html";
         }

@@ -1,76 +1,76 @@
 package net.likelion.bebc25.bytebite.member.service;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
+import net.likelion.bebc25.bytebite.member.dto.SignupDto;
 import net.likelion.bebc25.bytebite.member.repository.MemberRepository;
+import net.likelion.bebc25.bytebite.member.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
-/**
- * MemberService 인터페이스의 비즈니스 로직을 처리하는 기본 구현 클래스입니다.
- */
 @Service
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final FileService fileService;
 
-    /**
-     * 생성자를 통해 MemberRepository 의존성을 주입받습니다.
-     *
-     * @param memberRepository 주입받을 MemberRepository 스프링 빈 객체
-     */
-    public MemberServiceImpl(@Qualifier("jdbcTemplateMemberRepository") MemberRepository memberRepository) {
+    public MemberServiceImpl(@Qualifier("jdbcMemberRepository") MemberRepository memberRepository, RestaurantRepository restaurantRepository, FileService fileService) {
         this.memberRepository = memberRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.fileService = fileService;
     }
 
-    /**
-     * {@inheritDoc} 회원가입
-     */
+    // 회원가입
     @Override
-    public void register(MemberDto member) {
-        // 실습 영역
-        memberRepository.save(member);
+    public void signup(SignupDto signupDto) {
+
+        memberRepository.save(signupDto);
     }
 
-    /**
-     * {@inheritDoc} 로그인
-     */
+    @Transactional
+    public void signupWithRestaurant(SignupDto signupDto, RestaurantDto restaurantDto) {
+        int memberId = memberRepository.save(signupDto);
+
+        String imagePath = fileService.save(restaurantDto.getImage());
+
+        restaurantDto.setMemberId(memberId);
+        restaurantDto.setImageUrl(imagePath);
+        restaurantRepository.save(restaurantDto);
+    }
+
+    // 로그인
     @Override
     public MemberDto login(String username, String password) {
-        // 실습 영역
+
         return memberRepository.findByUsername(username);
     }
 
-    /**
-     * {@inheritDoc} 회원정보 수정
-     */
+    // 회원정보 수정
     @Override
     public void modifyInfo(MemberDto member) {
-        // 실습 영역
+
         memberRepository.update(member);
     }
 
-    /**
-     * {@inheritDoc} 탈퇴
-     */
+    // 탈퇴
     @Override
     public void withdraw(int id) {
-        // 실습 영역
+
         memberRepository.deleteById(id);
     }
 
-    /**
-     * {@inheritDoc} 회원 조회
-     */
+    // 회원 목록 조회
     @Override
     public List<MemberDto> getMembers() {
         return memberRepository.findAll();
     }
 
-    /**
-     * {@inheritDoc} 회원 id로 조회
-     */
+    // 회원 조회 - id
     @Override
     public MemberDto getMember(int id) {
         return memberRepository.findById(id);
