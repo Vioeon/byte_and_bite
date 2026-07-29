@@ -24,6 +24,8 @@ CREATE TABLE member (
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS restaurant;
+
 CREATE TABLE restaurant (
                             restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
                             member_id INT NOT NULL UNIQUE,
@@ -36,6 +38,8 @@ CREATE TABLE restaurant (
                             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                             CONSTRAINT fk_restaurant_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS post;
 
 CREATE TABLE post (
                       post_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -64,6 +68,8 @@ CREATE TABLE news (
                       CONSTRAINT fk_news_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
                       CONSTRAINT fk_news_restaurant FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS reply;
 
 CREATE TABLE reply (
                        reply_id INT AUTO_INCREMENT PRIMARY KEY,

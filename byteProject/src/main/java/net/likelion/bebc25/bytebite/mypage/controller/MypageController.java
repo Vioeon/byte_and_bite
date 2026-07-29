@@ -1,4 +1,4 @@
-package net.likelion.bebc25.bytebite.member.controller;
+package net.likelion.bebc25.bytebite.mypage.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ import java.util.List;
  */
 @Controller
 @Slf4j
-@RequestMapping("/bytebite/member")
-public class MemberController {
+@RequestMapping("/bytebite/mypage")
+public class MypageController {
 
     private final MemberService memberService;
 
@@ -28,23 +28,8 @@ public class MemberController {
      *
      * @param memberService 주입받을 MemberService 스프링 빈 객체
      */
-    public MemberController(MemberService memberService) {
+    public MypageController(MemberService memberService) {
         this.memberService = memberService;
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "member/login";
-    }
-
-    @GetMapping("/signup")
-    public String signup() {
-        return "member/signup";
-    }
-
-    @GetMapping("/resSignup")
-    public String resSignup() {
-        return "member/resSignup";
     }
 
     /**
