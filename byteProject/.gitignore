@@ -240,3 +240,6 @@ out/
 .vscode/
 
 application.properties
+
+# Uploaded images
+src/main/resources/static/uploads/

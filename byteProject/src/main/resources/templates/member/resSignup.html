@@ -18,27 +18,35 @@
     <div class="signup-box">
         <h2>식당 정보 등록</h2>
 
-        <form>
-            <input type="text" placeholder="식당명" required>
-            <input type="text" placeholder="식당 주소" required>
+        <form action="/member/signup/restaurant" method="post" enctype="multipart/form-data" th:object="${restaurantForm}">
+            <input type="text" th:field="*{rname}" placeholder="식당명" required>
+            <input type="text" th:field="*{address}" placeholder="식당 주소" required>
             <div class="links">
-                <select>
+                <select th:field="*{category}">
                     <!-- value : 선택 시 서버로 전송되는 값 -->
                     <option value="">식당 카테고리</option>
-                    <option value="">한식</option>
-                    <option value="">중식</option>
-                    <option value="">양식</option>
-                    <option value="">일식</option>
+                    <option value="0">한식</option>
+                    <option value="1">양식</option>
+                    <option value="2">중식</option>
+                    <option value="3">일식</option>
                 </select>
             </div>
-            <input type="text" placeholder="전화번호" required>
+            <input type="text" th:field="*{phone}" placeholder="전화번호" required>
 
+            <!-- 식당 대표 이미지 -->
+            <div class="image-upload">
+                <label for="image">식당 대표 이미지</label>
+                <input type="file"
+                       id="image"
+                       name="image"
+                       accept="image/*">
+            </div>
             <button type="submit">식당 등록</button>
         </form>
 
         <div class="links">
             <span>이미 계정이 있으신가요?</span>
-            <a href="/bytebite/member/login">로그인</a>
+            <a href="/member/login">로그인</a>
         </div>
     </div>
 </div>
