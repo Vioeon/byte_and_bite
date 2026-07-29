@@ -239,4 +239,4 @@ out/
 ### VS Code ###
 .vscode/
 
-byteProject/src/main/resources/application.properties
+application.properties
