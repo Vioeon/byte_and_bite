@@ -35,10 +35,10 @@
 
 [맛집 리뷰 목록]
 
-<img src="../images/01_post_list.png" width="400" alt="맛집 리뷰 목록 화면 ">
+<img src="../images/01_post_list.png" width="400" alt="로그인 사용자 맛집 리뷰 목록 화면">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/01_post_non_login.png" width="400" alt="비로그인 사용자 맛집 리뷰 목록 화면">
 
 - 출력 데이터 항목 (Output Data):
-    - GNB(Global Navigation Bar) 영역 : 서비스 타이틀, 로그아웃, 로그인, 회원가입, 맛집리뷰, 맛집소식, 마이페이지
+    - GNB(Global Navigation Bar) 영역 : 서비스 타이틀, 로그아웃, 맛집리뷰, 맛집소식, 마이페이지
     - 상단 영역: 카테고리 및 제목 검색어 입력, 리뷰작성
     - 목록 테이블: 식당명, 카테고리, 리뷰제목, 이미지url
     - 하단 영역: 페이지네이션(현재 페이지 및 이동 컨트롤러)
@@ -73,7 +73,7 @@
     - 댓글 작성자 본인 인증 시에만 댓글 수정 및 삭제 버튼 노출
     - 상단 맛집 리뷰 버튼 클릭 시 리뷰 목록 화면으로 이동
 
-### 2.3 맛집 리뷰 상세 작성 화면 (GET `/posts/write`)
+### 2.3 맛집 리뷰 작성 화면 (GET `/posts/write`)
 
 [맛집 리뷰 작성]
 
@@ -105,7 +105,9 @@
 
 ### 2.5 맛집 소식 목록 화면 (GET `/news`)
 
-<img src="../images/05_news_list.png" width="400" alt="맛집 소식 목록 화면">
+[맛집 소식 목록]
+
+<img src="../images/05_news_list.png" width="400" alt="로그인 사용자 맛집 소식 목록 화면">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/05_news_non_login.png" width="400" alt="비로그인 사용자 맛집 소식 목록 화면">
 
 - 출력 데이터 항목 (Output Data):
     - GNB(Global Navigation Bar) 영역 : 서비스 타이틀, 로그아웃, 맛집리뷰, 맛집소식, 마이페이지
@@ -125,6 +127,8 @@
 
 ### 2.6 맛집 소식 상세 화면 (GET `/news/{newsId}`)
 
+[맛집 소식 상세]
+
 <img src="../images/06_news_detail.png" width="400" alt="맛집 소식 상세 화면">
 
 - 출력 데이터 항목 (Output Data):
@@ -135,6 +139,8 @@
     - 상단 맛집 소식 버튼 클릭 시 맛집 소식 목록 화면으로 이동
 
 ### 2.7 맛집 소식 작성 화면 (GET `/news/write`)
+
+[맛집 소식 작성]
 
 <img src="../images/07_news_write.png" width="400" alt="맛집 소식 작성 화면">
 
@@ -149,6 +155,8 @@
     - 완료 버튼 제출 시 유효성 검증 후 소식 등록 처리
 
 ### 2.8 맛집 소식 수정 화면 (GET `/news/edit`)
+
+[맛집 소식 수정]
 
 <img src="../images/08_news_edit.png" width="400" alt="맛집 소식 수정 화면">
 
