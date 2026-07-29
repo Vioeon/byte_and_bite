@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS reply;
-DROP TABLE IF EXISTS likes;
-DROP TABLE IF EXISTS restaurant;
-DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS member;
 
 CREATE TABLE member (
@@ -14,6 +10,8 @@ CREATE TABLE member (
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS restaurant;
+
 CREATE TABLE restaurant (
                             restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
                             member_id INT NOT NULL UNIQUE,
@@ -23,6 +21,8 @@ CREATE TABLE restaurant (
                             phone VARCHAR(20) NOT NULL,
                             CONSTRAINT fk_restaurant_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS post;
 
 CREATE TABLE post (
                       post_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,8 +35,9 @@ CREATE TABLE post (
                       CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS `like`;
 
-CREATE TABLE likes (
+CREATE TABLE `like` (
                         like_id INT AUTO_INCREMENT PRIMARY KEY,
                         post_id INT NOT NULL,
                         member_id INT NOT NULL,
@@ -45,6 +46,8 @@ CREATE TABLE likes (
                         FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
                         FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS reply;
 
 CREATE TABLE reply (
                        reply_id INT AUTO_INCREMENT PRIMARY KEY,
