@@ -1,5 +1,13 @@
 USE bytebite;
 
+-- 최초 실행 후 bytebite에 모든 기존테이블 삭제된것 확인하고 삭제
+DROP TABLE IF EXISTS reply;
+DROP TABLE IF EXISTS likes;
+DROP TABLE IF EXISTS restaurant;
+DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS member;
+--
+
 DROP TABLE IF EXISTS reply;
 DROP TABLE IF EXISTS news;
 DROP TABLE IF EXISTS post;
