@@ -17,7 +17,7 @@ public class RestaurantDto {
     private Integer memberId;
 
     @NotNull(message = "식당 카테고리를 선택해주세요.")
-    private Integer category;
+    private String category;
 
     @NotBlank(message = "식당명은 필수 입력 항목입니다.")
     @Size(max = 50, message = "식당명은 50자 이하여야 합니다.")

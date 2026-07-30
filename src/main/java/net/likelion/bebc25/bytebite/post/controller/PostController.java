@@ -23,7 +23,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/list.html")
+    @GetMapping("/list")
     public String getBoardList(Model model){
         List<PostDto> posts = postService.getPosts();
         model.addAttribute("posts", posts);

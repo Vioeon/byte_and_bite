@@ -15,26 +15,15 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Spring의 JdbcTemplate을 사용하여 회원 데이터를 처리하는 저장소 구현체입니다.
- */
 @Repository
 public class JdbcMemberRepository implements MemberRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    /**
-     * 생성자를 통해 의존하는 JdbcTemplate을 주입받습니다.
-     *
-     * @param jdbcTemplate 스프링 빈으로 등록된 JdbcTemplate 객체
-     */
     public JdbcMemberRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /**
-     * 데이터베이스 ResultSet 데이터를 MemberDto 객체로 변환해주는 맵퍼 정의입니다.
-     */
     private final RowMapper<MemberDto> membersRowMapper = (ResultSet rs, int rowNum) -> {
         return MemberDto.builder()
                 .memberId(rs.getInt("id"))
@@ -76,9 +65,7 @@ public class JdbcMemberRepository implements MemberRepository {
         return keyHolder.getKey().intValue();
     }
 
-    /**
-     * {@inheritDoc} username 회원 조회
-     */
+    // email 회원 조회
     @Override
     public MemberDto findByEmail(String email) {
         try {
@@ -88,9 +75,7 @@ public class JdbcMemberRepository implements MemberRepository {
         }
     }
 
-    /**
-     * {@inheritDoc} id 회원 조회
-     */
+    // id 회원 조회
     @Override
     public MemberDto findById(int id) {
         return jdbcTemplate.queryForObject("SELECT id, username, password, email, created_at FROM member2 WHERE id = ?", memberDetailRowMapper, id);
@@ -104,33 +89,19 @@ public class JdbcMemberRepository implements MemberRepository {
         return count != null && count > 0;
     }
 
-    /**
-     * {@inheritDoc} 회원 정보 수정
-     */
     @Override
     public void update(MemberDto member) {
-        // 실습 영역
-        jdbcTemplate.update("UPDATE member2 SET nickname = ?, password = ?, email = ? WHERE id = ?"
-                , member.getNickname()
-                , member.getPassword()
-                , member.getEmail()
-                , member.getMemberId());
+
     }
 
-    /**
-     * {@inheritDoc} id 회원 삭제
-     */
     @Override
     public void deleteById(int id) {
-        // 실습 영역
-        jdbcTemplate.update("DELETE FROM member2 WHERE id = ?", id);
+
     }
 
-    /**
-     * {@inheritDoc} 회원 목록 조회
-     */
     @Override
     public List<MemberDto> findAll() {
-        return jdbcTemplate.query("SELECT id, username, email, created_at FROM member2", membersRowMapper);
+        return List.of();
     }
+
 }
