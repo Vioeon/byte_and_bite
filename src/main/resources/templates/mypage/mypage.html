@@ -111,10 +111,9 @@
 
         <form th:action="@{/member/nickname}" method="post">
             <div class="modal-body">
-                <label for="newNickname" style="font-size: 13px; font-weight: bold;">새 닉네임</label>
                 <input type="text" id="newNickname" name="newNickname"
                        th:value="${newNickname}"
-                       placeholder="새 닉네임 입력" required>
+                       placeholder="변경할 닉네임 입력" required>
 
                 <div class="error-message" th:if="${nicknameError != null}" th:text="${nicknameError}">
                     이미 존재하는 닉네임입니다.
