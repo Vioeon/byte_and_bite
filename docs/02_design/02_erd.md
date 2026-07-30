@@ -23,7 +23,7 @@ erDiagram
         varchar_100 email
         varchar_255 password
         varchar_50 nickname
-        tinyint role
+        varchar_7 role
         datetime created_at
         datetime updated_at
     }
@@ -31,11 +31,11 @@ erDiagram
     RESTAURANT {
         int restaurant_id PK
         int member_id FK
-        tinyint category
+        varchar_3 category
         varchar_100 rname
         varchar_255 address
         varchar_20 phone
-        varchar_50 image
+        varchar_100 image
         datetime created_at
         datetime updated_at
     }
@@ -47,7 +47,7 @@ erDiagram
         varchar_200 title
         text content
         int view_count
-        varchar_50 image
+        varchar_100 image
         datetime created_at
         datetime updated_at
     }
@@ -83,18 +83,18 @@ erDiagram
 - email: VARCHAR(100), NOT NULL (이메일 아이디)
 - password: VARCHAR(255), NOT NULL (비밀번호)
 - nickname: VARCHAR(50), NOT NULL (회원 이름)
-- role: TINYINT, NOT NULL DEFAULT FALSE (0: 일반회원, 1: 맛집운영자)
+- role: VARCHAR(7), NOT NULL DEFAULT FALSE ('USER', 'MANAGER')
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (가입 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (정보 수정시 갱신)
 
 ### 1.2.2 restaurant (식당 테이블)
 - restaurant_id: INT, PRIMARY KEY, AUTO_INCREMENT (식당 고유 식별자)
 - member_id: INT UNIQUE, FOREIGN KEY (식당 관계자와 식당 이름 연결)
-- category: TINYINT, NOT NULL (음식 카테고리 - 0: 한식, 1: 양식, 2: 중식, 3: 일식, 4: 기타)
+- category: VARCHAR(3), NOT NULL (음식 카테고리 - 'KOR', 'WST', 'CHN', 'JPN', 'ETC')
 - rname: VARCHAR(50), NOT NULL (식당 이름)
 - address: VARCHAR(100), NOT NULL (식당 주소)
 - phone: VARCHAR(20), NOT NULL (식당 연락처)
-- image: VARCHAR(50), NOT NULL (식당 사진 상대 경로)
+- image: VARCHAR(100), NOT NULL (식당 사진 상대 경로)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (가입 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (정보 수정시 갱신)
 
@@ -105,16 +105,18 @@ erDiagram
 - title: VARCHAR(200), NOT NULL (게시글 제목)
 - content: TEXT, NOT NULL (게시글 본문)
 - view_count: INT, DEFAULT 0 (조회수)
+- image: VARCHAR(100), NOT NULL (식당 사진 상대 경로)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (작성 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (글 수정시 갱신)
 
-### 1.2.4 news (좋아요 테이블)
+### 1.2.4 news (맛집 소식 테이블)
 - news_id: INT, PRIMARY KEY, AUTO_INCREMENT (소식 고유 식별자)
 - member_id: INT, FOREIGN KEY (작성자 회원 식별자)
 - restaurant_id: INT, FOREIGN KEY (연결 식당 식별자)
 - title: VARCHAR(200), NOT NULL (소식 제목)
 - content: TEXT, NOT NULL (소식 본문)
 - view_count: INT, DEFAULT 0 (조회수)
+- image: VARCHAR(100), NOT NULL (식당 사진 상대 경로)
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (작성 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (글 수정시 갱신)
 
@@ -136,7 +138,7 @@ CREATE TABLE member (
                         email VARCHAR(100) NOT NULL UNIQUE,
                         password VARCHAR(255) NOT NULL,
                         nickname VARCHAR(50) NOT NULL,
-                        role TINYINT NOT NULL DEFAULT 0,
+                        role VARCHAR(7) NOT NULL DEFAULT 'USER',
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -144,11 +146,11 @@ CREATE TABLE member (
 CREATE TABLE restaurant (
                             restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
                             member_id INT NOT NULL UNIQUE,
-                            category TINYINT NOT NULL,
+                            category VARCHAR(3) NOT NULL,
                             rname VARCHAR(50) NOT NULL,
                             address VARCHAR(100) NOT NULL,
                             phone VARCHAR(20) NOT NULL,
-                            image VARCHAR(50) NOT NULL,
+                            image VARCHAR(100) NOT NULL,
                             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                             CONSTRAINT fk_restaurant_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
@@ -161,7 +163,7 @@ CREATE TABLE post (
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(50) NOT NULL,
+                      image VARCHAR(100) NOT NULL,
                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
@@ -175,7 +177,7 @@ CREATE TABLE news (
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(50) NOT NULL,
+                      image VARCHAR(100) NOT NULL,
                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_news_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
