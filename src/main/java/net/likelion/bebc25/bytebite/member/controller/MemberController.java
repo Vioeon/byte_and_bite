@@ -106,14 +106,14 @@ public class MemberController {
             // addFlashAttribute: 임시로 세션에 속성을 담아서 리다이렉트 된 페이지에서 꺼내어 사용 후 속성값은 세션에서 제거함
             redirectAttributes.addFlashAttribute("loginErrorMessage", "아이디 또는 비밀번호를 확인하세요.");
             redirectAttributes.addFlashAttribute("loginForm", memberDto); // 입력 폼 데이터 유지
-            return "member/login";
+            return "redirect:/member/login";
         }
         // 로그인 성공 시
         // 세션 생성하여 사용자 정보 저장
         SessionMemberDto sessionMember = new SessionMemberDto(memberInfo);
         session.setAttribute("loginMember", sessionMember);
 
-        return "redirect:/member/list";
+        return "redirect:/post/list";
     }
 
     // 맛집 정보 등록 화면
