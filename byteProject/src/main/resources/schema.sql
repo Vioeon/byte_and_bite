@@ -1,12 +1,20 @@
 USE bytebite;
 
 -- 최초 실행 후 bytebite에 모든 기존테이블 삭제된것 확인하고 삭제
-DROP TABLE IF EXISTS reply;
-DROP TABLE IF EXISTS likes;
-DROP TABLE IF EXISTS restaurant;
-DROP TABLE IF EXISTS post;
-DROP TABLE IF EXISTS member;
---
+# DROP TABLE IF EXISTS reply;
+# DROP TABLE IF EXISTS likes;
+# DROP TABLE IF EXISTS restaurant;
+# DROP TABLE IF EXISTS post;
+# DROP TABLE IF EXISTS member;
+# --
+desc post;
+SELECT image FROM post;
+show create table post;
+SELECT * FROM member;
+SELECT * FROM restaurant;
+desc restaurant;
+SELECT member_id, nickname, role
+FROM member;
 
 DROP TABLE IF EXISTS reply;
 DROP TABLE IF EXISTS news;
@@ -48,7 +56,7 @@ CREATE TABLE post (
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(50) NOT NULL,
+                      image VARCHAR(500) NOT NULL,
                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
@@ -62,7 +70,7 @@ CREATE TABLE news (
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(50) NOT NULL,
+                      image VARCHAR(500) NOT NULL,
                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_news_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,

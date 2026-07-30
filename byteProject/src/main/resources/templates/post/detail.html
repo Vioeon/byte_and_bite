@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>스프링 게시판 - 상세 보기</title>
+    <link rel="stylesheet" href="/board/css/common.css">
+    <link rel="stylesheet" href="/board/css/detail.css">
+</head>
+<body>
+<div class="container">
+    <th:block th:insert="~{layout/common :: nav-header('게시글 상세 정보')}">
+        <h1>게시글 상세 정보</h1>
+        <div class="nav">
+            <a href="list.html">목록으로</a>
+            <a href="write.html">새 글 쓰기</a>
+        </div>
+    </th:block>
+    <table style="margin-bottom: 20px;">
+        <tr>
+            <th style="width: 20%;">번호</th>
+            <td th:text="${post.id}">3</td>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <td th:text="${post.title}"></td>
+        </tr>
+        <tr>
+            <th>작성자</th>
+            <td th:text="${post.nickname}"></td>
+        </tr>
+        <tr>
+            <th>작성일시</th>
+            <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td  th:text="${post.content}" style="white-space: pre-wrap;">리뷰 글</td>
+        </tr>
+        <tr>
+            <th>이미지</th>
+            <td>
+                <img th:each="image:${images}" th:if="${post.images != ''}" th:src="@{/images/{image}(image=${post.image})}"
+                     width="300">
+            </td>
+        </tr>
+    </table>
+
+    <div>
+        <a th:href="@{edit.html(id=${post.id})}" class="btn">수정하기</a>
+        <a href="list.html" class="btn btn-secondary">목록으로</a>
+    </div>
+</div>
+</body>
+</html>

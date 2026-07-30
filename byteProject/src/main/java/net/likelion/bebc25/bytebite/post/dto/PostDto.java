@@ -1,10 +1,14 @@
 package net.likelion.bebc25.bytebite.post.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,22 +16,32 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
-// 게시글 하나를 저장할 객체
 public class PostDto {
     private int id;
+
+    private int memberId;
+
+    private String nickname;
 
     @NotBlank(message = "제목은 필수 입력 항목입니다.")
     @Size(max = 100, message = "제목은 100자 이하로 입력해야 합니다.")
     private String title;
 
+//    @NotNull(message = "식당을 선택해주세요.")
+    private int restaurantId;
+
+    private String restaurantName;
+
+
+    private String image;
+//    @NotEmpty(message = "이미지는 필수 첨부 항목입니다.")
+    private MultipartFile images;
+
     @NotBlank(message = "내용은 필수 입력 항목입니다.")
     private String content;
 
-    @NotBlank(message = "작성자는 필수 입력 항목입니다.")
-    @Size(min = 2, max = 10, message = "작성자 이름은 2자 이상 10자 이하여야 합니다.")
-    private String author;
-
-    private boolean secret;
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }

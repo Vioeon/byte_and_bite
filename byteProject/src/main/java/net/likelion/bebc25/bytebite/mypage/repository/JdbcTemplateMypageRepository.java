@@ -30,19 +30,21 @@ public class JdbcTemplateMypageRepository implements PostRepository {
         return PostDto.builder()
                 .id(rs.getInt("id"))
                 .title(rs.getString("title"))
-                .author(rs.getString("author"))
+//                .author(rs.getString("author"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
-                .secret(rs.getBoolean("secret")).build();
+//                .secret(rs.getBoolean("secret"))
+                .build();
     };
 
     private final RowMapper<PostDto> postDetailMapper = (ResultSet rs, int rowNum) -> {
         return PostDto.builder()
                 .id(rs.getInt("id"))
                 .title(rs.getString("title"))
-                .author(rs.getString("author"))
+//                .author(rs.getString("author"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .content(rs.getString("content"))
-                .secret(rs.getBoolean("secret")).build();
+//                .secret(rs.getBoolean("secret"))
+                .build();
     };
 
     @Override
@@ -59,7 +61,7 @@ public class JdbcTemplateMypageRepository implements PostRepository {
     public void save(PostDto post) {
         jdbcTemplate.update("INSERT INTO post2 (title, author, content) VALUES (?, ?, ?)"
                 , post.getTitle()
-                , post.getAuthor()
+//                , post.getAuthor()
                 , post.getContent());
     }
 
@@ -67,7 +69,7 @@ public class JdbcTemplateMypageRepository implements PostRepository {
     public void update(PostDto post) {
         jdbcTemplate.update("UPDATE post2 SET title = ?, author = ?, content = ? WHERE id = ?"
                 , post.getTitle()
-                , post.getAuthor()
+//                , post.getAuthor()
                 , post.getContent()
                 , post.getId());
     }
