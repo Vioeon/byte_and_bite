@@ -1,32 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>byte&bite</title>
+    <title>Byte&Bite - 맛집 리뷰</title>
     <link rel="stylesheet" th:href="@{/css/postList.css}">
 </head>
 <body>
 
-<!-- 1. 최상단 헤더 -->
-<header>
-    <div class="wrapper header-content">
-        <div class="logo">byte&bite</div>
-        <div class="auth-buttons">
-            <button type="button">로그인</button>
-            <button type="button">회원가입</button>
-        </div>
-    </div>
-</header>
-
-<!-- 2. 네비게이션 & 정렬 -->
-<nav>
-    <div class="wrapper nav-content">
-        <div class="tabs">
-            <div class="tab active">맛집 리뷰</div>
-            <div class="tab">맛집 소식</div>
-            <div class="tab">마이페이지</div>
-        </div>
+<div th:replace="~{layout/common :: nav-header}"></div>
+<main class="wrapper">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
         <div class="sort-options">
             <label>
                 <input type="radio" name="sort" value="latest" checked> 최신순
@@ -36,12 +19,9 @@
             </label>
         </div>
     </div>
-</nav>
 
-<!-- 3. 메인 콘텐츠 -->
-<main class="wrapper">
     <!-- 검색바 -->
-    <form class="search-bar" action="/search" method="GET">
+    <form class="search-bar" action="/search" method="GET" onsubmit="return false;">
         <select class="category-select" name="category">
             <option value="all">전체 카테고리</option>
             <option value="korean">한식</option>
@@ -55,13 +35,72 @@
 
         <button type="submit" class="btn-search">검색</button>
 
-        <a href="/write" class="btn-write-link">
+        <a href="write.html" class="btn-write-link">
             <button type="button" class="btn-write">리뷰작성</button>
         </a>
     </form>
 
-    <!-- 3x3 동적 카드 그리드 -->
+    <!-- 3x3 카드 그리드 -->
     <section class="card-grid">
+        <!-- 카드 1 -->
+        <a href="detail.html?id=1" class="card-link">
+            <div class="card">
+                <div class="card-img">이미지</div>
+                <div class="card-info">
+                    <div class="restaurant-name">식당 이름</div>
+                    <div class="row">
+                        <span>한식</span>
+                        <span>조회수 123</span>
+                    </div>
+                </div>
+                <div class="card-title">리뷰제목</div>
+            </div>
+        </a>
+
+        <!-- 카드 2 -->
+        <a href="detail.html?id=2" class="card-link">
+            <div class="card">
+                <div class="card-img">이미지</div>
+                <div class="card-info">
+                    <div class="restaurant-name">식당 이름</div>
+                    <div class="row">
+                        <span>일식</span>
+                        <span>조회수 85</span>
+                    </div>
+                </div>
+                <div class="card-title">리뷰제목</div>
+            </div>
+        </a>
+
+        <!-- 카드 3 -->
+        <a href="detail.html?id=3" class="card-link">
+            <div class="card">
+                <div class="card-img">이미지</div>
+                <div class="card-info">
+                    <div class="restaurant-name">식당 이름</div>
+                    <div class="row">
+                        <span>양식</span>
+                        <span>조회수 210</span>
+                    </div>
+                </div>
+                <div class="card-title">리뷰제목</div>
+            </div>
+        </a>
+
+        <!-- 카드 4 -->
+        <a href="detail.html?id=4" class="card-link">
+            <div class="card">
+                <div class="card-img">이미지</div>
+                <div class="card-info">
+                    <div class="restaurant-name">식당 이름</div>
+                    <div class="row">
+                        <span>중식</span>
+                        <span>조회수 45</span>
+                    </div>
+                </div>
+                <div class="card-title">리뷰제목</div>
+            </div>
+        </a>
 
         <!-- DB에서 가져온 개수만큼 카드가 동적으로 반복 생성됩니다 -->
         <a th:each="review : ${reviews}"
@@ -84,16 +123,14 @@
         <div th:if="${#lists.isEmpty(reviews)}" style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
             등록된 리뷰가 없습니다.
         </div>
-
     </section>
 
     <!-- 페이지네이션 -->
-    <div class="pagination">
-        <button type="button">&lt;</button>
+    <div class="pagination" th:if="${posts != null and not #lists.isEmpty(posts)}">
+        <button><</button>
         <span>1</span>
-        <button type="button">&gt;</button>
+        <button>></button>
     </div>
 </main>
-
 </body>
 </html>

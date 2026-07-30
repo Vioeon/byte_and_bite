@@ -32,7 +32,5 @@ public class SignupDto {
     @Size(min = 2, max = 20, message = "닉네임 2자 이상 20자 이하여야 합니다.")
     private String nickname;
 
-    // 회원 유형
-    // 0 : 일반 사용자, 1: 맛집 운영자
-    private int role;
+    private String role;
 }

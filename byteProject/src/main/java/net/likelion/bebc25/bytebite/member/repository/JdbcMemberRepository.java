@@ -37,30 +37,22 @@ public class JdbcMemberRepository implements MemberRepository {
      */
     private final RowMapper<MemberDto> membersRowMapper = (ResultSet rs, int rowNum) -> {
         return MemberDto.builder()
-                .id(rs.getInt("id"))
+                .memberId(rs.getInt("id"))
                 .nickname(rs.getString("nickname")) // 아이디
                 .email(rs.getString("email"))
-                .role(rs.getInt("role"))
+                .role(rs.getString("role"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .build();
     };
 
     private final RowMapper<MemberDto> memberDetailRowMapper = (ResultSet rs, int rowNum) -> {
         return MemberDto.builder()
-                .id(rs.getInt("id"))
+                .memberId(rs.getInt("member_id"))
                 .nickname(rs.getString("nickname")) // 아이디
                 .email(rs.getString("email"))
                 .password(rs.getString("password"))
-                .role(rs.getInt("role"))
+                .role(rs.getString("role"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
-                .build();
-    };
-
-    private final RowMapper<MemberDto> loginRowMapper = (ResultSet rs, int rowNum) -> {
-        return MemberDto.builder()
-                .id(rs.getInt("id"))
-                .nickname(rs.getString("username")) // 아이디
-                .password(rs.getString("password"))
                 .build();
     };
 
@@ -77,7 +69,7 @@ public class JdbcMemberRepository implements MemberRepository {
             ps.setString(1, signupDto.getNickname());
             ps.setString(2, signupDto.getPassword());
             ps.setString(3, signupDto.getEmail());
-            ps.setInt(4, signupDto.getRole());
+            ps.setString(4, signupDto.getRole());
 
             return ps;
         }, keyHolder);
@@ -88,12 +80,10 @@ public class JdbcMemberRepository implements MemberRepository {
      * {@inheritDoc} username 회원 조회
      */
     @Override
-    public MemberDto findByUsername(String username) {
+    public MemberDto findByEmail(String email) {
         try {
-            return jdbcTemplate.queryForObject("SELECT id, username, password, created_at FROM member2 WHERE username = ?", loginRowMapper, username);
+            return jdbcTemplate.queryForObject("SELECT member_id, nickname, email, password, role, created_at FROM member WHERE email = ?", memberDetailRowMapper, email);
         } catch (EmptyResultDataAccessException e) {
-            // Spring JDB Exception
-            // 값이 존재하지 않을 때
             return null;
         }
     }
@@ -106,6 +96,14 @@ public class JdbcMemberRepository implements MemberRepository {
         return jdbcTemplate.queryForObject("SELECT id, username, password, email, created_at FROM member2 WHERE id = ?", memberDetailRowMapper, id);
     }
 
+    // 이메일 중복 확인
+    @Override
+    public boolean existsByEmail(String email) {
+        // Integer 타입으로 받음
+        Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM member WHERE email = ?", Integer.class, email);
+        return count != null && count > 0;
+    }
+
     /**
      * {@inheritDoc} 회원 정보 수정
      */
@@ -116,7 +114,7 @@ public class JdbcMemberRepository implements MemberRepository {
                 , member.getNickname()
                 , member.getPassword()
                 , member.getEmail()
-                , member.getId());
+                , member.getMemberId());
     }
 
     /**

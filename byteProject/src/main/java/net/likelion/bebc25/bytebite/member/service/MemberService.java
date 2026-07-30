@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface MemberService {
 
+  // email 중복 체크
+  void validateDuplicateEmail(SignupDto signupDto);
+
   // 회원가입
   void signup(SignupDto signupDto);
 

@@ -18,7 +18,7 @@
     <div class="signup-box">
         <h2>회원가입</h2>
 
-        <form action="signup" method="post" th:object="${signupForm}">
+        <form action="/member/signup" method="post" th:object="${signupForm}">
             <input type="text" th:field="*{nickname}" placeholder="nickname" required>
             <input type="email" th:field="*{email}" placeholder="Email" required>
             <input type="password" th:field="*{password}" placeholder="Password" required>
@@ -28,11 +28,11 @@
 
             <div class="member-type">
                 <label>
-                    <input type="radio" th:field="*{role}" value="0" checked>사용자
+                    <input type="radio" th:field="*{role}" value="USER" checked>사용자
                 </label>
 
                 <label>
-                    <input type="radio" th:field="*{role}" value="1">식당 관계자
+                    <input type="radio" th:field="*{role}" value="MANAGER">식당 관계자
                 </label>
             </div>
 

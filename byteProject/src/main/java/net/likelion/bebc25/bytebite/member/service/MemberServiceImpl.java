@@ -1,15 +1,16 @@
 package net.likelion.bebc25.bytebite.member.service;
 
+import net.likelion.bebc25.bytebite.exception.DuplicateEmailException;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SignupDto;
 import net.likelion.bebc25.bytebite.member.repository.MemberRepository;
 import net.likelion.bebc25.bytebite.member.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,17 +26,21 @@ public class MemberServiceImpl implements MemberService {
         this.fileService = fileService;
     }
 
+    public void validateDuplicateEmail(SignupDto signupDto){
+        boolean isDuplicate = memberRepository.existsByEmail(signupDto.getEmail());
+        if(isDuplicate){
+            throw new DuplicateEmailException("이미 사용중인 계정입니다.");
+        }
+    }
     // 회원가입
     @Override
     public void signup(SignupDto signupDto) {
-
         memberRepository.save(signupDto);
     }
 
     @Transactional
     public void signupWithRestaurant(SignupDto signupDto, RestaurantDto restaurantDto) {
         int memberId = memberRepository.save(signupDto);
-
         String imagePath = fileService.save(restaurantDto.getImage());
 
         restaurantDto.setMemberId(memberId);
@@ -45,9 +50,12 @@ public class MemberServiceImpl implements MemberService {
 
     // 로그인
     @Override
-    public MemberDto login(String username, String password) {
-
-        return memberRepository.findByUsername(username);
+    public MemberDto login(String email, String password) {
+        MemberDto memberDto = memberRepository.findByEmail(email);
+        if(memberDto != null && memberDto.getPassword().equals(password)){
+            return memberDto;
+        }
+        return null;
     }
 
     // 회원정보 수정

@@ -2,84 +2,146 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지</title>
-    <!-- CSS 파일 연결 -->
+    <title>byte&bite - 마이페이지</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
 </head>
 <body>
 
-<div class="mypage-container">
-    <!-- 1. 헤더 영역 -->
-    <header class="mypage-header">
-        <h1>마이페이지</h1>
-    </header>
+<header>
+    <div class="wrapper header-content">
+        <div class="logo">Byte&Bite</div>
+        <div class="auth-buttons">
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit">로그아웃</button>
+            </form>
+        </div>
+    </div>
+</header>
 
-    <!-- 2. 회원 정보 섹션 -->
-    <section class="profile-section">
-        <div class="profile-card">
-            <div class="profile-avatar">👤</div>
-            <div class="profile-info">
-                <h2><span th:text="${user.name}">홍길동</span>님 반가워요!</h2>
-                <p class="email" th:text="${user.email}">hong@example.com</p>
-                <p class="join-date">가입일: <span th:text="${user.joinDate}">2026-01-01</span></p>
+<nav>
+    <div class="wrapper nav-content">
+        <div class="tabs">
+            <a th:href="@{/posts}" class="tab">맛집 리뷰</a>
+            <a th:href="@{/news}" class="tab">맛집 소식</a>
+            <a th:href="@{/mypage}" class="tab active">마이페이지</a>
+        </div>
+    </div>
+</nav>
+
+<main class="wrapper">
+
+    <!-- 내 정보 카드 -->
+    <section class="profile-card">
+        <div class="profile-info">
+            <h2>
+                <span name="nickname">bytebite</span>
+                <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
+            </h2>
+            <div class="email" name="email">이메일</div>
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-item">
+                <span class="stat-label">작성한 리뷰</span>
+                <span class="stat-value" name="th:text=${posts != null ? posts.size() : 0}">0</span>
             </div>
-            <div class="profile-actions">
-                <a href="/mypage/edit" class="btn btn-secondary">회원정보 수정</a>
+            <div class="stat-item">
+                <span class="stat-label">가입일</span>
+                <span class="stat-value" name="${#temporals.format(member.createdAt, 'yyyy-MM-dd')}">2026-07-28</span>
             </div>
         </div>
     </section>
 
-<!--
-    3. 나의 활동내역 섹션
-    <section class="activity-section">
-        <h3>나의 활동내역</h3>
-
-        <div class="activity-grid">
-            3-1. 내가 쓴 글 목록
-            <div class="activity-box">
-                <h4>내가 작성한 글</h4>
-                <ul class="activity-list">
-                    자바 리스트 데이터를 반복문으로 출력
-                    <li th:each="post : ${postList}">
-                        <a th:href="@{/board/view(id=${post.id})}" th:text="${post.title}">첫 번째 게시글 제목입니다.</a>
-                        <span class="date" th:text="${post.regDate}">07-28</span>
-                    </li>
-                    백엔드 연결 전 테스트용 임시 데이터
-                    <li th:if="${postList == null}">
-                        <a href="#">스프링 부트 질문 있습니다.</a>
-                        <span class="date">07-25</span>
-                    </li>
-                    <li th:if="${postList == null}">
-                        <a href="#">오늘 공부 인증 1일차</a>
-                        <span class="date">07-24</span>
-                    </li>
-                </ul>
-            </div>
-
-            3-2. 내가 쓴 댓글 목록
-            <div class="activity-box">
-                <h4>내가 작성한 댓글</h4>
-                <ul class="activity-list">
-                    <li th:each="comment : ${commentList}">
-                        <a th:href="@{/board/view(id=${comment.postId})}" th:text="${comment.content}">댓글 내용입니다.</a>
-                        <span class="date" th:text="${comment.regDate}">07-28</span>
-                    </li>
-                    백엔드 연결 전 테스트용 임시 데이터
-                    <li th:if="${commentList == null}">
-                        <a href="#">저도 그렇게 생각해요! 동감합니다.</a>
-                        <span class="date">07-26</span>
-                    </li>
-                    <li th:if="${commentList == null}">
-                        <a href="#">좋은 정보 감사합니다. 퍼가요~</a>
-                        <span class="date">07-22</span>
-                    </li>
-                </ul>
+    <!-- 작성한 리뷰 피드 -->
+    <section class="posts-section">
+        <div class="section-header">
+            <div class="section-title">
+                작성한 리뷰
+                <span class="count-badge" name="${posts != null ? posts.size() : 0}">0</span>
             </div>
         </div>
+
+        <div class="posts-list">
+            <div class="post-item" th:each="post : ${posts}">
+                <div class="post-img" th:text="${post.hasImage ? '이미지' : '노이미지'}">
+                    이미지
+                </div>
+                <div class="post-main-content">
+                    <a th:href="@{/post/detail/{id}(id=${post.id})}" class="post-title-link">
+                        <h3 class="post-title" th:text="${post.title}">리뷰 제목이 들어가는 위치입니다.</h3>
+                    </a>
+                    <span class="restaurant-tag" th:text="${post.rname}">식당 이름</span>
+                </div>
+                <div class="post-meta">
+                    <span class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
+                    <div class="post-actions">
+                        <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn-action">수정</a>
+                        <form th:action="@{/post/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-action">삭제</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-box" th:if="${posts == null or #lists.isEmpty(posts)}">
+                작성한 리뷰가 없습니다.
+            </div>
+        </div>
+
+        <div class="pagination" th:if="${posts != null and not #lists.isEmpty(posts)}">
+            <button>&lt;</button>
+            <span>1</span>
+            <button>&gt;</button>
+        </div>
     </section>
-    -->
+
+    <!-- 회원 탈퇴 -->
+    <div class="account-action">
+        <form th:action="@{/member/withdraw}" method="post">
+            <button type="submit" class="btn-unregister" onclick="return confirm('정말 탈퇴하시겠습니까?');">회원 탈퇴하기</button>
+        </form>
+    </div>
+
+</main>
+
+<!-- 닉네임 변경 모달 -->
+<div class="modal-overlay" id="nicknameModal" th:classappend="${nicknameError != null} ? 'active' : ''">
+    <div class="modal-content">
+        <h3>닉네임 변경</h3>
+
+        <form th:action="@{/member/nickname}" method="post">
+            <div class="modal-body">
+                <label for="newNickname" style="font-size: 13px; font-weight: bold;">새 닉네임</label>
+                <input type="text" id="newNickname" name="newNickname"
+                       th:value="${newNickname}"
+                       placeholder="새 닉네임 입력" required>
+
+                <div class="error-message" th:if="${nicknameError != null}" th:text="${nicknameError}">
+                    이미 존재하는 닉네임입니다.
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeModal()">취소</button>
+                <button type="submit" class="btn-submit">변경</button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    const modal = document.getElementById('nicknameModal');
+
+    function openModal() {
+        modal.classList.add('active');
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        const errorMsg = modal.querySelector('.error-message');
+        if (errorMsg) errorMsg.style.display = 'none';
+    }
+</script>
 
 </body>
 </html>
