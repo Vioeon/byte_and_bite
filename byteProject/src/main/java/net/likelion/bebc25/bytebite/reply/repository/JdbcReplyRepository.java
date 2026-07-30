@@ -1,4 +1,4 @@
 package net.likelion.bebc25.bytebite.reply.repository;
 
-public class exam {
+public class JdbcReplyRepository {
 }
