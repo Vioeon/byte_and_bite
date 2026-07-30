@@ -1,4 +1,4 @@
 package net.likelion.bebc25.bytebite.reply.service;
 
-public class exam {
+public class ReplyServiceImpl {
 }
