@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div th:replace="~{layout/common :: navHeader}"></div>
+<div th:replace="~{layout/common :: nav-header}"></div>
 <main class="wrapper">
     <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
         <div class="sort-options">
@@ -103,24 +103,24 @@
         </a>
 
         <!-- DB에서 가져온 개수만큼 카드가 동적으로 반복 생성됩니다 -->
-        <a th:each="review : ${reviews}"
-           th:href="@{/detail(id=${review.id})}"
+        <a th:each="post : ${posts}"
+           th:href="@{/detail(id=${post.id})}"
            class="card-link">
             <div class="card">
                 <div class="card-img">이미지</div>
                 <div class="card-info">
-                    <div class="restaurant-name" th:text="${review.restaurantName}">식당 이름</div>
+                    <div class="restaurant-name" th:text="${post.restaurantName}">식당 이름</div>
                     <div class="row">
-                        <span th:text="${review.category}">카테고리</span>
-                        <span th:text="'조회수 ' + ${review.views}">조회수 0</span>
+                        <span th:text="${post.category}">카테고리</span>
+                        <span th:text="'조회수 ' + ${post.views}">조회수 0</span>
                     </div>
                 </div>
-                <div class="card-title" th:text="${review.title}">리뷰 제목</div>
+                <div class="card-title" th:text="${post.title}">리뷰 제목</div>
             </div>
         </a>
 
         <!-- 데이터가 아예 없을 때 예외 처리 -->
-        <div th:if="${#lists.isEmpty(reviews)}" style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
+        <div th:if="${#lists.isEmpty(posts)}" style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
             등록된 리뷰가 없습니다.
         </div>
     </section>
