@@ -1,6 +1,7 @@
 package net.likelion.bebc25.bytebite.member.repository;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.member.dto.SignupDto;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface MemberRepository {
   /**
    * 새로운 회원 정보를 저장소에 저장합니다.
    *
-   * @param member 저장할 회원 정보 DTO
+   * @param signupDto 저장할 회원 정보 DTO
    */
-  void save(MemberDto member);
+  int save(SignupDto signupDto);
 
   /**
    * 회원 로그인 아이디(username)를 기반으로 회원 정보를 조회합니다.

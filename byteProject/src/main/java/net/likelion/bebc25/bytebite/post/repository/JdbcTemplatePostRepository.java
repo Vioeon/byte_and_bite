@@ -19,60 +19,60 @@ public class JdbcTemplatePostRepository implements PostRepository{
     }
 
     private final RowMapper<PostDto> postRowMapper = (ResultSet rs, int rowNum) -> {
-//        return new PostDto(
-//                rs.getInt("id"),
-//                rs.getString("title"),
-//                rs.getString("content"),
-//                rs.getString("author"),
-//                rs.getBoolean("secret"),
-//                rs.getObject("created_at", LocalDateTime.class));
         return PostDto.builder()
-                    .id(rs.getInt("id"))
-                    .title(rs.getString("title"))
-                    .author(rs.getString("author"))
-                    .createdAt(rs.getObject("created_at", LocalDateTime.class))
-                    .secret(rs.getBoolean("secret")).build();
+                .id(rs.getInt("post_id"))
+                .memberId(rs.getInt("member_id"))
+                .nickname(rs.getString("nickname"))
+                .title(rs.getString("title"))
+                .image(rs.getString("image"))
+                .createdAt(rs.getObject("created_at", LocalDateTime.class))
+                .build();
     };
 
     private final RowMapper<PostDto> postDetailMapper = (ResultSet rs, int rowNum) -> {
         return PostDto.builder()
-                .id(rs.getInt("id"))
+                .id(rs.getInt("post_id"))
+                .memberId(rs.getInt("member_id"))
+                .nickname(rs.getString("nickname"))
                 .title(rs.getString("title"))
-                .author(rs.getString("author"))
-                .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .content(rs.getString("content"))
-                .secret(rs.getBoolean("secret")).build();
+                .image(rs.getString("image"))
+                .createdAt(rs.getObject("created_at", LocalDateTime.class))
+                .build();
     };
 
     @Override
     public List<PostDto> findAll() {
-        return jdbcTemplate.query("SELECT * FROM post2", postRowMapper);
+        String sql = "SELECT p.*, m.nickname FROM post p JOIN member m ON p.member_id = m.member_id";
+        return jdbcTemplate.query(sql, postRowMapper);
     }
 
     @Override
     public PostDto findById(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM post2 WHERE id = ?", postDetailMapper, id);
+        String sql = "SELECT p.*, m.nickname FROM post p JOIN member m ON p.member_id = m.member_id WHERE p.post_id = ?";
+        return jdbcTemplate.queryForObject(sql, postDetailMapper, id);
     }
 
     @Override
     public void save(PostDto post) {
-        jdbcTemplate.update("INSERT INTO post2 (title, author, content) VALUES (?, ?, ?)"
+        jdbcTemplate.update("INSERT INTO post (member_id, restaurant_id, title, content, image) VALUES (?, ?, ?, ?, ?)"
+                , post.getMemberId()
+                , post.getRestaurantId()
                 , post.getTitle()
-                , post.getAuthor()
-                , post.getContent());
+                , post.getContent()
+                , post.getImage());
     }
 
     @Override
     public void update(PostDto post) {
-        jdbcTemplate.update("UPDATE post2 SET title = ?, author = ?, content = ? WHERE id = ?"
+        jdbcTemplate.update("UPDATE post SET title = ?, content = ? WHERE post_id = ?"
                 , post.getTitle()
-                , post.getAuthor()
                 , post.getContent()
                 , post.getId());
     }
 
     @Override
     public void deleteById(int id) {
-        jdbcTemplate.update("DELETE FROM post2 WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM post WHERE post_id = ?", id);
     }
 }

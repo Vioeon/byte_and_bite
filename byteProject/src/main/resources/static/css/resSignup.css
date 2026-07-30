@@ -68,7 +68,8 @@ body::after {
     margin-bottom: 25px;
 }
 
-.signup-box input {
+.signup-box input,
+.signup-box select{
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
@@ -107,6 +108,25 @@ body::after {
     cursor: pointer;
 }
 
+.image-upload {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.image-upload label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.image-upload input[type="file"] {
+    width: 100%;
+    padding: 10px;
+
+    background: white;
+    border-radius: 8px;
+}
+
 /* 하단 링크 */
 .links {
     margin-top: 20px;
@@ -119,10 +139,4 @@ body::after {
 
 .links span {
     margin: 0 8px;
-}
-
-.field-error {
-    height: 18px;
-    color: #dc3545;
-    font-size: 0.9em;
 }
