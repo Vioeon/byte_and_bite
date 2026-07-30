@@ -1,3 +1,9 @@
+/* 0. 스크롤바 강제 고정 (페이지 간 덜컹거림 방지) */
+html {
+    overflow-y: scroll;
+}
+
+/* 기본 리셋 */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,28 +12,24 @@
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #fff;
+    background-color: #f8f9fa;
     color: #111;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding-bottom: 60px;
 }
 
-/* 공통 중앙 정렬 레이아웃 (최대 너비 1200px) */
 .wrapper {
     width: 100%;
-    max-width: 1200px;
+    max-width: 900px;
+    margin: 0 auto;
     padding: 0 20px;
 }
 
-/* 1. 최상단 헤더 영역 */
+/* 1. 헤더 */
 header {
     width: 100%;
+    background: #fff;
     border-bottom: 2px solid #000;
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
+    padding: 15px 0;
 }
 
 .header-content {
@@ -37,39 +39,41 @@ header {
 }
 
 .logo {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -1px;
+    font-size: 26px;
+    font-weight: bold;
 }
 
 .auth-buttons {
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
 
 .auth-buttons button {
     border: 2px solid #000;
     background: #fff;
-    padding: 8px 18px;
-    font-size: 15px;
+    padding: 6px 14px;
     font-weight: bold;
+    font-size: 14px;
     cursor: pointer;
     border-radius: 4px;
 }
 
-/* 2. 네비게이션 & 정렬 옵션 */
+.auth-buttons button:hover {
+    background: #eee;
+}
+
+/* 2. 네비게이션 & 정렬 */
 nav {
     width: 100%;
+    background: #fff;
     border-bottom: 2px solid #000;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .nav-content {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .tabs {
@@ -78,30 +82,28 @@ nav {
 }
 
 .tab {
-    font-size: 18px;
-    padding: 12px 24px;
+    font-size: 16px;
+    padding: 12px 18px;
     cursor: pointer;
     color: #666;
-    font-weight: 500;
+    background: none;
+    border: none;
+
+    text-decoration: none; /* a 태그 기본 밑줄 제거 */
+    display: inline-block;
 }
 
-/* 활성화된 탭 */
 .tab.active {
-    border: 2px solid #000;
-    border-bottom: 2px solid #fff;
-    margin-bottom: -2px;
+    border-bottom: 3px solid #000;
     font-weight: bold;
     color: #000;
-    background: #fff;
-    border-radius: 6px 6px 0 0;
 }
 
-/* 라디오 버튼 정렬 옵션 */
+/* 정렬 옵션 */
 .sort-options {
     display: flex;
     gap: 16px;
-    padding-bottom: 12px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -114,9 +116,9 @@ nav {
 }
 
 .sort-options input[type="radio"] {
-    accent-color: #000; /* 깔끔한 라디오 버튼 스타일 */
-    width: 16px;
-    height: 16px;
+    accent-color: #000;
+    width: 15px;
+    height: 15px;
     cursor: pointer;
 }
 
@@ -124,160 +126,163 @@ nav {
 main {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 25px;
 }
 
 /* 검색바 영역 */
 .search-bar {
     display: flex;
-    gap: 12px;
+    gap: 10px;
+    width: 100%;
 }
 
-/* 드롭다운 select 스타일 */
 .category-select {
     border: 2px solid #000;
     background: #fff;
-    padding: 14px 16px;
-    font-size: 16px;
+    padding: 8px 12px;
+    font-size: 14px;
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
-    outline: none;
-}
-
-.search-bar input {
-    border: 2px solid #000;
-    background: #fff;
-    padding: 14px 20px;
-    font-size: 16px;
-    border-radius: 6px;
     outline: none;
 }
 
 .search-input {
     flex: 1;
-    text-align: left; /* 텍스트 입력이 자연스럽도록 좌측 정렬 */
+    border: 2px solid #000;
+    background: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    outline: none;
 }
 
 .btn-search {
     border: 2px solid #000;
     background: #fff;
-    padding: 14px 24px;
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
 }
 
-/* 리뷰 작성 버튼 링크 스타일 */
+.btn-search:hover {
+    background: #eee;
+}
+
 .btn-write-link {
     text-decoration: none;
 }
 
 .btn-write {
     border: 2px solid #000;
-    background-color: #f5f5f5;
-    padding: 14px 20px;
-    font-size: 16px;
+    background-color: #eee;
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
     height: 100%;
 }
 
-/* 3x3 카드 그리드 레이아웃 */
+.btn-write:hover {
+    background-color: #ddd;
+}
+
+/* 3x3 카드 그리드 */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    gap: 20px;
+    width: 100%;
 }
 
-/* 카드 개별 링크 스타일 */
 .card-link {
     text-decoration: none;
     color: inherit;
     display: block;
 }
 
-/* 통일된 카드 스타일 */
 .card {
     border: 2px solid #000;
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     border-radius: 8px;
     background-color: #fff;
-    height: 360px;
-    transition: transform 0.1s ease, border-color 0.1s ease;
+    height: 350px;
+    transition: background-color 0.1s ease;
 }
 
 .card-link:hover .card {
     background-color: #fafafa;
-    border-width: 3px;
-    padding: 15px;
 }
 
 .card-img {
     border: 2px solid #000;
-    height: 200px;
+    height: 190px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
     border-radius: 6px;
     background-color: #f0f0f0;
     flex-shrink: 0;
+    color: #666;
 }
 
 .card-info {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: 2px 2px;
+    gap: 4px;
+    padding: 2px;
 }
 
 .card-info .restaurant-name {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
 }
 
 .card-info .row {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    color: #555;
+    font-size: 13px;
+    color: #666;
 }
 
 .card-title {
     border: 2px solid #000;
     text-align: center;
     padding: 8px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     border-radius: 6px;
     margin-top: auto;
     background-color: #fff;
 }
 
-/* 4. 하단 페이지네이션 */
+/* 페이지네이션 */
 .pagination {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 15px;
 }
 
 .pagination button {
     border: 2px solid #000;
     background: #fff;
-    padding: 8px 18px;
-    font-size: 16px;
+    padding: 5px 12px;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.pagination button:hover {
+    background: #eee;
 }

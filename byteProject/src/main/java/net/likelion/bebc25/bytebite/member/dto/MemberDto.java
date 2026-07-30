@@ -18,7 +18,12 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberDto {
     // id
-    private int id;
+    private int memberId;
+
+    // 닉네임
+    @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
+    @Size(min = 2, max = 20, message = "닉네임 2자 이상 20자 이하여야 합니다.")
+    private String nickname;
 
     // 이메일
     @NotBlank(message = "이메일은 필수 입력 항목입니다.")
@@ -30,14 +35,7 @@ public class MemberDto {
     @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하여야 합니다.")
     private String password;
 
-    // 닉네임
-    @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
-    @Size(min = 2, max = 20, message = "닉네임 2자 이상 20자 이하여야 합니다.")
-    private String nickname;
-
-    // 회원 유형
-    // 0 : 일반 사용자, 1: 맛집 운영자
-    private int role;
+    private String role;
 
     // 회원 가입 일시
     private LocalDateTime createdAt;

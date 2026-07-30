@@ -70,7 +70,7 @@
 //        if (bindingResult.hasErrors()) { // 검증에 실패했을 경우
 //            return "member/register"; // 작성중이던 페이지로 다시 보낸다.
 //        }
-//        memberServicegit checkout feature/.register(memberDto);  // db에 데이터 저장
+//        memberService.register(memberDto);  // db에 데이터 저장
 //
 //        return "redirect:/member/login.html"; // 로그인 창 띄움
 //    }

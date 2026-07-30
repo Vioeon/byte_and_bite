@@ -20,8 +20,11 @@
         <h2>Login</h2>
 
         <form action="/member/login" method="post" th:object="${loginForm}">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Password">
+            <input type="email" th:field="*{email}" placeholder="Email" required>
+            <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            <input type="password" th:field="*{password}" placeholder="Password" required>
+            <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            <div class="field-error" th:if="${loginErrorMessage}" th:text="${loginErrorMessage}">에러 메세지</div>
 
             <button type="submit">로그인</button>
         </form>

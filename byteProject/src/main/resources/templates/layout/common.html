@@ -2,20 +2,38 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>스프링 게시판 - Fragment</title>
-    <link rel="stylesheet" th:href="@{../../static/board/css/common.css}">
-    <link rel="stylesheet" th:href="@{/board/css/write.css}">
 </head>
 <body>
-<div class="container">
-    <th:block th:fragment="nav-header(title)">
-        <h1  th:text="${title}">타이틀</h1>
-        <div class="nav">
-            <a th:href="@{write.html}">새 글</a>
-            <a th:href="@{list.html}">목록으로 이동</a>
+<!-- 공통 GNB 조각 정의 -->
+<th:block th:fragment="nav-header">
+    <header>
+        <div class="wrapper header-content">
+            <div class="logo">Byte&Bite</div>
+            <div class="auth-buttons">
+                <!-- 로그인 안 된 경우 -->
+                <th:block th:if="${session.loginMember == null}">
+                    <a th:href="@{/member/login}"><button type="button">로그인</button></a>
+                    <a th:href="@{/member/register}"><button type="button">회원가입</button></a>
+                </th:block>
+                <!-- 로그인 된 경우 -->
+                <th:block th:if="${session.loginMember != null}">
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit">로그아웃</button>
+                    </form>
+                </th:block>
+            </div>
         </div>
-    </th:block>
+    </header>
 
-</div>
+    <nav>
+        <div class="wrapper nav-content">
+            <div class="tabs">
+                <a th:href="@{/posts}" class="tab" th:classappend="${menu == 'posts'} ? 'active' : ''">맛집 리뷰</a>
+                <a th:href="@{/news}" class="tab" th:classappend="${menu == 'news'} ? 'active' : ''">맛집 소식</a>
+                <a th:href="@{/mypage}" class="tab" th:classappend="${menu == 'mypage'} ? 'active' : ''">마이페이지</a>
+            </div>
+        </div>
+    </nav>
+</th:block>
 </body>
 </html>
