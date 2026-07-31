@@ -24,6 +24,45 @@
     margin-top: 5px;
 }
 
+.profile-restaurant-card {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.profile-restaurant-info h2 {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-restaurant-info .rname .category .address .phone {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.profile-restaurant-img {
+    border: 2px solid #000;
+    height: 190px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: #f0f0f0;
+    flex-shrink: 0;
+    color: #666;
+}
+
 .profile-stats {
     display: flex;
     gap: 20px;
