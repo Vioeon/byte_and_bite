@@ -19,18 +19,26 @@
         <h2>회원가입</h2>
 
         <form action="/member/signup" method="post" th:object="${signupForm}">
-            <input type="text" th:field="*{nickname}" placeholder="nickname" required>
-            <input type="email" th:field="*{email}" placeholder="Email" required>
-            <input type="password" th:field="*{password}" placeholder="Password" required>
-            <input type="password" th:field="*{passwordConfirm}" placeholder="Password 확인" required>
+            <input type="text" th:field="*{nickname}" placeholder="닉네임 입력" required>
+            <div class="input-guide" th:unless="${#fields.hasErrors('nickname')}">2~10자의 닉네임을 입력해주세요.</div>
+            <div class="field-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></div>
 
-            <div class="field-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+            <input type="email" th:field="*{email}" placeholder="이메일 입력" required>
+            <div class="input-guide" th:unless="${#fields.hasErrors('email')}">로그인에 사용할 이메일 주소입니다.</div>
+            <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+            <input type="password" th:field="*{password}" placeholder="비밀번호 입력" required>
+            <div class="input-guide" th:unless="${#fields.hasErrors('password')}">8~20자 영문, 숫자, 특수문자를 포함해주세요.</div>
+            <div class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+            <input type="password" th:field="*{passwordConfirm}" placeholder="비밀번호 확인" required>
+            <div class="input-guide" th:unless="${#fields.hasErrors('passwordConfirm')}">비밀번호를 한 번 더 입력해주세요.</div>
+            <div class="field-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
 
             <div class="member-type">
                 <label>
                     <input type="radio" th:field="*{role}" value="USER">사용자
                 </label>
-
                 <label>
                     <input type="radio" th:field="*{role}" value="MANAGER">식당 관계자
                 </label>

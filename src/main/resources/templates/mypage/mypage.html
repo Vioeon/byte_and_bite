@@ -38,15 +38,16 @@
     <!-- 맛집 운영자 식당 정보 카드 -->
     <th:block th:if="${session.loginMember != null} and ${session.loginMember.role == 'MANAGER'}">
         <section class="profile-restaurant-card">
-            <div class="profile-restaurant-img">이미지</div>
+            <div class="profile-restaurant-img">
+                <img th:src="${restaurant.imageUrl}" alt="식당 이미지">
+            </div>
             <div class="profile-restaurant-info">
                 <h2>
-                    <span name="rname">식당이름</span>
-                    <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
+                    <span th:text="${restaurant.rname}">맛있는 한끼</span>
                 </h2>
-                <div class="category" name="category">카테고리</div>
-                <div class="address" name="address">주소</div>
-                <div class="phone" name="phone">전화번호</div>
+                <span class="category" th:text="${restaurant.categoryName}">한식</span>
+                <div class="address" th:text="${restaurant.address}">서울 강남구 테헤란로 123</div>
+                <div class="phone" th:text="${restaurant.phone}">0212345678</div>
             </div>
         </section>
     </th:block>

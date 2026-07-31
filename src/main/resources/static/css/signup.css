@@ -71,10 +71,31 @@ body::after {
 .signup-box input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
 
     border: none;
     border-radius: 8px;
+}
+
+.input-guide {
+    font-size: 12px;
+    color: #000;
+    margin-top: 4px;
+    margin-bottom: 15px;
+    padding-left: 2px;
+
+    text-align: left;
+}
+
+.field-error {
+    min-height: 18px;
+
+    color: #dc3545;
+    font-size: 12px;
+    text-align: left;
+
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding-left: 2px;
 }
 
 .member-type {
@@ -109,20 +130,24 @@ body::after {
 
 /* 하단 링크 */
 .links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
     margin-top: 20px;
+
+    font-size: 14px;
+    color: #000000;
 }
 
 .links a {
+    color: #000000;
+    font-weight: bold;
     text-decoration: none;
-    color: black;
 }
 
-.links span {
-    margin: 0 8px;
-}
-
-.field-error {
-    height: 18px;
-    color: #dc3545;
-    font-size: 0.9em;
+.links a:hover {
+    color: #ccc;
+    text-decoration: underline;
 }
