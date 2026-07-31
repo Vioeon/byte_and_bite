@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface NewsService {
     List<NewsDto> getNews();
-//    NewsDto getNews(int id);
-//    void writeNews(NewsDto post);
-//    void editNews(NewsDto post);
-//    void removeNews(int id);
+    List<NewsDto> getNewsByViews();
+
+//    NewsDto getNews(int id); // get
+//    void writeNews(NewsDto post); // post
+//    void editNews(NewsDto post); // post
+//    void removeNews(int id); // post
 }

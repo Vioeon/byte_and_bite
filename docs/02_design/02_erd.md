@@ -44,22 +44,11 @@ erDiagram
         int post_id PK
         int member_id FK
         int restaurant_id FK
+        varchar_4 type
         varchar_200 title
         text content
         int view_count
         varchar_100 image
-        datetime created_at
-        datetime updated_at
-    }
-    
-    NEWS {
-        int news_id PK
-        int member_id FK
-        int restaurant_id FK
-        varchar_200 title
-        text content
-        int view_count
-        varchar_50 image
         datetime created_at
         datetime updated_at
     }
@@ -102,6 +91,7 @@ erDiagram
 - post_id: INT, PRIMARY KEY, AUTO_INCREMENT (게시글 고유 식별자)
 - member_id: INT, FOREIGN KEY (작성자 회원 식별자)
 - restaurant_id: INT, FOREIGN KEY (연결 식당 식별자)
+- type: VARCHAR(4), NOT NULL ('POST', 'NEWS')
 - title: VARCHAR(200), NOT NULL (게시글 제목)
 - content: TEXT, NOT NULL (게시글 본문)
 - view_count: INT, DEFAULT 0 (조회수)
@@ -109,18 +99,7 @@ erDiagram
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (작성 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (글 수정시 갱신)
 
-### 1.2.4 news (맛집 소식 테이블)
-- news_id: INT, PRIMARY KEY, AUTO_INCREMENT (소식 고유 식별자)
-- member_id: INT, FOREIGN KEY (작성자 회원 식별자)
-- restaurant_id: INT, FOREIGN KEY (연결 식당 식별자)
-- title: VARCHAR(200), NOT NULL (소식 제목)
-- content: TEXT, NOT NULL (소식 본문)
-- view_count: INT, DEFAULT 0 (조회수)
-- image: VARCHAR(100), NOT NULL (식당 사진 상대 경로)
-- created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (작성 일시)
-- updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (글 수정시 갱신)
-
-### 1.2.5 reply (댓글 테이블)
+### 1.2.4 reply (댓글 테이블)
 - reply_id: INT, PRIMARY KEY, AUTO_INCREMENT (댓글 고유 식별자)
 - post_id: INT, FOREIGN KEY (대상 게시글 식별자)
 - member_id: INT, FOREIGN KEY (댓글 작성자 식별자)
@@ -160,6 +139,7 @@ CREATE TABLE post (
                       post_id INT AUTO_INCREMENT PRIMARY KEY,
                       member_id INT NOT NULL,
                       restaurant_id INT NOT NULL,
+                      type VARCHAR(4) NOT NULL,
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
@@ -168,20 +148,6 @@ CREATE TABLE post (
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
                       CONSTRAINT fk_post_restaurant FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
-);
-
-CREATE TABLE news (
-                      news_id INT AUTO_INCREMENT PRIMARY KEY,
-                      member_id INT NOT NULL,
-                      restaurant_id INT NOT NULL,
-                      title VARCHAR(200) NOT NULL,
-                      content TEXT NOT NULL,
-                      view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(100) NOT NULL,
-                      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                      CONSTRAINT fk_news_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
-                      CONSTRAINT fk_news_restaurant FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE reply (
