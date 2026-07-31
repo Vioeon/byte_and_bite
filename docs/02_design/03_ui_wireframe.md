@@ -229,17 +229,7 @@
     - 이메일 @~~~ 미입력 시 경고 창 출력
     - 비밀번호 미입력 시 경고 창 출력
 
-### 2.13 비밀번호 변경 (GET `/member/password/reset`)
-
-<img src="../images/13_password_reset1.png" width="400" alt="비밀번호 변경 본인 확인 검증 화면">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/13_password_reset2.png" width="400" alt="비밀번호 변경 화면">
-
-- 입력 데이터 및 검증 규칙 (Input Data & Validation):
-    - 새 비밀번호 : 공백 제출 제한, 최소 8자 ~ 최대 20자 이하
-    - 새 비밀번호 확인 :  공백 제출 제한, 최소 8자 ~ 최대 20자 이하
-- 화면 제어 및 권한 규칙 (Behavior Rules):
-    - 본인 확인 버튼 클릭 시 본인 확인 완료되면 비밀번호 변경 화면으로 이동
-
-### 2.14 회원가입 화면 (GET `/member/signup`)
+### 2.13 회원가입 화면 (GET `/member/signup`)
 
 <img src="../images/14_signup.png" width="400" alt="회원가입 화면">
 
@@ -252,7 +242,7 @@
 - 화면 제어 및 권한 규칙 (Behavior Rules):
     - 회원 가입 버튼 클릭 시 메인 페이지로 이동
 
-### 2.15 식당정보 등록 화면 (GET `/member/signup/restaurant`)
+### 2.14 식당정보 등록 화면 (GET `/member/signup/restaurant`)
 
 <img src="../images/15_signup_restaurant.png" width="400" alt="식당정보 등록 화면">
 
