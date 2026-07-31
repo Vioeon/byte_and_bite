@@ -113,7 +113,7 @@ public class MemberController {
         SessionMemberDto sessionMember = new SessionMemberDto(memberInfo);
         session.setAttribute("loginMember", sessionMember);
 
-        return "redirect:/post/list";
+        return "redirect:/member/posts";
     }
 
     // 맛집 정보 등록 화면
