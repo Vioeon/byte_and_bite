@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface NewsRepository {
     List<NewsDto> findAll();
+    List<NewsDto> findAllByViews();
 //    NewsDto findById(int id);
 //    void save(NewsDto post);
 //    void update(NewsDto post);

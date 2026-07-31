@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Byte&Bite - 맛집 리뷰</title>
+    <link rel="stylesheet" th:href="@{/css/postList.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+
+<div th:replace="~{layout/common :: nav-header}"></div>
+<main class="wrapper">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <div class="sort-options">
+            <label>
+                <input type="radio" name="sort" value="latest"
+                       th:checked="${sort == 'latest'}"
+                       onchange="location.href='?sort=latest'"> 최신순
+            </label>
+            <label>
+                <input type="radio" name="sort" value="views"
+                       th:checked="${sort == 'views'}"
+                       onchange="location.href='?sort=views'"> 조회순
+            </label>
+        </div>
+    </div>
+
+    <!-- 검색바 -->
+    <form class="search-bar" action="/search" method="GET" onsubmit="return false;">
+        <select class="category-select" name="category">
+            <option value="all">전체 카테고리</option>
+            <option value="korean">한식</option>
+            <option value="western">양식</option>
+            <option value="chinese">중식</option>
+            <option value="japanese">일식</option>
+            <option value="etc">기타</option>
+        </select>
+
+        <input type="text" class="search-input" name="keyword" placeholder="리뷰 제목을 입력해주세요.">
+
+        <button type="submit" class="btn-search">검색</button>
+
+        <a href="write.html" class="btn-write-link">
+            <button type="button" class="btn-write">리뷰작성</button>
+        </a>
+    </form>
+
+    <!-- 3x3 카드 그리드 -->
+    <section class="card-grid">
+        <!-- 카드 1 -->
+<!--        <a href="detail.html?id=1" class="card-link">-->
+<!--            <div class="card">-->
+<!--                <div class="card-img">이미지</div>-->
+<!--                <div class="card-info">-->
+<!--                    <div class="restaurant-name">식당 이름</div>-->
+<!--                    <div class="row">-->
+<!--                        <span>한식</span>-->
+<!--                        <span>조회수 123</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-title">리뷰제목</div>-->
+<!--            </div>-->
+<!--        </a>-->
+
+<!--        &lt;!&ndash; 카드 2 &ndash;&gt;-->
+<!--        <a href="detail.html?id=2" class="card-link">-->
+<!--            <div class="card">-->
+<!--                <div class="card-img">이미지</div>-->
+<!--                <div class="card-info">-->
+<!--                    <div class="restaurant-name">식당 이름</div>-->
+<!--                    <div class="row">-->
+<!--                        <span>일식</span>-->
+<!--                        <span>조회수 85</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-title">리뷰제목</div>-->
+<!--            </div>-->
+<!--        </a>-->
+
+<!--        &lt;!&ndash; 카드 3 &ndash;&gt;-->
+<!--        <a href="detail.html?id=3" class="card-link">-->
+<!--            <div class="card">-->
+<!--                <div class="card-img">이미지</div>-->
+<!--                <div class="card-info">-->
+<!--                    <div class="restaurant-name">식당 이름</div>-->
+<!--                    <div class="row">-->
+<!--                        <span>양식</span>-->
+<!--                        <span>조회수 210</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-title">리뷰제목</div>-->
+<!--            </div>-->
+<!--        </a>-->
+
+<!--        &lt;!&ndash; 카드 4 &ndash;&gt;-->
+<!--        <a href="detail.html?id=4" class="card-link">-->
+<!--            <div class="card">-->
+<!--                <div class="card-img">이미지</div>-->
+<!--                <div class="card-info">-->
+<!--                    <div class="restaurant-name">식당 이름</div>-->
+<!--                    <div class="row">-->
+<!--                        <span>중식</span>-->
+<!--                        <span>조회수 45</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-title">리뷰제목</div>-->
+<!--            </div>-->
+<!--        </a>-->
+
+        <!-- DB에서 가져온 개수만큼 카드가 동적으로 반복 생성됩니다 -->
+        <a th:each="post : ${news}"
+           th:href="@{/detail(id=${post.newsId})}"
+           class="card-link">
+            <div class="card">
+                <div class="card-img">이미지</div>
+                <div class="card-info">
+                    <div class="restaurant-name" th:text="${post.restaurantName}">식당 이름</div>
+                    <div class="row">
+                        <span th:text="${post.category}">카테고리</span>
+                        <span th:text="'조회수 ' + ${post.views}">조회수 0</span>
+                    </div>
+                </div>
+                <div class="card-title" th:text="${post.title}">리뷰 제목</div>
+            </div>
+        </a>
+
+        <!-- 데이터가 아예 없을 때 예외 처리 -->
+        <div th:if="${#lists.isEmpty(news)}" style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
+            등록된 리뷰가 없습니다.
+        </div>
+    </section>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" th:if="${news != null and not #lists.isEmpty(news)}">
+        <button><</button>
+        <span>1</span>
+        <button>></button>
+    </div>
+</main>
+</body>
+</html>

@@ -14,7 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 // 게시글 하나를 저장할 객체
 public class NewsDto {
-    private int id;
+    private int newsId;
+    private int restaurantId;
+    private String restaurantName;
+    private String category;
+    private int views;
 
     @NotBlank(message = "제목은 필수 입력 항목입니다.")
     @Size(max = 200, message = "제목은 200자 이하로 입력해야 합니다.")
@@ -28,22 +32,5 @@ public class NewsDto {
     private String image;
 
     private LocalDateTime createdAt;
-
-    //public PostDto(){}
-
-    public NewsDto(String title, LocalDateTime createdAt){
-        this.title = title;
-        this.createdAt = createdAt;
-    }
-
-    public NewsDto(String title, String content){
-        this.title = title;
-        this.content = content;
-    }
-
-    public NewsDto(String title, String content, String image){
-        this.title = title;
-        this.content = content;
-        this.image = image;
-    }
+    private LocalDateTime updatedAt;
 }

@@ -15,7 +15,7 @@ CREATE TABLE member (
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
--- KOR, WST, CHN, JPN, ETC
+
 CREATE TABLE restaurant (
                             restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
                             member_id INT NOT NULL UNIQUE,
@@ -33,6 +33,7 @@ CREATE TABLE post (
                       post_id INT AUTO_INCREMENT PRIMARY KEY,
                       member_id INT NOT NULL,
                       restaurant_id INT NOT NULL,
+                      type VARCHAR(4) NOT NULL,
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
@@ -41,20 +42,6 @@ CREATE TABLE post (
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
                       CONSTRAINT fk_post_restaurant FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
-);
-
-CREATE TABLE news (
-                      news_id INT AUTO_INCREMENT PRIMARY KEY,
-                      member_id INT NOT NULL,
-                      restaurant_id INT NOT NULL,
-                      title VARCHAR(200) NOT NULL,
-                      content TEXT NOT NULL,
-                      view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(100) NOT NULL,
-                      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                      CONSTRAINT fk_news_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
-                      CONSTRAINT fk_news_restaurant FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE reply (
