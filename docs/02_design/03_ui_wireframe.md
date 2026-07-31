@@ -231,7 +231,7 @@
 
 ### 2.13 회원가입 화면 (GET `/member/signup`)
 
-<img src="../images/14_signup.png" width="400" alt="회원가입 화면">
+<img src="../images/13_signup.png" width="400" alt="회원가입 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 닉네임 : 필수 입력 항목, 공백 제출 제한, 최대 20자 이하
@@ -244,7 +244,7 @@
 
 ### 2.14 식당정보 등록 화면 (GET `/member/signup/restaurant`)
 
-<img src="../images/15_signup_restaurant.png" width="400" alt="식당정보 등록 화면">
+<img src="../images/14_signup_restaurant.png" width="400" alt="식당정보 등록 화면">
 
 - 입력 데이터 및 검증 규칙 (Input Data & Validation):
     - 식당명 : 필수 입력 항목, 공백 제출 제한, 최대 50자 이하
