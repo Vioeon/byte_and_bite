@@ -14,7 +14,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
@@ -23,7 +23,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public String getBoardList(Model model){
         List<PostDto> posts = postService.getPosts();
         model.addAttribute("posts", posts);
@@ -31,9 +31,9 @@ public class PostController {
         return "post/postList";
     }
 
-    @GetMapping("/detail.html")
-    public String getDetail(@RequestParam("id") int id, Model model){
-        PostDto post = postService.getPost(id);
+    @GetMapping("/{postId}")
+    public String getDetail(@PathVariable int postId, Model model){
+        PostDto post = postService.getPost(postId);
         // DB에 저장된 이미지 문자열을 , 로 나누기
         // .split() - 문자열을 원하는 기준으로 나누어줌
         List<String> images = List.of(post.getImage().split(","));
@@ -43,7 +43,7 @@ public class PostController {
         return "post/detail"; // 템플릿 파일 경로
     }
 
-    @GetMapping("/write.html")
+    @GetMapping("/write")
     public String getWriteForm(@ModelAttribute("postForm") PostDto post){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
         return "post/write";
     }
@@ -54,14 +54,18 @@ public class PostController {
                             BindingResult bindingResult,
                             @RequestParam(value="images", required = false)
                                 MultipartFile[] images){
-        if(bindingResult.hasErrors()){
-            bindingResult.getFieldErrors().forEach(error -> {
-                log.info("필드 : {}, 오류 : {}",
-                        error.getField(),
-                        error.getDefaultMessage());
-            });
-            return "post/write"; //
+        // 이미지 첨부 필수 검사
+        if(images == null || images.length == 0 || images[0].isEmpty()){
+            bindingResult.rejectValue("images", "required",
+                    "이미지는 필수 첨부 항목입니다.");
         }
+        // 제목, 내용, 이미지 검증 실패 시 리턴
+        if(bindingResult.hasErrors()){
+            bindingResult.getAllErrors().forEach(System.out::println);
+            return "post/write";
+        }
+        // 대표 이미지 저장
+        post.setImage(images[0].getOriginalFilename());
 
 //         여러 장의 이미지를 등록 가능(MultipartFile[] 로 수정)
         if(images != null && images.length > 0){
@@ -86,10 +90,10 @@ public class PostController {
         post.setRestaurantId(1); // 임시 식당 번호
 
         postService.writePost(post);
-        return "redirect:/post/list.html"; //
+        return "redirect:/post/list"; //
     }
 
-    @GetMapping("/edit.html")
+    @GetMapping("/edit")
     public String getEditForm(@RequestParam("id") int id, Model model){
         PostDto post = postService.getPost(id);
         model.addAttribute("postForm", post);
@@ -104,12 +108,12 @@ public class PostController {
         }
 
         postService.editPost(post);
-        return "redirect:detail.html?id=" + post.getId();
+        return "redirect:/posts/" + post.getId();
     }
 
     @PostMapping("/delete")
     public String deletePost(@RequestParam int id){
         postService.removePost(id);
-        return "redirect:/post/list.html";
+        return "redirect:/post/list";
     }
 }

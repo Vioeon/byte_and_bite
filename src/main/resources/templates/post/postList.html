@@ -36,76 +36,16 @@
 
         <button type="submit" class="btn-search">검색</button>
 
-        <a href="write.html" class="btn-write-link">
+        <a href="@{/posts/write}" class="btn-write-link">
             <button type="button" class="btn-write">리뷰작성</button>
         </a>
     </form>
 
     <!-- 3x3 카드 그리드 -->
     <section class="card-grid">
-        <!-- 카드 1 -->
-        <a href="detail.html?id=1" class="card-link">
-            <div class="card">
-                <div class="card-img">이미지</div>
-                <div class="card-info">
-                    <div class="restaurant-name">식당 이름</div>
-                    <div class="row">
-                        <span>한식</span>
-                        <span>조회수 123</span>
-                    </div>
-                </div>
-                <div class="card-title">리뷰제목</div>
-            </div>
-        </a>
-
-        <!-- 카드 2 -->
-        <a href="detail.html?id=2" class="card-link">
-            <div class="card">
-                <div class="card-img">이미지</div>
-                <div class="card-info">
-                    <div class="restaurant-name">식당 이름</div>
-                    <div class="row">
-                        <span>일식</span>
-                        <span>조회수 85</span>
-                    </div>
-                </div>
-                <div class="card-title">리뷰제목</div>
-            </div>
-        </a>
-
-        <!-- 카드 3 -->
-        <a href="detail.html?id=3" class="card-link">
-            <div class="card">
-                <div class="card-img">이미지</div>
-                <div class="card-info">
-                    <div class="restaurant-name">식당 이름</div>
-                    <div class="row">
-                        <span>양식</span>
-                        <span>조회수 210</span>
-                    </div>
-                </div>
-                <div class="card-title">리뷰제목</div>
-            </div>
-        </a>
-
-        <!-- 카드 4 -->
-        <a href="detail.html?id=4" class="card-link">
-            <div class="card">
-                <div class="card-img">이미지</div>
-                <div class="card-info">
-                    <div class="restaurant-name">식당 이름</div>
-                    <div class="row">
-                        <span>중식</span>
-                        <span>조회수 45</span>
-                    </div>
-                </div>
-                <div class="card-title">리뷰제목</div>
-            </div>
-        </a>
-
         <!-- DB에서 가져온 개수만큼 카드가 동적으로 반복 생성됩니다 -->
         <a th:each="post : ${posts}"
-           th:href="@{/detail(id=${post.id})}"
+           th:href="@{/posts/{postId}(postId=${post.id})}"
            class="card-link">
             <div class="card">
                 <div class="card-img">이미지</div>
