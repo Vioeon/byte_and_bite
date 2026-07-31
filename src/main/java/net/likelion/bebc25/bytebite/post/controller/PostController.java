@@ -27,12 +27,6 @@ public class PostController {
     public String getBoardList(Model model){
         List<PostDto> posts = postService.getPosts();
         model.addAttribute("posts", posts);
-        return "post/postList";
-    }
-
-    // 맛집리뷰 화면 테스트용
-    @GetMapping("/postList")
-    public String posts(Model model) {
         model.addAttribute("menu", "posts");
         return "post/postList";
     }

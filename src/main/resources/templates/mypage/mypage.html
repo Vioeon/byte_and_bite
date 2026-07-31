@@ -8,36 +8,18 @@
 </head>
 <body>
 
-<header>
-    <div class="wrapper header-content">
-        <div class="logo">Byte&Bite</div>
-        <div class="auth-buttons">
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit">로그아웃</button>
-            </form>
-        </div>
-    </div>
-</header>
-
-<nav>
-    <div class="wrapper nav-content">
-        <div class="tabs">
-            <a th:href="@{/posts}" class="tab">맛집 리뷰</a>
-            <a th:href="@{/news}" class="tab">맛집 소식</a>
-            <a th:href="@{/mypage}" class="tab active">마이페이지</a>
-        </div>
-    </div>
-</nav>
-
+<div th:replace="~{layout/common :: nav-header}"></div>
 <main class="wrapper">
 
     <!-- 내 정보 카드 -->
     <section class="profile-card">
         <div class="profile-info">
             <h2>
+                <!-- 닉네임 th 필드 설정 -->
                 <span name="nickname">bytebite</span>
                 <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
             </h2>
+            <!-- 이메일 th 필드 설정 -->
             <div class="email" name="email">이메일</div>
         </div>
 
@@ -48,12 +30,13 @@
             </div>
             <div class="stat-item">
                 <span class="stat-label">가입일</span>
+                <!-- 가입일 th 필드 설정 -->
                 <span class="stat-value" name="${#temporals.format(member.createdAt, 'yyyy-MM-dd')}">2026-07-28</span>
             </div>
         </div>
     </section>
 
-    <!-- 작성한 리뷰 피드 -->
+    <!-- 작성한 리뷰 -->
     <section class="posts-section">
         <div class="section-header">
             <div class="section-title">

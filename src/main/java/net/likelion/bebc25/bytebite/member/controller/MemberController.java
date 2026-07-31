@@ -25,12 +25,6 @@ public class MemberController {
 
     // -----------------------------------------------------
 
-    // 맛집리뷰 화면 테스트용
-    @GetMapping("/posts")
-    public String posts(Model model) {
-        model.addAttribute("menu", "posts");
-        return "post/postList";
-    }
     // 마이페이지 화면 테스트용
     @GetMapping("/mypage")
     public String mypage(Model model) {
@@ -85,27 +79,29 @@ public class MemberController {
 
     // 로그인 화면
     @GetMapping("/login")
-    public String getLoginForm(@ModelAttribute("loginForm") MemberDto memberDto) {
+    public String getLoginForm(@ModelAttribute("loginForm") LoginDto loginDto) {
         return "member/login";
     }
     // 로그인 인증 요청 처리
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("loginForm") MemberDto memberDto,
+    public String login(@Valid @ModelAttribute("loginForm") LoginDto loginDto,
                         BindingResult bindingResult,
                         RedirectAttributes redirectAttributes,
                         HttpSession session) {
 
         if(bindingResult.hasErrors()){ // 검증에 실패했을 경우
+            log.info("검증 실패");
+            log.info("errors={}", bindingResult.getAllErrors());
             return "member/login"; // 작성중이던 페이지로 다시 보낸다.
         }
 
         // 로그인 시도
-        MemberDto memberInfo = memberService.login(memberDto.getEmail(), memberDto.getPassword());
+        MemberDto memberInfo = memberService.login(loginDto.getEmail(), loginDto.getPassword());
         if(memberInfo == null){
             // 로그인 실패 메시지를 담아 다시 로그인 페이지로 리다이렉트
             // addFlashAttribute: 임시로 세션에 속성을 담아서 리다이렉트 된 페이지에서 꺼내어 사용 후 속성값은 세션에서 제거함
             redirectAttributes.addFlashAttribute("loginErrorMessage", "아이디 또는 비밀번호를 확인하세요.");
-            redirectAttributes.addFlashAttribute("loginForm", memberDto); // 입력 폼 데이터 유지
+            redirectAttributes.addFlashAttribute("loginForm", loginDto); // 입력 폼 데이터 유지
             return "redirect:/member/login";
         }
         // 로그인 성공 시
@@ -113,7 +109,7 @@ public class MemberController {
         SessionMemberDto sessionMember = new SessionMemberDto(memberInfo);
         session.setAttribute("loginMember", sessionMember);
 
-        return "redirect:/member/posts";
+        return "redirect:/post/list";
     }
 
     // 맛집 정보 등록 화면

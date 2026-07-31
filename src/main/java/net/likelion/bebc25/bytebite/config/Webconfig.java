@@ -14,6 +14,6 @@ public class Webconfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/member/*", "/post/write", "/news/write", "/mypage/*") // 로그인 체크할 경로
-                .excludePathPatterns("/member/mypage", "/member/posts", "/member/signup", "/member/signup/restaurant", "/member/login", "/post/list", "/news/list", "/member/register", "/css/**", "/js/**", "/*.ico", "/error"); // 제외할 경로
+                .excludePathPatterns("/member/signup", "/member/signup/restaurant", "/member/login", "/post/list", "/news/list", "/member/register", "/css/**", "/js/**", "/*.ico", "/error"); // 제외할 경로
     }
 }
