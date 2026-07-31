@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping("/")
     public String home() {
-
-        return "redirect:/news/list"; // 게시글 목록으로 이동
+        return "redirect:/posts"; // 게시글 목록으로 이동
     }
 }

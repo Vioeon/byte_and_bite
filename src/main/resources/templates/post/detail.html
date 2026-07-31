@@ -8,11 +8,11 @@
 </head>
 <body>
 <div class="container">
-    <th:block th:insert="~{layout/common :: nav-header('게시글 상세 정보')}">
+    <th:block th:insert="~{layout/common :: nav-header}">
         <h1>게시글 상세 정보</h1>
         <div class="nav">
-            <a href="list.html">목록으로</a>
-            <a href="write.html">새 글 쓰기</a>
+            <a href="@{/posts}">목록으로</a>
+            <a href="@{/posts/write}">새 글 쓰기</a>
         </div>
     </th:block>
     <table style="margin-bottom: 20px;">
@@ -39,15 +39,15 @@
         <tr>
             <th>이미지</th>
             <td>
-                <img th:each="image:${images}" th:if="${post.images != ''}" th:src="@{/images/{image}(image=${post.image})}"
-                     width="300">
+                <img th:each="image : ${images}" th:if="${post.image != null}"
+                     th:src="@{/images/{image}(image=${image})}" width="300">
             </td>
         </tr>
     </table>
 
     <div>
-        <a th:href="@{edit.html(id=${post.id})}" class="btn">수정하기</a>
-        <a href="list.html" class="btn btn-secondary">목록으로</a>
+        <a th:href="@{/posts/edit(id=${post.id})}" class="btn">수정하기</a>
+        <a th:href="@{/posts}" class="btn btn-secondary">목록으로</a>
     </div>
 </div>
 </body>

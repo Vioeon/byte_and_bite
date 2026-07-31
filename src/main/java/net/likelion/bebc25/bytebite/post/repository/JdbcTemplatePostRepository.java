@@ -25,6 +25,9 @@ public class JdbcTemplatePostRepository implements PostRepository{
                 .nickname(rs.getString("nickname"))
                 .title(rs.getString("title"))
                 .image(rs.getString("image"))
+                .category(rs.getString("category"))
+                .restaurantName(rs.getString("rname"))
+                .views(rs.getInt("view_count"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .build();
     };
@@ -37,19 +40,28 @@ public class JdbcTemplatePostRepository implements PostRepository{
                 .title(rs.getString("title"))
                 .content(rs.getString("content"))
                 .image(rs.getString("image"))
+                .category(rs.getString("category"))
+                .restaurantName(rs.getString("rname"))
+                .views(rs.getInt("view_count"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .build();
     };
 
     @Override
-    public List<PostDto> findAll() {
-        String sql = "SELECT p.*, m.nickname FROM post p JOIN member m ON p.member_id = m.member_id";
+    public List<PostDto> findAllPost() {
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname FROM post p "
+                + "JOIN member m ON p.member_id = m.member_id "
+                + "JOIN restaurant r ON p.restaurant_id = r.restaurant_id "
+                + "WHERE p.type = 'POST'";
+
         return jdbcTemplate.query(sql, postRowMapper);
     }
 
     @Override
     public PostDto findById(int id) {
-        String sql = "SELECT p.*, m.nickname FROM post p JOIN member m ON p.member_id = m.member_id WHERE p.post_id = ?";
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname FROM post p JOIN member m ON p.member_id = m.member_id " +
+                "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE p.post_id = ?";
         return jdbcTemplate.queryForObject(sql, postDetailMapper, id);
     }
 

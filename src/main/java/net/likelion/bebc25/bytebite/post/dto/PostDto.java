@@ -20,7 +20,6 @@ public class PostDto {
     private int id;
 
     private int memberId;
-
     private String nickname;
 
     @NotBlank(message = "제목은 필수 입력 항목입니다.")
@@ -29,19 +28,20 @@ public class PostDto {
 
 //    @NotNull(message = "식당을 선택해주세요.")
     private int restaurantId;
-
     private String restaurantName;
+
+    private String category;
 
 
     private String image;
-//    @NotEmpty(message = "이미지는 필수 첨부 항목입니다.")
     private MultipartFile images;
 
     @NotBlank(message = "내용은 필수 입력 항목입니다.")
     private String content;
 
-    private LocalDateTime createdAt;
+    private int views;
 
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 }
