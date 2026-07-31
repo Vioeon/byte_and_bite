@@ -35,6 +35,21 @@
             </div>
         </div>
     </section>
+    <!-- 맛집 운영자 식당 정보 카드 -->
+    <th:block th:if="${session.loginMember != null} and ${session.loginMember.role == 'MANAGER'}">
+        <section class="profile-restaurant-card">
+            <div class="profile-restaurant-img">이미지</div>
+            <div class="profile-restaurant-info">
+                <h2>
+                    <span name="rname">식당이름</span>
+                    <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
+                </h2>
+                <div class="category" name="category">카테고리</div>
+                <div class="address" name="address">주소</div>
+                <div class="phone" name="phone">전화번호</div>
+            </div>
+        </section>
+    </th:block>
 
     <!-- 작성한 리뷰 -->
     <section class="posts-section">
