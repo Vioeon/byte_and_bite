@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.likelion.bebc25.bytebite.exception.DuplicateEmailException;
 import net.likelion.bebc25.bytebite.member.dto.*;
 import net.likelion.bebc25.bytebite.member.service.MemberService;
+import net.likelion.bebc25.bytebite.member.service.RestaurantService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,20 +19,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RestaurantService restaurantService;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, RestaurantService restaurantService) {
         this.memberService = memberService;
+        this.restaurantService = restaurantService;
     }
-
-    // -----------------------------------------------------
 
     // 마이페이지 화면 테스트용
     @GetMapping("/mypage")
-    public String mypage(Model model) {
+    public String mypage(Model model, HttpSession session) {
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if(loginMember != null && loginMember.getRole().equals("MANAGER")) {
+
+            // memberId로 식당 정보 조회하여 Dto에 저장
+            RestaurantDto restaurant = restaurantService.findByMemberId(loginMember.getMemberId());
+
+            model.addAttribute("restaurant", restaurant);
+        }
+
         model.addAttribute("menu", "mypage");
         return "mypage/mypage";
     }
-    // -----------------------------------------------------
+
 
     // 회원가입 화면
     @GetMapping("/signup")
@@ -50,14 +60,10 @@ public class MemberController {
                     "비밀번호가 일치하지 않습니다."
             );
         }
-        // @Valid 검증 및 에러 메시지
         if (bindingResult.hasErrors()) {
-            model.addAttribute(
-                    "errorMessage",
-                    bindingResult.getAllErrors().get(0).getDefaultMessage()
-            );
             return "member/signup";
         }
+
         // 일반 사용자, 맛집 운영자 - 이메일 중복 체크
         try{
             memberService.validateDuplicateEmail(signupDto);
@@ -109,7 +115,7 @@ public class MemberController {
         SessionMemberDto sessionMember = new SessionMemberDto(memberInfo);
         session.setAttribute("loginMember", sessionMember);
 
-        return "redirect:/post/list";
+        return "redirect:/posts";
     }
 
     // 맛집 정보 등록 화면
@@ -145,62 +151,4 @@ public class MemberController {
         session.invalidate(); // 세션 파기
         return "redirect:/";
     }
-//    /**
-//     * 전체 회원 목록을 조회하고 회원 목록 정적 화면으로 유도합니다.
-//     *
-//     * @param model 화면에 전달할 데이터를 담는 Model 객체
-//     * @return 회원 목록 화면으로의 redirect 경로
-//     */
-//    @GetMapping("/list.html")
-//    public String getMemberList(Model model) {
-//        // 실습 영역
-//        List<MemberDto> members = memberService.getMembers();
-//        model.addAttribute("members", members);
-//        return "member/list";
-//    }
-//
-//    /**
-//     * 회원 정보 수정 화면으로 유도합니다.
-//     *
-//     * @param id    수정할 회원의 일련번호
-//     * @param model 화면에 전달할 데이터를 담는 Model 객체
-//     * @return 회원 정보 수정 화면으로의 redirect 경로
-//     */
-//    @GetMapping("/edit.html")
-//    public String getEditForm(@RequestParam("id") int id, Model model) {
-//        // 실습 영역
-//        MemberDto memberDto = memberService.getMember(id);
-//        model.addAttribute("memberForm", memberDto);
-//        return "member/edit";
-//    }
-//
-//    /**
-//     * 회원 정보 수정 요청 데이터를 받아 반영 처리를 수행합니다.
-//     *
-//     * @param memberDto 수정 요청 데이터 DTO
-//     * @return 회원 목록 화면으로의 redirect 경로
-//     */
-//    @PostMapping("/edit")
-//    public String edit(@Valid @ModelAttribute("memberForm") MemberDto memberDto,
-//                       BindingResult bindingResult) {
-//        // 실습 영역
-//        if (bindingResult.hasErrors()) {
-//            return "member/edit";
-//        }
-//        memberService.modifyInfo(memberDto);
-//        return "redirect:/member/list.html";
-//    }
-//
-//    /**
-//     * 회원 탈퇴 요청을 받아 삭제 처리를 수행합니다.
-//     *
-//     * @param id 탈퇴할 회원의 일련번호
-//     * @return 회원 목록 화면으로의 redirect 경로
-//     */
-//    @PostMapping("/withdraw")
-//    public String withdraw(@RequestParam int id) {
-//        // 실습 영역
-//        memberService.withdraw(id);
-//        return "redirect:/member/list.html";
-//    }
 }

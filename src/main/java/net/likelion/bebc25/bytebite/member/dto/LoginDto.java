@@ -1,6 +1,7 @@
 package net.likelion.bebc25.bytebite.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 

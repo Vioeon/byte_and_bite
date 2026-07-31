@@ -99,14 +99,24 @@ body::after {
 
 /* 하단 링크 */
 .links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
     margin-top: 20px;
+
+    font-size: 14px;
+    color: #000;
 }
 
 .links a {
+    color: #000;
+    font-weight: bold;
     text-decoration: none;
-    color: black;
 }
 
-.links span {
-    margin: 0 8px;
+.links a:hover {
+    color: #ccc;
+    text-decoration: underline;
 }
