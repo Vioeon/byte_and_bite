@@ -42,17 +42,17 @@ header {
     align-items: center;
 }
 
-/* 로고 */
+/* 로고 (화사하고 톡톡 튀는 네온 코랄 주황) */
 .logo {
     font-size: 28px;
     font-weight: 800;
-    color: #ff6b35;
+    color: #ff5252;
     text-decoration: none;
     letter-spacing: -1px;
 }
 
 .logo:hover {
-    color: #ff6b35;
+    color: #ff5252;
     text-decoration: none;
 }
 
@@ -84,8 +84,8 @@ header {
 }
 
 .header-auth a:hover {
-    border-color: #ff6b35;
-    color: #ff6b35;
+    border-color: #ff5252;
+    color: #ff5252;
 }
 
 /* 로그아웃 버튼 */
@@ -103,9 +103,9 @@ header {
 }
 
 .header-auth button:hover {
-    background: #ff6b35;
+    background: #ff5252;
     color: white;
-    border-color: #ff6b35;
+    border-color: #ff5252;
 }
 
 /* ==========
@@ -144,13 +144,13 @@ nav {
 }
 
 .tab:hover {
-    color: #ff6b35;
+    color: #ff5252;
 }
 
 .tab.active {
     font-weight: bold;
-    color: #ff6b35;
-    border-bottom: 3px solid #ff6b35;
+    color: #ff5252;
+    border-bottom: 3px solid #ff5252;
 }
 
 /* 사용자 환영 문구 */

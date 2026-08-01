@@ -18,7 +18,7 @@
     </div>
     <!-- 회원가입 박스 -->
     <div class="signup-box">
-        <h2>나의 식당 등록</h2>
+        <h2>내 식당 등록</h2>
 
         <form action="/member/signup/restaurant" method="post" enctype="multipart/form-data" th:object="${restaurantForm}">
             <input type="text" th:field="*{rname}" placeholder="식당명" required>
@@ -39,7 +39,7 @@
                 <label for="image">식당 대표 이미지</label>
                 <input type="file" id="image" name="image" accept="image/*">
             </div>
-            <button type="submit">식당 등록</button>
+            <button type="submit">등록하기</button>
         </form>
 
         <div class="links">

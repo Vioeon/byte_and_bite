@@ -15,11 +15,10 @@
 }
 
 .sort-options input[type="radio"] {
-    accent-color: #ff6b35;
+    accent-color: #ff5252;
     width: 15px;
     height: 15px;
 }
-
 
 /* 메인 콘텐츠 영역 */
 main {
@@ -27,7 +26,6 @@ main {
     flex-direction: column;
     gap: 25px;
 }
-
 
 /* 검색바 영역 */
 .search-bar {
@@ -39,7 +37,6 @@ main {
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
-
 
 /* 카테고리 선택 */
 .category-select {
@@ -53,7 +50,7 @@ main {
 }
 
 .category-select:focus {
-    border-color: #ff6b35;
+    border-color: #ff5252;
 }
 
 /* 검색 input */
@@ -68,13 +65,13 @@ main {
 }
 
 .search-input:focus {
-    border-color: #ff6b35;
+    border-color: #ff5252;
 }
 
 /* 검색 버튼 */
 .btn-search {
     border: none;
-    background: #ff6b35;
+    background: #ff5252;
     color: white;
     padding: 10px 18px;
     font-size: 14px;
@@ -84,7 +81,7 @@ main {
 }
 
 .btn-search:hover {
-    background: #e85a28;
+    background: #e03e3e;
 }
 
 /* 작성 버튼 */
@@ -134,14 +131,12 @@ main {
     height: 350px;
 
     box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-    transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-link:hover .card {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 20px rgba(255, 82, 82, 0.12);
 }
 
 /* 카드 이미지 */
@@ -205,16 +200,13 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 8px;
-
     margin-top: 20px;
 }
 
 .pagination button {
     border: 1px solid #ddd;
     background: white;
-
     padding: 7px 13px;
     font-weight: bold;
     cursor: pointer;
@@ -223,7 +215,7 @@ main {
 }
 
 .pagination button:hover {
-    background: #ff6b35;
+    background: #ff5252;
     color: white;
-    border-color: #ff6b35;
+    border-color: #ff5252;
 }
