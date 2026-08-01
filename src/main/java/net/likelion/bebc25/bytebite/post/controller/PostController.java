@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+// 댓글 서비스 추가
+import net.likelion.bebc25.bytebite.reply.service.ReplyService;
 
 import java.util.List;
 
@@ -19,8 +21,13 @@ public class PostController {
 
     private final PostService postService;
 
-    public PostController(PostService postService){
+    // 댓글 필드 추가
+    private final ReplyService replyService;
+
+    // 댓글 생성자 추가
+    public PostController(PostService postService, ReplyService replyService){
         this.postService = postService;
+        this.replyService = replyService;
     }
 
     @GetMapping
@@ -40,6 +47,10 @@ public class PostController {
 
         model.addAttribute("post", post);
         model.addAttribute("images", images);
+
+        // 댓글 조회 추가
+        model.addAttribute("replyList", replyService.findByPostId(postId));
+
         return "post/detail"; // 템플릿 파일 경로
     }
 
