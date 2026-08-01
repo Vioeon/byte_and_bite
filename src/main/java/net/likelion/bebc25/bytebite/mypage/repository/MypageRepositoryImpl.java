@@ -27,6 +27,6 @@ public class MypageRepositoryImpl implements MypageRepository {
 
     @Override
     public MemberDto findProfileById(int memberId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM member WHERE member_id = ?", memberRowMapper, memberId);
+        return jdbcTemplate.queryForObject("SELECT member_id, nickname, email, created_at FROM member WHERE member_id = ?", memberRowMapper, memberId);
     }
 }

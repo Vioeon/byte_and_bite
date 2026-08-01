@@ -18,11 +18,11 @@ public class MypageController {
         this.mypageService = mypageService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String getMemberProfile(Model model) {
-        MemberDto hello = mypageService.getProfileById(2);
-
-        model.addAttribute("memberinfo", hello);
+        MemberDto memberInfo = mypageService.getProfileById(6);
+        log.info(memberInfo.getNickname());
+        model.addAttribute("memberInfo", memberInfo);
         return "mypage/mypage";
     }
 }
