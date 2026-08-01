@@ -22,7 +22,9 @@ public class MypageController {
     public String getMemberProfile(Model model) {
         MemberDto memberInfo = mypageService.getProfileById(6);
         log.info(memberInfo.getNickname());
+
         model.addAttribute("memberInfo", memberInfo);
+        model.addAttribute("menu", "mypage");
         return "mypage/mypage";
     }
 }

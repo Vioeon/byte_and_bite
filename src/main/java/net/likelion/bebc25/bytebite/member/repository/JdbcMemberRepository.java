@@ -78,7 +78,7 @@ public class JdbcMemberRepository implements MemberRepository {
     // id 회원 조회
     @Override
     public MemberDto findById(int id) {
-        return jdbcTemplate.queryForObject("SELECT id, username, password, email, created_at FROM member2 WHERE id = ?", memberDetailRowMapper, id);
+        return jdbcTemplate.queryForObject("SELECT id, username, password, email, created_at FROM member WHERE id = ?", memberDetailRowMapper, id);
     }
 
     // 이메일 중복 확인
