@@ -26,7 +26,7 @@ public class NewsController {
     }
 
     // 소식 목록 조회하는 컨트롤러
-    @GetMapping("/list") // /news/list prefix
+    @GetMapping("/") // /news/list prefix
     public String getNewsBoardList(@RequestParam(value = "sort", defaultValue = "latest")
                                        String sort, Model model){
         // 게시글 목록 조회(데이터)

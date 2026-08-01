@@ -1,98 +1,89 @@
-/* 전체 초기화 */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* 화면 전체 */
 body {
-    height: 100vh;
-
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    /* #CFCBC6 : 연한그레이, #C8D5C0 : 연한 세이지색 */
-    background-color: #DDD6CC;
-    /* 배경 이미지 */
-    background-image: url("../images/loginImage.jpg");
-    background-size: contain; /* cover */
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #f8f9fa;
+    padding-bottom: 80px;
 }
 
-/* 배경 이미지 위에 반투명한 검은 오버레이를 씌워 살짝 어둡게 만듦 */
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.15);
-
-    z-index: -1;
-}
-
-/* 사이트 슬로건 */
 .slogan {
     text-align: center;
-    margin-bottom: 30px;
-    color: white;
-    text-shadow: 0 3px 10px rgba(0,0,0,0.6);
+    margin-bottom: 35px;
+    color: #333;
 }
 
 .slogan h1 {
-    font-size: 42px;
-    font-weight: bold;
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -2px;
 }
 
 .slogan p {
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 19px;
+    margin-top: 8px;
+    color: #666;
 }
 
-/* 회원가입 박스 */
+.slogan h1 a {
+    color: #ff6b35;
+    text-decoration: none;
+}
+
+.slogan h1 a:hover {
+    opacity: 0.85;
+}
+
 .signup-box {
     width: 420px;
-    padding: 40px;
-
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(8px);
-
-    border-radius: 20px;
-
+    padding: 42px;
+    background: white;
+    border-radius: 22px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.1);
     text-align: center;
 }
 
 .signup-box h2 {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #333;
 }
 
 .signup-box input {
     width: 100%;
-    padding: 12px;
+    padding: 13px 15px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    font-size: 14px;
+    transition: border 0.2s;
+}
 
-    border: none;
-    border-radius: 8px;
+.signup-box input:focus {
+    border-color: #ff6b35;
 }
 
 .input-guide {
     font-size: 12px;
-    color: #000;
-    margin-top: 4px;
-    margin-bottom: 15px;
+    color: #666;
+    margin-top: 2px;
+    margin-bottom: 10px;
     padding-left: 2px;
-
     text-align: left;
 }
 
 .field-error {
     min-height: 18px;
-
     color: #dc3545;
     font-size: 12px;
     text-align: left;
-
     margin-top: 5px;
     margin-bottom: 15px;
     padding-left: 2px;
@@ -101,53 +92,57 @@ body::after {
 .member-type {
     display: flex;
     justify-content: space-evenly;
-
     margin: 15px 0 20px;
 }
 
 .member-type label {
     display: flex;
     align-items: center;
-    gap: 5px;
-
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
     white-space: nowrap;
 }
 
 .member-type input {
     margin: 0;
-    transform: translateY(1px);
+    accent-color: #ff6b35;
 }
 
 .signup-box button {
     width: 100%;
-    padding: 12px;
-
+    padding: 13px;
+    margin-top: 5px;
     border: none;
-    border-radius: 8px;
-
+    border-radius: 10px;
     cursor: pointer;
+    background-color: #ff6b35;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    transition: background-color 0.2s;
 }
 
-/* 하단 링크 */
+.signup-box button:hover {
+    background-color: #e85a28;
+}
+
 .links {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-
-    margin-top: 20px;
-
+    gap: 10px;
+    margin-top: 22px;
     font-size: 14px;
-    color: #000000;
+    color: #555;
 }
 
 .links a {
-    color: #000000;
+    color: #333;
     font-weight: bold;
     text-decoration: none;
 }
 
 .links a:hover {
-    color: #ccc;
-    text-decoration: underline;
+    color: #ff6b35;
 }
