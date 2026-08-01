@@ -16,22 +16,22 @@
         <div class="profile-info">
             <h2>
                 <!-- 닉네임 th 필드 설정 -->
-                <span name="nickname">bytebite</span>
+                <span th:text="${memberInfo?.nickname}" name="nickname"></span>
                 <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
             </h2>
-            <!-- 이메일 th 필드 설정 -->
-            <div class="email" name="email">이메일</div>
+            <div class="email" th:text="${memberInfo?.email}" email="email"></div>
         </div>
 
         <div class="profile-stats">
             <div class="stat-item">
                 <span class="stat-label">작성한 리뷰</span>
-                <span class="stat-value" name="th:text=${posts != null ? posts.size() : 0}">0</span>
+                <span class="stat-value" th:text="${posts != null ? posts.size() : 0}">0</span>
             </div>
             <div class="stat-item">
                 <span class="stat-label">가입일</span>
                 <!-- 가입일 th 필드 설정 -->
-                <span class="stat-value" name="${#temporals.format(member.createdAt, 'yyyy-MM-dd')}">2026-07-28</span>
+                <span class="stat-value" th:text="${memberInfo != null ? #temporals.format(memberInfo.createdAt, 'yyyy-MM-dd') : ''}">2026-07-28</span>
+
             </div>
         </div>
     </section>
@@ -57,7 +57,7 @@
         <div class="section-header">
             <div class="section-title">
                 작성한 리뷰
-                <span class="count-badge" name="${posts != null ? posts.size() : 0}">0</span>
+                <span class="count-badge" th:text="${posts != null ? posts.size() : 0}">0</span>
             </div>
         </div>
 
