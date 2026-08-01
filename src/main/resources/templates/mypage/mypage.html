@@ -16,10 +16,9 @@
         <div class="profile-info">
             <h2>
                 <!-- 닉네임 th 필드 설정 -->
-                <span name="nickname">bytebite</span>
+                <span th:text="${memberinfo.nickname}" name="nickname">홍길동</span>
                 <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
             </h2>
-            <!-- 이메일 th 필드 설정 -->
             <div class="email" name="email">이메일</div>
         </div>
 
