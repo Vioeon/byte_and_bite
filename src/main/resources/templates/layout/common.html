@@ -8,8 +8,9 @@
 <th:block th:fragment="nav-header">
     <header>
         <div class="wrapper header-content">
-            <div class="logo">Byte&Bite</div>
-            <div class="auth-buttons">
+            <a class="logo" th:href="@{/}">Byte &amp; Bite</a>
+
+            <div class="header-auth">
                 <!-- 로그인 안 된 경우 -->
                 <th:block th:if="${session.loginMember == null}">
                     <a th:href="@{/member/login}">로그인</a>
@@ -31,7 +32,7 @@
             <div class="tabs">
                 <a th:href="@{/posts}" class="tab" th:classappend="${menu == 'posts'} ? 'active' : ''">맛집 리뷰</a>
                 <a th:href="@{/news}" class="tab" th:classappend="${menu == 'news'} ? 'active' : ''">맛집 소식</a>
-                <a th:href="@{/mypage}" class="tab" th:classappend="${menu == 'mypage'} ? 'active' : ''">마이페이지</a>
+                <a th:href="@{/member/mypage}" class="tab" th:classappend="${menu == 'mypage'} ? 'active' : ''">마이페이지</a>
             </div>
         </div>
     </nav>
