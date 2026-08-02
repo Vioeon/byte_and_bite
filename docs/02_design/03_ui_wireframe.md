@@ -14,16 +14,18 @@
 - 메인 페이지 / 맛집 리뷰 (GET `/posts`)
 - 맛집 리뷰 상세 조회 (GET `/posts/{postId}`)
 - 맛집 리뷰 작성 (GET `/posts/write`)
-- 맛집 리뷰 수정 (GET `/posts/edit`)
+- 맛집 리뷰 수정 (GET `/posts/{postId}/edit`)
+- 맛집 리뷰 댓글 등록 (POST `/posts/{postid}/replies/write`)
+- 맛집 리뷰 댓글 수정 (POST `/posts/{postid}/replies/{repliesId}/edit`)
+- 맛집 리뷰 댓글 삭제 (POST `/posts/{postid}/replies/{repliesId}/delete`)
 - 메인 페이지 / 맛집 소식 (GET `/news`)
 - 맛집 소식 상세 조회 (GET `/news/{newsId}`)
 - 맛집 소식 작성 (GET `/news/write`)
-- 맛집 소식 수정 (GET `/news/edit`)
+- 맛집 소식 수정 (GET `/news/{newsId}/edit`)
 - 마이페이지 조회 - 일반 사용자 (GET `/mypage`)
 - 마이페이지 조회 - 맛집 운영자 (GET `/mypage`)
 - 맛집 정보 수정 (GET `/mypage/restaurant/edit`)
 - 로그인 (GET `/member/login`)
-- 비밀번호 재설정 (GET `/member/password/reset`)
 - 회원가입 (GET `/member/signup`)
 - 회원가입-식당정보 등록 (GET `/member/signup/restaurant`)
 
@@ -91,7 +93,7 @@
     - 취소 버튼 클릭 시 이전 맛집 리뷰 목록 화면으로 이동
     - 완료 버튼 제출 시 유효성 검증 후 리뷰 등록 처리
 
-### 2.4 맛집 리뷰 수정 화면 (GET `/posts/edit`)
+### 2.4 맛집 리뷰 수정 화면 (GET `/posts/{postId}/edit`)
 
 [맛집 리뷰 수정]
 
@@ -163,7 +165,7 @@
     - 취소 버튼 클릭 시 이전 맛집 소식 목록 화면으로 이동
     - 완료 버튼 제출 시 유효성 검증 후 소식 등록 처리
 
-### 2.8 맛집 소식 수정 화면 (GET `/news/edit`)
+### 2.8 맛집 소식 수정 화면 (GET `/news/{newsId}/edit`)
 
 [맛집 소식 수정]
 
