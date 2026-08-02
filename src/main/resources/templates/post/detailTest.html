@@ -68,10 +68,12 @@
         <h3>댓글 (2)</h3>
 
         <!-- 댓글 작성 폼 -->
-        <form action="/posts/1/reply" method="post" class="reply-form">
-            <textarea name="content" placeholder="댓글을 입력해주세요" required></textarea>
-            <button type="submit">등록</button>
-        </form>
+        <th:block th:if="${session.loginMember != null}">
+            <form action="/posts/1/reply" method="post" class="reply-form">
+                <textarea name="content" placeholder="댓글을 입력해주세요" required></textarea>
+                <button type="submit">등록</button>
+            </form>
+        </th:block>
 
         <!-- 댓글 목록 -->
         <div class="reply-list">
