@@ -152,4 +152,16 @@ public class MemberController {
         session.invalidate(); // 세션 파기
         return "redirect:/";
     }
+
+    @PostMapping("/withdraw")
+    public String withdraw(HttpSession session, RedirectAttributes redirectAttributes) {
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/member/login"; // 비로그인 상태면 로그인 페이지로
+        }
+        memberService.withdraw(loginMember.getMemberId());
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("message", "회원 탈퇴가 완료되었습니다.");
+        return "redirect:/";
+    }
 }

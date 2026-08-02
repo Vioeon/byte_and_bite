@@ -25,6 +25,7 @@ public class MypageRepositoryImpl implements MypageRepository {
                 .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
     };
 
+    // id 에 해당하는 회원정보 찾기
     @Override
     public MemberDto findProfileById(int memberId) {
         return jdbcTemplate.queryForObject("SELECT member_id, nickname, email, created_at FROM member WHERE member_id = ?", memberRowMapper, memberId);
