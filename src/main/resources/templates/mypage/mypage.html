@@ -39,7 +39,7 @@
     <th:block th:if="${session.loginMember != null} and ${session.loginMember.role == 'MANAGER'}">
         <section class="profile-restaurant-card">
             <div class="profile-restaurant-img">
-                <img th:src="${restaurant.imageUrl}" alt="식당 이미지">
+                <img th:src="${restaurant?.imageUrl}" alt="식당 이미지">
             </div>
             <div class="profile-restaurant-info">
                 <h2>
