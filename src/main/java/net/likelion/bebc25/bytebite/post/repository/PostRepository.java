@@ -10,4 +10,6 @@ public interface PostRepository {
     void save(PostDto post);
     void update(PostDto post);
     void deleteById(int id);
+
+    void increaseView(int postid);
 }

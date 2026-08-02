@@ -14,6 +14,7 @@ public class MypageServiceImpl implements MypageService {
         this.mypageRepository = mypageRepository;
     }
 
+    // id 에 해당하는 회원정보 조회
     @Override
     public MemberDto getProfileById(int memberId) {
 

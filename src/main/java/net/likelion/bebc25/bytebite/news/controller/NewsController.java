@@ -26,7 +26,7 @@ public class NewsController {
     }
 
     // 소식 목록 조회하는 컨트롤러
-    @GetMapping("/") // /news/list prefix
+    @GetMapping // /news/list prefix
     public String getNewsBoardList(@RequestParam(value = "sort", defaultValue = "latest")
                                        String sort, Model model){
         // 게시글 목록 조회(데이터)
@@ -37,7 +37,7 @@ public class NewsController {
             news = newsService.getNewsByViews();
         }
 
-        model.addAttribute("news", news); // Model transfer data to html(view)
+        model.addAttribute("menu", "news"); // Model transfer data to html(view)
         return "admin/newsList"; // template/admin/list(.html)
     }
 

@@ -34,10 +34,10 @@ public class MemberController {
 
             // memberId로 식당 정보 조회하여 Dto에 저장
             RestaurantDto restaurant = restaurantService.findByMemberId(loginMember.getMemberId());
-
+            log.info(restaurant.getImageUrl());
             model.addAttribute("restaurant", restaurant);
         }
-
+        log.info(loginMember.getNickname());
         model.addAttribute("menu", "mypage");
         return "mypage/mypage";
     }
@@ -114,6 +114,8 @@ public class MemberController {
         // 세션 생성하여 사용자 정보 저장
         SessionMemberDto sessionMember = new SessionMemberDto(memberInfo);
         session.setAttribute("loginMember", sessionMember);
+        // 로그인한 세션 30분 설정
+        session.setMaxInactiveInterval(1800);
 
         return "redirect:/posts";
     }
@@ -142,13 +144,24 @@ public class MemberController {
 
         // 사용한 세션 제거
         session.removeAttribute("signupForm");
-
         return "redirect:/member/login";
     }
 
     @PostMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate(); // 세션 파기
+        return "redirect:/";
+    }
+
+    @PostMapping("/withdraw")
+    public String withdraw(HttpSession session, RedirectAttributes redirectAttributes) {
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/member/login"; // 비로그인 상태면 로그인 페이지로
+        }
+        memberService.withdraw(loginMember.getMemberId());
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("message", "회원 탈퇴가 완료되었습니다.");
         return "redirect:/";
     }
 }

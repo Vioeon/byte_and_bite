@@ -13,7 +13,25 @@ public class Webconfig implements WebMvcConfigurer {
         // LoginCheckInterceptor가 true인경우만 컨트롤러 실행, 아니면 로그인 화면으로 이동
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
-                .addPathPatterns("/member/*", "/post/write", "/news/write", "/mypage/*") // 로그인 체크할 경로
-                .excludePathPatterns("/member/signup", "/member/signup/restaurant", "/member/login", "/posts", "/news", "/member/register", "/css/**", "/js/**", "/*.ico", "/error"); // 제외할 경로
+                .addPathPatterns( // 로그인 체크할 경로
+                        "/member/*",
+                        "/post/write",
+                        "/posts/*/edit",
+
+                        "/posts/*/replies/write",
+                        "/posts/*/replies/*/edit",
+                        "/posts/*/replies/*/delete",
+
+                        "/news/write",
+                        "/news/*/edit",
+                        "/mypage",
+                        "/mypage/**")
+                .excludePathPatterns( // 제외할 경로
+                        "/member/signup",
+                        "/member/signup/restaurant",
+                        "/member/login",
+                        "/posts",
+                        "/news",
+                        "/css/**", "/js/**", "/images/**", "/*.ico", "/*.svg", "/error");
     }
 }

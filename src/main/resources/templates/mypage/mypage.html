@@ -2,7 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>byte&bite - 마이페이지</title>
+    <title>마이페이지</title>
+    <link rel="icon" href="/favicon.ico">
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
 </head>
@@ -45,9 +46,14 @@
                 <h2>
                     <span th:text="${restaurant.rname}">맛있는 한끼</span>
                 </h2>
-                <span class="category" th:text="${restaurant.categoryName}">한식</span>
-                <div class="address" th:text="${restaurant.address}">서울 강남구 테헤란로 123</div>
-                <div class="phone" th:text="${restaurant.phone}">0212345678</div>
+                <div class="restaurant-meta-item">
+                    <span class="badge-category" th:text="${restaurant.categoryName}">한식</span>
+                </div>
+                <div class="address">📍 <span th:text="${restaurant.address}">서울 강남구 테헤란로 123</span></div>
+                <div class="phone">☎ <span th:text="${restaurant.phone}">0212345678</span></div>
+            </div>
+            <div class="profile-restaurant-action">
+                <a th:href="@{/restaurant/edit}" class="btn-restaurant-edit">식당 정보 수정</a>
             </div>
         </section>
     </th:block>

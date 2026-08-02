@@ -24,6 +24,7 @@ erDiagram
         varchar_255 password
         varchar_50 nickname
         varchar_7 role
+        varchar_10 status
         datetime created_at
         datetime updated_at
     }
@@ -73,6 +74,7 @@ erDiagram
 - password: VARCHAR(255), NOT NULL (비밀번호)
 - nickname: VARCHAR(50), NOT NULL (회원 이름)
 - role: VARCHAR(7), NOT NULL DEFAULT FALSE ('USER', 'MANAGER')
+- status: VARCHAR(10), NOT NULL DEFAULT 'ACTIVE' ('ACTIVE', 'DELETED')
 - created_at: DATETIME, DEFAULT CURRENT_TIMESTAMP (가입 일시)
 - updated_at: DATETIME, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP (정보 수정시 갱신)
 
@@ -118,6 +120,7 @@ CREATE TABLE member (
                         password VARCHAR(255) NOT NULL,
                         nickname VARCHAR(50) NOT NULL,
                         role VARCHAR(7) NOT NULL DEFAULT 'USER',
+                        status VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

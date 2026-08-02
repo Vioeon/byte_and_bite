@@ -50,7 +50,7 @@ public class MypageController {
             log.info("조회된 닉네임: {}", memberInfo.getNickname());
         }
         model.addAttribute("memberInfo", memberInfo);
-
+        model.addAttribute("menu", "mypage");
         return "mypage/mypage";
     }
 }
