@@ -47,7 +47,7 @@ public class PostController {
 
         model.addAttribute("post", post);
         model.addAttribute("images", images);
-
+        model.addAttribute("menu", "posts");
         // 댓글 조회 추가
         model.addAttribute("replyList", replyService.findByPostId(postId));
 
