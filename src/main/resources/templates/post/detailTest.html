@@ -75,13 +75,14 @@
 
         <!-- 댓글 목록 -->
         <div class="reply-list">
-            <div class="reply-item">
+            <div class="reply-item" th:each="reply : ${replies}">
                 <div class="reply-header">
                     <strong>미식가A</strong>
                     <span>2026-08-02 15:00</span>
                 </div>
                 <p>사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.</p>
                 <div class="reply-action">
+                    <a th:href="@{/posts/{id}/replies/{repliesId}/edit(id=${post.id})}" class="btn-action">수정</a>
                     <form action="/posts/1/replies/1/delete" method="post" style="display:inline;">
                         <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>
                     </form>
@@ -96,6 +97,28 @@
                 <p>여기 진짜 인정입니다. 저도 단골이에요!</p>
             </div>
         </div>
+
+        <!-- 댓글 동적 렌더링 -->
+<!--        <div class="reply-list">-->
+<!--            <div class="reply-item" th:each="reply : ${replies}">-->
+<!--                <div class="reply-header">-->
+<!--                    <strong th:text="${reply.nickname}">미식가A</strong>-->
+<!--                    <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-02 15:00</span>-->
+<!--                </div>-->
+<!--                <p th:text="${reply.content}">-->
+<!--                    사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.-->
+<!--                </p>-->
+<!--                <div class="reply-action" th:if="${reply.writer}">-->
+<!--                    <a th:href="@{/posts/{postId}/replies/{replyId}/edit(postId=${post.id}, replyId=${reply.id})}" class="btn-action">수정</a>-->
+<!--                    <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.id})}" method="post" style="display:inline;">-->
+<!--                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div th:if="${#lists.isEmpty(replies)}">-->
+<!--                등록된 댓글이 없습니다.-->
+<!--            </div>-->
+<!--        </div>-->
     </section>
 
 </main>
