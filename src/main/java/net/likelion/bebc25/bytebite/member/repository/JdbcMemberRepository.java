@@ -69,16 +69,10 @@ public class JdbcMemberRepository implements MemberRepository {
     @Override
     public MemberDto findByEmail(String email) {
         try {
-            return jdbcTemplate.queryForObject("SELECT member_id, nickname, email, password, role, created_at FROM member WHERE email = ?", memberDetailRowMapper, email);
+            return jdbcTemplate.queryForObject("SELECT member_id, nickname, email, password, role, created_at FROM member WHERE email = ? AND status = 'ACTIVE'", memberDetailRowMapper, email);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-    }
-
-    // id 회원 조회
-    @Override
-    public MemberDto findById(int id) {
-        return jdbcTemplate.queryForObject("SELECT id, username, password, email, created_at FROM member WHERE id = ?", memberDetailRowMapper, id);
     }
 
     // 이메일 중복 확인
@@ -90,18 +84,8 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
-    public void update(MemberDto member) {
-
-    }
-
-    @Override
-    public void deleteById(int id) {
-
-    }
-
-    @Override
-    public List<MemberDto> findAll() {
-        return List.of();
+    public void withdrawUser(int id) {
+        jdbcTemplate.update("UPDATE member SET status = 'DELETED' WHERE member_id = ?", id);
     }
 
 }

@@ -6,8 +6,13 @@
     <link rel="icon" href="/favicon.ico">
 </head>
 <body>
+
 <!-- 공통 GNB 조각 정의 -->
 <th:block th:fragment="nav-header">
+    <!-- 메시지가 존재할 때만 출력 -->
+    <div th:if="${message}" class="alert alert-success" role="alert">
+        <p th:text="${message}"></p>
+    </div>
     <header>
         <div class="wrapper header-content">
             <a class="logo" th:href="@{/}">Byte &amp; Bite</a>

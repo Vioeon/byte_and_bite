@@ -26,12 +26,14 @@ public class MemberServiceImpl implements MemberService {
         this.fileService = fileService;
     }
 
-    public void validateDuplicateEmail(SignupDto signupDto){
+    @Override
+    public void validateDuplicateEmail(SignupDto signupDto) {
         boolean isDuplicate = memberRepository.existsByEmail(signupDto.getEmail());
-        if(isDuplicate){
+        if (isDuplicate) {
             throw new DuplicateEmailException("이미 사용중인 계정입니다.");
         }
     }
+
     // 회원가입
     @Override
     public void signup(SignupDto signupDto) {
@@ -52,35 +54,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDto login(String email, String password) {
         MemberDto memberDto = memberRepository.findByEmail(email);
-        if(memberDto != null && memberDto.getPassword().equals(password)){
+        if (memberDto != null && memberDto.getPassword().equals(password)) {
             return memberDto;
         }
         return null;
     }
 
-    // 회원정보 수정
-    @Override
-    public void modifyInfo(MemberDto member) {
-
-        memberRepository.update(member);
-    }
-
     // 탈퇴
     @Override
     public void withdraw(int id) {
-
-        memberRepository.deleteById(id);
-    }
-
-    // 회원 목록 조회
-    @Override
-    public List<MemberDto> getMembers() {
-        return memberRepository.findAll();
-    }
-
-    // 회원 조회 - id
-    @Override
-    public MemberDto getMember(int id) {
-        return memberRepository.findById(id);
+        memberRepository.withdrawUser(id);
     }
 }
