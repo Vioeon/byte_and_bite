@@ -27,6 +27,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void increaseView(int postid){ postRepository.increaseView(postid);}
+
+    @Override
     public void writePost(PostDto post) {
         postRepository.save(post);
     }

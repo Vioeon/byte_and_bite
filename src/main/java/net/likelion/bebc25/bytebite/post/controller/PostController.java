@@ -1,5 +1,6 @@
 package net.likelion.bebc25.bytebite.post.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
@@ -12,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 // 댓글 서비스 추가
 import net.likelion.bebc25.bytebite.reply.service.ReplyService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @Slf4j
@@ -39,7 +42,23 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public String getDetail(@PathVariable int postId, Model model){
+    public String getDetail(@PathVariable int postId,
+                            HttpSession session,Model model){
+        // 조회수 처리 - 중복되면 안돼서 HashSet
+        Set<Integer> viewPostIds = (Set<Integer>) session.getAttribute("viewPostIds");
+
+        // 조회 목록 세션 없으면 생성
+        if(viewPostIds == null){
+            viewPostIds = new HashSet<>();
+            session.setAttribute("viewPostIds", viewPostIds);
+        }
+
+        // 처음 조회 시 조회수 1 증가
+        if(!viewPostIds.contains(postId)){
+            postService.increaseView(postId);
+            viewPostIds.add(postId);
+        }
+
         PostDto post = postService.getPost(postId);
         // DB에 저장된 이미지 문자열을 , 로 나누기
         // .split() - 문자열을 원하는 기준으로 나누어줌

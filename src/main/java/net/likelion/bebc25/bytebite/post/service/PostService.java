@@ -10,4 +10,6 @@ public interface PostService {
     void writePost(PostDto post);
     void editPost(PostDto post);
     void removePost(int id);
+
+    void increaseView(int postid);
 }

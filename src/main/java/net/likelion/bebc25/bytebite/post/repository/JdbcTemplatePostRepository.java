@@ -87,4 +87,10 @@ public class JdbcTemplatePostRepository implements PostRepository{
     public void deleteById(int id) {
         jdbcTemplate.update("DELETE FROM post WHERE post_id = ?", id);
     }
+
+    // 조회수 증가
+    @Override
+    public void increaseView(int postid) {
+        jdbcTemplate.update("UPDATE post SET view_count = view_count + 1 WHERE post_id = ?", postid);
+    }
 }
