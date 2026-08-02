@@ -65,11 +65,15 @@
 
     <!-- 댓글 -->
     <section class="reply-box">
-        <h3>댓글 (2)</h3>
+        <h3>
+            댓글 (<span th:text="${replyCount}">0</span>)
+        </h3>
 
         <!-- 댓글 작성 폼 -->
         <th:block th:if="${session.loginMember != null}">
-            <form action="/posts/1/reply" method="post" class="reply-form">
+            <form th:action="@{/posts/{postId}/replies/write(postId=${post.id})}"
+                  method="post"
+                  class="reply-form">
                 <textarea name="content" placeholder="댓글을 입력해주세요" required></textarea>
                 <button type="submit">등록</button>
             </form>
@@ -102,7 +106,7 @@
 
         <!-- 댓글 동적 렌더링 -->
 <!--        <div class="reply-list">-->
-<!--            <div class="reply-item" th:each="reply : ${replies}">-->
+<!--            <div class="reply-item" th:each="reply : ${replyList}">-->
 <!--                <div class="reply-header">-->
 <!--                    <strong th:text="${reply.nickname}">미식가A</strong>-->
 <!--                    <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-02 15:00</span>-->
@@ -110,16 +114,37 @@
 <!--                <p th:text="${reply.content}">-->
 <!--                    사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.-->
 <!--                </p>-->
-<!--                <div class="reply-action" th:if="${reply.writer}">-->
-<!--                    <a th:href="@{/posts/{postId}/replies/{replyId}/edit(postId=${post.id}, replyId=${reply.id})}" class="btn-action">수정</a>-->
-<!--                    <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.id})}" method="post" style="display:inline;">-->
-<!--                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>-->
-<!--                    </form>-->
-<!--                </div>-->
+<!--&lt;!&ndash;                댓글 수정기능 주석처리&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="reply-action" th:if="${reply.writer}">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a th:href="@{/posts/{postId}/replies/{replyId}/edit(postId=${post.id}, replyId=${reply.id})}" class="btn-action">수정</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.id})}" method="post" style="display:inline;">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </form>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
 <!--            </div>-->
-<!--            <div th:if="${#lists.isEmpty(replies)}">-->
+<!--            <div th:if="${#lists.isEmpty(replyList)}">-->
 <!--                등록된 댓글이 없습니다.-->
 <!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; 댓글 페이징 &ndash;&gt;-->
+<!--        <div class="reply-pagination">-->
+
+<!--            &lt;!&ndash; 이전 페이지 &ndash;&gt;-->
+<!--            <a th:if="${page > 1}"-->
+<!--               th:href="@{/posts/{postId}(postId=${post.id}, page=${page - 1})}">-->
+<!--                &lt;-->
+<!--            </a>-->
+
+<!--            &lt;!&ndash; 현재 페이지 &ndash;&gt;-->
+<!--            <span th:text="${page}"></span>-->
+
+<!--            &lt;!&ndash; 다음 페이지 &ndash;&gt;-->
+<!--            <a th:if="${page < totalPage}"-->
+<!--               th:href="@{/posts/{postId}(postId=${post.id}, page=${page + 1})}">-->
+<!--                &gt;-->
+<!--            </a>-->
+
 <!--        </div>-->
     </section>
 

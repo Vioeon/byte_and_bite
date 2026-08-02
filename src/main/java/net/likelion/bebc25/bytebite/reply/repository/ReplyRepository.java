@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ReplyRepository {
 
-    List<ReplyDto> findByPostId(int postId);
+    List<ReplyDto> findByPostId(int postId, int page);
 
+    // 댓글 개수 조회
+    int countByPostId(int postId);
 }

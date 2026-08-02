@@ -16,7 +16,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<ReplyDto> findByPostId(int postId) {
-        return replyRepository.findByPostId(postId);
+    public List<ReplyDto> findByPostId(int postId, int page) {
+        return replyRepository.findByPostId(postId, page);
+    }
+
+    @Override
+    public int countByPostId(int postId) {
+        return replyRepository.countByPostId(postId);
     }
 }
