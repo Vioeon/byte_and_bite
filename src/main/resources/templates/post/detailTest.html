@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>맛집 리뷰 상세</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" th:href="@{/css/postDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+
+<div th:replace="~{layout/common :: nav-header}"></div>
+<main class="detail-wrapper">
+
+    <!-- 식당 정보 -->
+    <section class="restaurant-box">
+        <div class="restaurant-image">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500" alt="식당 이미지">
+        </div>
+
+        <div class="restaurant-info">
+            <h1>맛있는 한끼 강남본점</h1>
+            <div class="restaurant-category">
+                한식
+            </div>
+            <div class="restaurant-detail">
+                <p>📍 서울 강남구 테헤란로 123</p>
+                <p>☎ 02-1234-5678</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 맛집 리뷰 -->
+    <section class="review-box">
+        <div class="review-header">
+            <h2>정말 맛있었던 인생 맛집 리뷰입니다!</h2>
+
+            <div class="review-meta">
+                <span>작성자 : <strong>맛집탐방러</strong></span>
+                <span>조회수 128</span>
+                <span>2026-08-02 14:30</span>
+            </div>
+        </div>
+
+        <div class="review-image">
+            <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800" alt="리뷰 음식 이미지">
+        </div>
+
+        <div class="review-content">
+            음식이 정말 맛있었고 매장 내부 분위기도 아주 깔끔하고 좋았습니다.
+            <br><br>
+            특히 대표 메뉴가 입에서 살살 녹을 정도로 훌륭했으며, 직원분들도 친절하셔서 다음에도 다시 방문하고 싶은 찐 맛집입니다! 추천합니다.
+        </div>
+
+        <div class="review-buttons">
+            <a th:href="@{/posts}" class="btn-action">목록</a>
+            <th:block th:if="${session.loginMember != null and session.loginMember.memberId == post.memberId}">
+                <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn-action">수정</a>
+                <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-action" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                </form>
+            </th:block>
+        </div>
+    </section>
+
+    <!-- 댓글 -->
+    <section class="reply-box">
+        <h3>댓글 (2)</h3>
+
+        <!-- 댓글 작성 폼 -->
+        <form action="/posts/1/reply" method="post" class="reply-form">
+            <textarea name="content" placeholder="댓글을 입력해주세요" required></textarea>
+            <button type="submit">등록</button>
+        </form>
+
+        <!-- 댓글 목록 -->
+        <div class="reply-list">
+            <div class="reply-item">
+                <div class="reply-header">
+                    <strong>미식가A</strong>
+                    <span>2026-08-02 15:00</span>
+                </div>
+                <p>사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.</p>
+                <div class="reply-action">
+                    <form action="/posts/1/replies/1/delete" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="reply-item">
+                <div class="reply-header">
+                    <strong>푸드파이터</strong>
+                    <span>2026-08-02 15:10</span>
+                </div>
+                <p>여기 진짜 인정입니다. 저도 단골이에요!</p>
+            </div>
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
