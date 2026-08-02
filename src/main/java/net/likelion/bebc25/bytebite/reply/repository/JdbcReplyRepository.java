@@ -31,7 +31,13 @@ public class JdbcReplyRepository implements ReplyRepository {
     };
 
     @Override
-    public List<ReplyDto> findByPostId(int postId) {
+    public List<ReplyDto> findByPostId(int postId, int page) {
+
+        // 한 페이지에 보여줄 댓글 개수
+        int size = 10;
+
+        // LIMIT 시작 위치 계산
+        int offset = (page - 1) * size;
 
         String sql = """
                 SELECT r.*, m.nickname
@@ -40,8 +46,32 @@ public class JdbcReplyRepository implements ReplyRepository {
                     ON r.member_id = m.member_id
                 WHERE r.post_id = ?
                 ORDER BY r.created_at ASC
+                LIMIT ?, ?
                 """;
 
-        return jdbcTemplate.query(sql, replyRowMapper, postId);
+        return jdbcTemplate.query(
+                sql,
+                replyRowMapper,
+                postId,
+                offset,
+                size
+        );
     }
+
+    @Override
+    public int countByPostId(int postId) {
+
+        String sql = """
+                SELECT COUNT(*)
+                FROM reply
+                WHERE post_id = ?
+                """;
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
+                postId
+        );
+    }
+
 }

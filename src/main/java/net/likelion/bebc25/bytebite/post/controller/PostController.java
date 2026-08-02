@@ -43,7 +43,9 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public String getDetail(@PathVariable int postId,
-                            HttpSession session,Model model){
+                            @RequestParam(defaultValue = "1") int page,
+                            HttpSession session,
+                            Model model){
         // 조회수 처리 - 중복되면 안돼서 HashSet
         Set<Integer> viewPostIds = (Set<Integer>) session.getAttribute("viewPostIds");
 
@@ -67,8 +69,21 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("images", images);
         model.addAttribute("menu", "posts");
-        // 댓글 조회 추가
-        model.addAttribute("replyList", replyService.findByPostId(postId));
+        // 댓글 조회 (페이지당 10개)
+        model.addAttribute("replyList", replyService.findByPostId(postId, page));
+
+        // 전체 댓글 수 조회
+        int totalReply = replyService.countByPostId(postId);
+
+        // 화면으로 전달
+        model.addAttribute("replyCount", totalReply);
+
+        // 전체 페이지 수 계산
+        int totalPage = (int) Math.ceil((double) totalReply / 10);
+
+        // 화면으로 전달
+        model.addAttribute("page", page);
+        model.addAttribute("totalPage", totalPage);
 
         return "post/detail"; // 템플릿 파일 경로
     }

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ReplyService {
 
-    List<ReplyDto> findByPostId(int postId);
+    List<ReplyDto> findByPostId(int postId, int page);
 
+    int countByPostId(int postId);
 }
