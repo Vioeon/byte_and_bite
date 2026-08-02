@@ -14,18 +14,9 @@ public interface MemberRepository {
   // email 회원 찾기
   MemberDto findByEmail(String email);
 
-  // id 회원 찾기
-  MemberDto findById(int id);
-
   // email 정보가 있는지 확인
   boolean existsByEmail(String email);
 
-  // 회원 정보 수정
-  void update(MemberDto member);
-
-  // id 회원 삭제
-  void deleteById(int id);
-
-  // 회원 목록 조회
-  List<MemberDto> findAll();
+  // id 회원 탈퇴 처리
+  void withdrawUser(int id);
 }
