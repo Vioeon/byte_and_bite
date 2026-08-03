@@ -2,8 +2,10 @@ package net.likelion.bebc25.bytebite.news.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.news.service.NewsService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,25 +25,27 @@ import java.util.List;
 public class NewsController {
 
     private final NewsService newsService;
+    // file 로직 관련 구조체
     private final FileStore fileStore;
 
-    public NewsController(NewsService newsService){
+    public NewsController(NewsService newsService, @Qualifier("localFileStore") FileStore fileStore){
         this.newsService = newsService;
+        this.fileStore = fileStore;
     }
 
     // 소식 목록 조회하는 컨트롤러
     @GetMapping // /news/list prefix
-    public String getNewsBoardList(@RequestParam(value = "sort", defaultValue = "latest")
+    public String getNewsBoardList(@RequestParam(value = "page", defaultValue = "1") int page,
+                                   @RequestParam(value = "size", defaultValue = "9") int size,
+                                   @RequestParam(value = "sort", defaultValue = "latest") // 최신순, 조회순 정렬
                                    String sort, Model model){
         // 게시글 목록 조회(데이터)
-        List<PostDto> news;
-        if(sort.equals("latest")) { // 최신순 정렬
-            news = newsService.getNews();
-        }else{ // 조회수순 정렬
-            news = newsService.getNewsByViews();
-        }
+        NewPageDto<PostDto> news = newsService.getNewsList(page, size, sort);
 
-        model.addAttribute("news", news); // Model transfer data to html(view)
+        model.addAttribute("news", news.getContent());
+        model.addAttribute("pageResponse", news);
+        model.addAttribute("sort", sort);
+        model.addAttribute("menu", "news");
         return "news/newsList"; // template/admin/list(.html)
     }
 
@@ -51,6 +55,7 @@ public class NewsController {
         PostDto news = newsService.getNews(id);
         System.out.println("news = " + news);
         model.addAttribute("news", news);
+        model.addAttribute("menu", "news");
         return "news/detail"; // 템플릿 파일 경로
     }
 

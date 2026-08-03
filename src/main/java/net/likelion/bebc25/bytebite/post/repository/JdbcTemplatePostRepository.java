@@ -184,20 +184,26 @@ public class JdbcTemplatePostRepository implements PostRepository{
 
     // 작성일시순으로 정렬(default)
     @Override
-    public List<PostDto> findAllNews() { // findAll query
+    public List<PostDto> findAllNews(int offset, int limit) { // findAll query
         return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
                 "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
-                "WHERE p.type = 'NEWS' " +
-                "ORDER BY p.created_at DESC;", newsRowMapper);
+                "WHERE p.type = 'NEWS' ORDER BY p.created_at DESC " +
+                "LIMIT ? OFFSET ?;", newsRowMapper, limit, offset);
     }
 
     // view_count순으로 정렬
     @Override
-    public List<PostDto> findAllNewsByViews() { // findAll query
+    public List<PostDto> findAllNewsByViews(int offset, int limit) { // findAll query
         return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
                 "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
-                "WHERE p.type = 'NEWS' " +
-                "ORDER BY p.view_count DESC;", newsRowMapper);
+                "WHERE p.type = 'NEWS' ORDER BY p.view_count DESC " +
+                "LIMIT ? OFFSET ?;", newsRowMapper, limit, offset);
+    }
+
+    @Override
+    public int countNews() {
+        return jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM post WHERE type = 'NEWS'", Integer.class);
     }
 
     // 현재 detail.html에는 post_id, title, nickname, created_at, content가 포함

@@ -72,19 +72,24 @@
     </section>
 
     <!-- 페이지네이션 -->
-    <div class="pagination">
-        <!-- 이전 페이지 -->
-        <a th:if="${page > 1}"
-           th:href="@{/news(page=${news.number - 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
-            &lt;
-        </a>
-        <!-- 현재 페이지 -->
-        <span th:text="${page}"></span>
-        <!-- 다음 페이지 -->
-        <a th:if="${page < totalPage}"
-           th:href="@{/news(page=${news.number + 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
-            &gt;
-        </a>
+    <div class="pagination" th:if="${pageResponse != null and not #lists.isEmpty(news)}">
+        <!-- 이전 페이지 버튼 -->
+        <a th:if="${pageResponse.hasPrev}"
+           th:href="@{/news(page=${pageResponse.page - 1}, sort=${sort})}">&laquo; 이전</a>
+        <span th:unless="${pageResponse.hasPrev}" class="disabled">&laquo; 이전</span>
+
+        <!-- 페이지 번호 목록 -->
+        <th:block th:each="p : ${#numbers.sequence(pageResponse.startPage, pageResponse.endPage)}">
+            <a th:if="${p != pageResponse.page}"
+               th:href="@{/news(page=${p}, sort=${sort})}"
+               th:text="${p}">1</a>
+            <span th:if="${p == pageResponse.page}" class="active" th:text="${p}">1</span>
+        </th:block>
+
+        <!-- 다음 페이지 버튼 -->
+        <a th:if="${pageResponse.hasNext}"
+           th:href="@{/news(page=${pageResponse.page + 1}, sort=${sort})}">다음 &raquo;</a>
+        <span th:unless="${pageResponse.hasNext}" class="disabled">다음 &raquo;</span>
     </div>
 </main>
 </body>

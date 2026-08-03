@@ -26,8 +26,9 @@ public interface PostRepository {
     void increaseView(int postId);
 
     // news
-    List<PostDto> findAllNews();
-    List<PostDto> findAllNewsByViews();
+    List<PostDto> findAllNews(int offset, int limit);
+    List<PostDto> findAllNewsByViews(int offset, int limit);
+    int countNews();
     PostDto findNewsById(int id);
     void saveNews(PostDto post);
     //    void update(NewsDto post);
