@@ -1,15 +1,15 @@
 package net.likelion.bebc25.bytebite.news.service;
 
-import net.likelion.bebc25.bytebite.news.dto.NewsDto;
+import net.likelion.bebc25.bytebite.post.dto.PostDto;
 
 import java.util.List;
 
 public interface NewsService {
-    List<NewsDto> getNews();
-    List<NewsDto> getNewsByViews();
+    List<PostDto> getNews();
+    List<PostDto> getNewsByViews();
 
-//    NewsDto getNews(int id); // get
-//    void writeNews(NewsDto post); // post
+    PostDto getNews(int id); // get
+    void writeNews(PostDto post); // post
 //    void editNews(NewsDto post); // post
 //    void removeNews(int id); // post
 }

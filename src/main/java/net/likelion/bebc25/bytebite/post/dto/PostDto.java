@@ -32,6 +32,7 @@ public class PostDto {
 
     private String category;
 
+    private String type; // "POST", "NEWS"
 
     private String image;
     private MultipartFile images;

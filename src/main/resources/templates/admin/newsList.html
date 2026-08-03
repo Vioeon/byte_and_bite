@@ -42,108 +42,15 @@
         <button type="submit" class="btn-search">검색</button>
 
         <a href="write.html" class="btn-write-link">
-            <button type="button" class="btn-write">리뷰작성</button>
+            <button type="button" class="btn-write">소식작성</button>
         </a>
     </form>
 
-    <!-- 검색 및 정렬을 포함 전체 Form -->
-    <!-- 정렬 변경, 카테고리 변경, 검색버튼 할때마다 form을 실행해서 db에서 데이터 가져와 변경해줘야함 -->
-    <!-- 노션에 옵션 별 페이징처리 예시 참고 -->
-<!--    <form class="search-bar" action="/posts" method="GET">-->
-<!--        &lt;!&ndash; 정렬 옵션 (라디오 버튼) &ndash;&gt;-->
-<!--        <div class="sort-options" style="margin-bottom: 15px; display: flex; justify-content: flex-end; width: 100%;">-->
-<!--            <label>-->
-<!--                <input type="radio" name="sort" value="latest" th:checked="${sort == 'latest' or sort == null}" onchange="this.form.submit()"> 최신순-->
-<!--            </label>-->
-<!--            <label style="margin-left: 10px;">-->
-<!--                <input type="radio" name="sort" value="views" th:checked="${sort == 'views'}" onchange="this.form.submit()"> 조회순-->
-<!--            </label>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; 카테고리 선택 &ndash;&gt;-->
-<!--        <select class="category-select" name="category" th:value="${param.category}" onchange="this.form.submit()">-->
-<!--            <option value="all" th:selected="${param.category == 'all' or param.category == null}">전체 카테고리</option>-->
-<!--            <option value="KOR" th:selected="${param.category == 'KOR'}">한식</option>-->
-<!--            <option value="WST" th:selected="${param.category == 'WST'}">양식</option>-->
-<!--            <option value="CHN" th:selected="${param.category == 'CHN'}">중식</option>-->
-<!--            <option value="JPN" th:selected="${param.category == 'JPN'}">일식</option>-->
-<!--            <option value="ETC" th:selected="${param.category == 'ETC'}">기타</option>-->
-<!--        </select>-->
-
-<!--        &lt;!&ndash; 키워드 검색창 &ndash;&gt;-->
-<!--        <input type="text" class="search-input" name="keyword" th:value="${param.keyword}" placeholder="리뷰 제목을 입력해주세요.">-->
-<!--        <button type="submit" class="btn-search">검색</button>-->
-
-<!--        <a href="/posts/write" class="btn-write-link">-->
-<!--            <button type="button" class="btn-write">리뷰 작성</button>-->
-<!--        </a>-->
-<!--    </form>-->
-
     <!-- 3x3 카드 그리드 -->
     <section class="card-grid">
-        <!-- 카드 1 -->
-<!--        <a href="detail.html?id=1" class="card-link">-->
-<!--            <div class="card">-->
-<!--                <div class="card-img">이미지</div>-->
-<!--                <div class="card-info">-->
-<!--                    <div class="restaurant-name">식당 이름</div>-->
-<!--                    <div class="row">-->
-<!--                        <span>한식</span>-->
-<!--                        <span>조회수 123</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="card-title">리뷰제목</div>-->
-<!--            </div>-->
-<!--        </a>-->
-
-<!--        &lt;!&ndash; 카드 2 &ndash;&gt;-->
-<!--        <a href="detail.html?id=2" class="card-link">-->
-<!--            <div class="card">-->
-<!--                <div class="card-img">이미지</div>-->
-<!--                <div class="card-info">-->
-<!--                    <div class="restaurant-name">식당 이름</div>-->
-<!--                    <div class="row">-->
-<!--                        <span>일식</span>-->
-<!--                        <span>조회수 85</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="card-title">리뷰제목</div>-->
-<!--            </div>-->
-<!--        </a>-->
-
-<!--        &lt;!&ndash; 카드 3 &ndash;&gt;-->
-<!--        <a href="detail.html?id=3" class="card-link">-->
-<!--            <div class="card">-->
-<!--                <div class="card-img">이미지</div>-->
-<!--                <div class="card-info">-->
-<!--                    <div class="restaurant-name">식당 이름</div>-->
-<!--                    <div class="row">-->
-<!--                        <span>양식</span>-->
-<!--                        <span>조회수 210</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="card-title">리뷰제목</div>-->
-<!--            </div>-->
-<!--        </a>-->
-
-<!--        &lt;!&ndash; 카드 4 &ndash;&gt;-->
-<!--        <a href="detail.html?id=4" class="card-link">-->
-<!--            <div class="card">-->
-<!--                <div class="card-img">이미지</div>-->
-<!--                <div class="card-info">-->
-<!--                    <div class="restaurant-name">식당 이름</div>-->
-<!--                    <div class="row">-->
-<!--                        <span>중식</span>-->
-<!--                        <span>조회수 45</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="card-title">리뷰제목</div>-->
-<!--            </div>-->
-<!--        </a>-->
-
         <!-- DB에서 가져온 개수만큼 카드가 동적으로 반복 생성됩니다 -->
         <a th:each="post : ${news}"
-           th:href="@{/detail(id=${post.newsId})}"
+           th:href="@{/news/{id}(id=${post.id})}"
            class="card-link">
             <div class="card">
                 <div class="card-img">이미지</div>

@@ -12,4 +12,12 @@ public interface PostRepository {
     void deleteById(int id);
 
     void increaseView(int postid);
+
+    // news
+    List<PostDto> findAllNews();
+    List<PostDto> findAllNewsByViews();
+    PostDto findNewsById(int id);
+    void saveNews(PostDto post);
+    //    void update(NewsDto post);
+    //    void deleteById(int id);
 }
