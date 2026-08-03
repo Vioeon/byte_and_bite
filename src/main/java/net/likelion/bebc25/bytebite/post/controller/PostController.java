@@ -3,16 +3,20 @@ package net.likelion.bebc25.bytebite.post.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
+import net.likelion.bebc25.bytebite.post.dto.PageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.post.service.PostService;
+import net.likelion.bebc25.bytebite.reply.service.ReplyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-// 댓글 서비스 추가
-import net.likelion.bebc25.bytebite.reply.service.ReplyService;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Member;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,20 +27,25 @@ import java.util.Set;
 public class PostController {
 
     private final PostService postService;
-
-    // 댓글 필드 추가
     private final ReplyService replyService;
 
-    // 댓글 생성자 추가
     public PostController(PostService postService, ReplyService replyService){
         this.postService = postService;
         this.replyService = replyService;
     }
 
     @GetMapping
-    public String getBoardList(Model model){
-        List<PostDto> posts = postService.getPosts();
-        model.addAttribute("posts", posts);
+    public String getBoardList(@RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "latest") String sort,
+                               Model model){
+        int size = 9;
+
+        PageDto<PostDto> pageDto = postService.getPosts(page, size, sort);
+
+
+        model.addAttribute("pageDto", pageDto);
+        model.addAttribute("posts", pageDto.getContent());
+        model.addAttribute("sort", sort);
         model.addAttribute("menu", "posts");
         return "post/postList";
     }
@@ -89,8 +98,15 @@ public class PostController {
     }
 
     @GetMapping("/write")
-    public String getWriteForm(@ModelAttribute("postForm") PostDto post){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
-        return "post/write";
+    public String getWriteForm(@ModelAttribute("postForm") PostDto post,
+                               HttpSession session){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
+       SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+       // 비회원이 리뷰 작성을 누르면 로그인 화면으로
+       if(loginMember == null){
+           return "redirect:/member/login";
+       }
+       return "post/write";
     }
 
     // html에서 images 값을 가져오고, 여러 장의 파일을 가져오기 때문에 배열로 받음
@@ -98,56 +114,98 @@ public class PostController {
     public String writePost(@Valid @ModelAttribute("postForm") PostDto post,
                             BindingResult bindingResult,
                             @RequestParam(value="images", required = false)
-                                MultipartFile[] images){
+                                MultipartFile[] images,
+                            HttpSession session){
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
         // 이미지 첨부 필수 검사
         if(images == null || images.length == 0 || images[0].isEmpty()){
             bindingResult.rejectValue("images", "required",
                     "이미지는 필수 첨부 항목입니다.");
         }
+
+        // 로그인 검사
+        if(loginMember == null){
+            return "redirect:/login";
+        }
+
         // 제목, 내용, 이미지 검증 실패 시 리턴
         if(bindingResult.hasErrors()){
             bindingResult.getAllErrors().forEach(System.out::println);
             return "post/write";
         }
-        // 대표 이미지 저장
-        post.setImage(images[0].getOriginalFilename());
 
-//         여러 장의 이미지를 등록 가능(MultipartFile[] 로 수정)
-        if(images != null && images.length > 0){
-            post.setImage(images[0].getOriginalFilename());
+        // 이미지 저장 경로
+        String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
+        File uploadDir = new File(uploadPath);
+
+        if(!uploadDir.exists()){
+            uploadDir.mkdirs();
+        }
+        // DB 저장용 url 생성
+        StringBuilder imageUrl = new StringBuilder();
+
+        for(int i = 0; i < images.length; i++){
+            MultipartFile image = images[i];
+            if(!image.isEmpty()){
+                String fileName = java.util.UUID.randomUUID() + "_" + image.getOriginalFilename();
+                File saveFile = new File(uploadPath + fileName);
+                try {
+                    // 실제 파일 저장
+                    image.transferTo(saveFile);
+
+                } catch (IOException e){
+                    throw new RuntimeException(e);
+                }
+
+                // DB 저장 url
+                imageUrl.append("/uploads/").append(image.getOriginalFilename());
+                // 여러 이미지 구분
+                if(i < images.length -1) {
+                    imageUrl.append(",");
+                }
+            }
         }
 
-        // 여러 이미지 이름을 하나의 문자열로 만들기 위한 객체
-        StringBuilder sb = new StringBuilder();
-        // 사용자가 선택한 이미지 개수만큼 반복
-                for(int i = 0; i<images.length; i++){
-                    // (업로드 파일.파일 원본 이름())
-                    sb.append(images[i].getOriginalFilename());
-                    // 파일 이름 사이 구분자 , 추가
-                    if(i != images.length -1) {
-                        sb.append(",");
-                    }
-                }
-        // StringBuilder를 String으로 변환해서 DTO에 저장
-                post.setImage(sb.toString());
-
-        post.setMemberId(1); // 임시 회원 번호
+        post.setMemberId(loginMember.getMemberId());
         post.setRestaurantId(1); // 임시 식당 번호
+        post.setType("POST");
+        post.setImage(imageUrl.toString()); // DB에 url 저장
 
         postService.writePost(post);
-        return "redirect:/post/list"; //
+        return "redirect:/posts"; //
     }
 
     @GetMapping("/edit")
-    public String getEditForm(@RequestParam("id") int id, Model model){
+    public String getEditForm(@RequestParam("id") int id, HttpSession session, Model model){
+        SessionMemberDto loginMember = (SessionMemberDto)session.getAttribute("loginMember");
+        if(loginMember == null){
+            return "redirect:/login";
+        }
+
         PostDto post = postService.getPost(id);
+
+        if(!loginMember.getRole().equals("MANAGER") &&  loginMember.getMemberId()!=post.getMemberId()){
+            model.addAttribute("postForm", post);
+            return "/posts";
+        }
         model.addAttribute("postForm", post);
         return "post/write";
     }
 
     @PostMapping("/edit")
     public String editPost(@Valid @ModelAttribute("postForm") PostDto post,
-                           BindingResult bindingResult){
+                           BindingResult bindingResult,
+                           HttpSession session){
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if(loginMember == null){
+            return "redirect:/login";
+        }
+        PostDto origin = postService.getPost(post.getId());
+
+        if(!loginMember.getRole().equals("MANAGER") && loginMember.getMemberId() != origin.getMemberId()){
+            return "redirect:/posts";
+        }
+
         if(bindingResult.hasErrors()){
             return "post/write";
         }
@@ -157,8 +215,25 @@ public class PostController {
     }
 
     @PostMapping("/delete")
-    public String deletePost(@RequestParam int id){
+    public String deletePost(@RequestParam int id, HttpSession session){
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        if(loginMember == null){
+            return "redirect:/login";
+        }
+
+        PostDto post = postService.getPost(id);
+        if(!loginMember.getRole().equals("MANAGER") && loginMember.getMemberId() != post.getMemberId()){
+            return "redirect:/login";
+        }
+
         postService.removePost(id);
-        return "redirect:/post/list";
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/restaurant/search")
+    @ResponseBody
+    public PostDto search(@RequestParam String keyword){
+        return postService.findByName(keyword);
     }
 }

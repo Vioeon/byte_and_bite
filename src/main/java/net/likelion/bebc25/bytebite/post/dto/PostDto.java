@@ -30,12 +30,14 @@ public class PostDto {
     private int restaurantId;
     private String restaurantName;
 
+    private String type;
     private String category;
 
-    private String type; // "POST", "NEWS"
+    private String role;
 
     private String image;
-    private MultipartFile images;
+    @NotNull
+    private MultipartFile[] images;
 
     @NotBlank(message = "내용은 필수 입력 항목입니다.")
     private String content;
