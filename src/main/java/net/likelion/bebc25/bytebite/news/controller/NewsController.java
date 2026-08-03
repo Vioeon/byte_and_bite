@@ -41,6 +41,7 @@ public class NewsController {
         }
 
         model.addAttribute("news", news); // Model transfer data to html(view)
+        model.addAttribute("menu", "news");
         return "admin/newsList"; // template/admin/list(.html)
     }
 
@@ -50,6 +51,7 @@ public class NewsController {
         PostDto news = newsService.getNews(id);
         System.out.println("news = " + news);
         model.addAttribute("news", news);
+        model.addAttribute("menu", "news");
         return "admin/detail"; // 템플릿 파일 경로
     }
 
