@@ -76,7 +76,7 @@
     </section>
 
     <!-- 댓글 -->
-    <section class="reply-box">
+    <section class="reply-box" id="reply-section">
         <h3>
             댓글 (<span th:text="${replyCount}">0</span>)
         </h3>
@@ -138,14 +138,14 @@
         <div class="pagination">
             <!-- 이전 페이지 -->
             <a th:if="${page > 1}"
-               th:href="@{/posts/{postId}(postId=${post.id}, page=${page - 1})}">
+               th:href="@{'/posts/' + ${post.id} + '?page=' + ${page - 1} + '#reply-section'}">
                 &lt;
             </a>
             <!-- 현재 페이지 -->
             <span th:text="${page}"></span>
             <!-- 다음 페이지 -->
             <a th:if="${page < totalPage}"
-               th:href="@{/posts/{postId}(postId=${post.id}, page=${page + 1})}">
+               th:href="@{'/posts/' + ${post.id} + '?page=' + ${page + 1} + '#reply-section'}">
                 &gt;
             </a>
         </div>

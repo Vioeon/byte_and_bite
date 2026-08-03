@@ -42,7 +42,7 @@ public class ReplyController {
         replyService.writeReply(reply);
 
         // 게시글 상세페이지로 이동
-        return "redirect:/posts/" + postId;
+        return "redirect:/posts/" + postId + "#reply-section";
     }
 
     // 댓글 수정
@@ -74,6 +74,6 @@ public class ReplyController {
         replyService.updateReply(reply);
 
         // 게시글 상세페이지로 이동
-        return "redirect:/posts/" + postId;
+        return "redirect:/posts/" + postId + "#reply-section";
     }
 }
