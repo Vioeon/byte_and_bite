@@ -1,5 +1,6 @@
 package net.likelion.bebc25.bytebite.post.service;
 
+import net.likelion.bebc25.bytebite.post.dto.PageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,8 +18,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPosts() {
-        return postRepository.findAllPost();
+    public PageDto<PostDto> getPosts(int page, int size, String sort) {
+        int offset = (page - 1) * size;
+
+        List<PostDto> posts;
+        if(sort.equals("popular")){
+             posts = postRepository.findPopular(offset, size);
+        } else {
+            posts = postRepository.findLatest(offset, size);
+        }
+
+        int totalCount = postRepository.countPost();
+        return new PageDto<>(posts, page, size, totalCount);
+    }
+
+    @Override
+    public int getPostCount(){
+        return postRepository.countPost();
     }
 
     @Override
@@ -42,5 +58,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void removePost(int id) {
         postRepository.deleteById(id);
+    }
+
+    @Override
+    public PostDto findByName(String keyword){
+        return postRepository.findByName(keyword);
     }
 }
