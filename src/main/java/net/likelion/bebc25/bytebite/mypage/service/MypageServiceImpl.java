@@ -2,7 +2,10 @@ package net.likelion.bebc25.bytebite.mypage.service;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.mypage.repository.MypageRepository;
+import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MypageServiceImpl implements MypageService {
@@ -20,4 +23,10 @@ public class MypageServiceImpl implements MypageService {
 
         return mypageRepository.findProfileById(memberId);
     }
+
+    @Override
+    public List<PostDto> getPostListById(int memberId) {
+        return mypageRepository.findPostListById(memberId);
+    }
+
 }
