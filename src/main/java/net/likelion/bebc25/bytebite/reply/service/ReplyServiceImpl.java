@@ -28,7 +28,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     // 댓글 등록
     @Override
-    public void save(ReplyDto reply) {
+    public void writeReply(ReplyDto reply) {
         replyRepository.save(reply);
     }
 }

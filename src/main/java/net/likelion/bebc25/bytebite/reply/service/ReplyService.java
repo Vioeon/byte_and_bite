@@ -10,6 +10,6 @@ public interface ReplyService {
 
     int countByPostId(int postId);
 
-    void save(ReplyDto reply);
+    void writeReply(ReplyDto reply);
 
 }

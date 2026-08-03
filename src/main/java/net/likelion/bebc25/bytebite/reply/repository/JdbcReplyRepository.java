@@ -45,7 +45,7 @@ public class JdbcReplyRepository implements ReplyRepository {
                 JOIN member m
                     ON r.member_id = m.member_id
                 WHERE r.post_id = ?
-                ORDER BY r.created_at ASC
+                ORDER BY r.created_at DESC
                 LIMIT ?, ?
                 """;
 

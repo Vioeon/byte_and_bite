@@ -79,6 +79,11 @@
             </form>
         </th:block>
 
+        <!-- 비로그인 -->
+        <th:block th:unless="${session.loginMember != null}">
+            <p>댓글을 작성하려면 로그인해주세요.</p>
+        </th:block>
+
         <!-- 댓글 목록 -->
         <div class="reply-list">
             <div class="reply-item" th:each="reply : ${replies}">
