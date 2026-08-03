@@ -45,7 +45,7 @@ public class JdbcReplyRepository implements ReplyRepository {
                 JOIN member m
                     ON r.member_id = m.member_id
                 WHERE r.post_id = ?
-                ORDER BY r.created_at ASC
+                ORDER BY r.created_at DESC
                 LIMIT ?, ?
                 """;
 
@@ -74,4 +74,38 @@ public class JdbcReplyRepository implements ReplyRepository {
         );
     }
 
+
+    // 댓글 등록
+    @Override
+    public void save(ReplyDto reply) {
+
+        String sql = """
+                INSERT INTO reply (post_id, member_id, content)
+                VALUES (?, ?, ?)
+                """;
+
+        jdbcTemplate.update(sql,
+                reply.getPostId(),
+                reply.getMemberId(),
+                reply.getContent());
+    }
+
+    // 댓글 수정
+    @Override
+    public void update(ReplyDto reply) {
+
+        String sql = """
+            UPDATE reply
+            SET content = ?
+            WHERE reply_id = ?
+              AND member_id = ?
+            """;
+
+        jdbcTemplate.update(
+                sql,
+                reply.getContent(),
+                reply.getReplyId(),
+                reply.getMemberId()
+        );
+    }
 }

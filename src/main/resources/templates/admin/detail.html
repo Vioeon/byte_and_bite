@@ -2,78 +2,76 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>스프링 게시판 - 상세 보기</title>
+    <title>맛집 소식 상세</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/board/css/detail.css">
+    <link rel="stylesheet" th:href="@{/css/newsDetail.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
 </head>
 <body>
-<div class="container">
-    <th:block th:insert="~{layout/common :: nav-header}">
-        <h1>게시글 상세 정보</h1>
-        <div class="nav">
-            <a th:href="@{/news}">목록으로</a>
-            <a th:href="@{/news/write}">새 글 쓰기</a>
+
+<div th:replace="~{layout/common :: nav-header}"></div>
+<main class="detail-wrapper">
+
+    <!-- 식당 정보 -->
+    <section class="restaurant-box">
+        <div class="restaurant-image">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500" alt="식당 이미지">
+            <!--            <img th:src="@{/images/{image}(image=${post.image})}" alt="식당 이미지">-->
         </div>
-    </th:block>
-    <table style="margin-bottom: 20px;">
-        <tr>
-            <th style="width: 20%;">번호</th>
-            <td th:text="${news.id}">3</td>
-        </tr>
-        <tr>
-            <th>제목</th>
-            <td th:text="${news.title}"></td>
-        </tr>
-        <tr>
-            <th>작성자</th>
-            <td th:text="${news.nickname}"></td>
-        </tr>
-        <tr>
-            <th>작성일시</th>
-            <td th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-        </tr>
-        <tr>
-            <th>내용</th>
-            <td  th:text="${news.content}" style="white-space: pre-wrap;">리뷰 글</td>
-        </tr>
-        <!--
-        <tr>
-            <th>이미지</th>
-            <td>
-                <img th:each="image : ${images}" th:if="${post.image != null}"
-                     th:src="@{/images/{image}(image=${image})}" width="300">
-            </td>
-        </tr>
-        -->
-    </table>
-    <!-- 댓글 출력 -->
-    <!--
-    <h3>댓글</h3>
+        <div class="restaurant-info">
+            <h1>맛있는 한끼 강남본점</h1>
+            <div class="restaurant-category">
+                한식
+            </div>
+            <div class="restaurant-detail">
+                <p>📍 서울 강남구 테헤란로 123</p>
+                <p>☎ 02-1234-5678</p>
+            </div>
+            <!--            식당 정보도 가져와야함-->
+            <!--            <h1 th:text="${post.rname}">맛있는 한끼 강남본점</h1>-->
+            <!--            <div class="restaurant-category" th:text="${post.category}">-->
+            <!--                한식-->
+            <!--            </div>-->
+            <!--            <div class="restaurant-detail">-->
+            <!--                <p th:text="'📍 ' + ${post.address}">📍 서울 강남구 테헤란로 123</p>-->
+            <!--                <p th:text="'☎ ' + ${post.phone}">☎ 02-1234-5678</p>-->
+            <!--            </div>-->
+        </div>
+    </section>
 
-    <div th:if="${#lists.isEmpty(replyList)}">
-        <p>등록된 댓글이 없습니다.</p>
-    </div>
+    <!-- 맛집 소식 -->
+    <section class="review-box">
+        <div class="review-header">
+            <h2 th:text="${news.title}">정말 맛있었던 인생 맛집 소식입니다!</h2>
 
-    <table th:if="${!#lists.isEmpty(replyList)}">
-        <tr>
-            <th style="width:20%;">작성자</th>
-            <th style="width:50%;">내용</th>
-            <th style="width:30%;">작성일</th>
-        </tr>
+            <div class="review-meta">
+                <span>작성자 : <strong th:text="${news.nickname}">맛집탐방러</strong></span>
+                <span th:text="'조회수 ' + ${news.views}">조회수 128</span>
+                <span th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-02 14:30</span>
+            </div>
+        </div>
 
-        <tr th:each="reply : ${replyList}">
-            <td th:text="${reply.nickname}"></td>
-            <td th:text="${reply.content}"></td>
-            <td th:text="${#temporals.format(reply.createdAt, 'MM/dd HH:mm:ss')}"></td>
-        </tr>
-    </table>
-    -->
+        <div class="review-image">
+            <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800" alt="소식 이미지">
+            <!--            <img th:src="@{/images/{image}(image=${post.image})}" alt="소식 이미지">-->
+        </div>
 
-    <div>
-        <a th:href="@{/news/edit(id=${news.id})}" class="btn">수정하기</a>
-        <a th:href="@{/news}" class="btn btn-secondary">목록으로</a>
-    </div>
-</div>
+        <div class="review-content" th:text="${news.content}">
+            음식이 정말 맛있었고 매장 내부 분위기도 아주 깔끔하고 좋았습니다.
+            <br><br>
+            특히 대표 메뉴가 입에서 살살 녹을 정도로 훌륭했으며, 직원분들도 친절하셔서 다음에도 다시 방문하고 싶은 찐 맛집입니다! 추천합니다.
+        </div>
+
+        <div class="review-buttons">
+            <a th:href="@{/news}" class="btn-action">목록</a>
+            <th:block th:if="${session.loginMember != null and session.loginMember.memberId == news.memberId}">
+                <a th:href="@{/news/{id}/edit(id=${news.id})}" class="btn-action">수정</a>
+                <form th:action="@{/news/{id}/delete(id=${news.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-action" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                </form>
+            </th:block>
+        </div>
+    </section>
+</main>
 </body>
 </html>

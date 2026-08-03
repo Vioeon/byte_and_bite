@@ -1,0 +1,172 @@
+/* 전체 영역 */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    width: 800px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+}
+
+/* 제목 */
+.container h1 {
+    margin-bottom: 32px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* 상단 메뉴 */
+.nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.nav a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav a:hover {
+    color: #ff5252;
+}
+
+/* 입력 그룹 */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 공통 입력 */
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color .2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ff5252;
+}
+
+.form-group textarea {
+    min-height: 220px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+/* 식당 검색 */
+.search-group {
+    display: flex;
+    gap: 10px;
+}
+
+.search-group input {
+    flex: 1;
+}
+
+/* 검색 버튼 */
+#searchButton {
+    padding: 0 20px;
+    border: none;
+    border-radius: 8px;
+    background: #ff5252;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#searchButton:hover {
+    background: #e04848;
+}
+
+/* 검색 결과 */
+#restaurantResult {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 선택된 식당 */
+#selectRestaurant {
+    background: #f7f7f7;
+}
+
+/* 안내 문구 */
+.form-group span {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #888;
+}
+
+/* 에러 */
+.field-error {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #ff4d4f;
+}
+
+/* 버튼 영역 */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 40px;
+}
+
+/* 버튼 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: 42px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+    background: #ff5252;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.btn:hover {
+    background: #e04848;
+}
+
+.btn-secondary {
+    background: #f3f3f3;
+    color: #555;
+}
+
+.btn-secondary:hover {
+    background: #e5e5e5;
+}

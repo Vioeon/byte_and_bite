@@ -1,10 +1,13 @@
 package net.likelion.bebc25.bytebite.news.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import net.likelion.bebc25.bytebite.news.dto.NewsDto;
+//import net.likelion.bebc25.bytebite.news.dto.NewsDto;
+import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.news.service.NewsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,24 +31,44 @@ public class NewsController {
     // 소식 목록 조회하는 컨트롤러
     @GetMapping // /news/list prefix
     public String getNewsBoardList(@RequestParam(value = "sort", defaultValue = "latest")
-                                       String sort, Model model){
+                                   String sort, Model model){
         // 게시글 목록 조회(데이터)
-        List<NewsDto> news;
+        List<PostDto> news;
         if(sort.equals("latest")) { // 최신순 정렬
             news = newsService.getNews();
         }else{ // 조회수순 정렬
             news = newsService.getNewsByViews();
         }
 
-        model.addAttribute("menu", "news"); // Model transfer data to html(view)
+        model.addAttribute("news", news); // Model transfer data to html(view)
+        model.addAttribute("menu", "news");
         return "admin/newsList"; // template/admin/list(.html)
     }
 
     // 소식 상세 조회하는 컨트롤러
-//    @GetMapping("/detail.html")
-//    public String getNewsDetail(@RequestParam("id") int id, Model model){
-//        NewsDto news = newsService.getNews(id);
-//        model.addAttribute("news", news);
-//        return "board/detail"; // 템플릿 파일 경로
-//    }
+    @GetMapping("/{id}")
+    public String getNewsDetail(@PathVariable int id, Model model){
+        PostDto news = newsService.getNews(id);
+        System.out.println("news = " + news);
+        model.addAttribute("news", news);
+        model.addAttribute("menu", "news");
+        return "admin/detail"; // 템플릿 파일 경로
+    }
+
+    // 게시글 수정 화면을 요청하는 컨트롤러
+    @GetMapping("/write")
+    public String getWriteNewsForm(@ModelAttribute("newsForm") PostDto post){
+        return "admin/write"; // 템플릿 파일 경로
+    }
+
+    // 게시글 등록 요청을 처리하는 컨트롤러
+    @PostMapping("/write")
+    public String writePost(@Valid @ModelAttribute("postForm") PostDto post, // Validation 검증 대상 객체
+                            BindingResult bindingResult){ // Validation 검증 결과 저장 객체(대상 객체 뒤에 기술해야 함)
+        if(bindingResult.hasErrors()){ // 검증에 실패했을 경우
+            return "news/write"; // 작성중이던 페이지로 다시 보낸다.
+        }
+        newsService.writeNews(post);
+        return "redirect:/news"; // 브라우저에 /news로 재요청하라고 응답
+    }
 }

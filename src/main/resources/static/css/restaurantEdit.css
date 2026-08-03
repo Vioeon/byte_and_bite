@@ -1,0 +1,116 @@
+/* 식당 정보 수정 */
+.restaurant-box {
+    width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* 식당 이미지 */
+.profile-restaurant-img {
+    width: 260px;
+    height: 220px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-restaurant-img img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background-color: #f8f8f8;
+}
+
+/* 파일 input 숨김 */
+.profile-restaurant-img input[type="file"] {
+    display: none;
+}
+/* 이미지 변경 버튼 */
+.image-change-btn {
+    width: 160px;
+    height: 38px;
+    margin-top: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+.image-change-btn:hover {
+    background-color: #444;
+}
+
+/* 입력 영역 */
+.restaurant-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-info label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.restaurant-info input,
+.restaurant-info select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+
+    border: 1px solid #ddd;
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+}
+
+.restaurant-info input:focus,
+.restaurant-info select:focus {
+    outline: none;
+    border-color: #222;
+}
+
+/* 수정 버튼 */
+.restaurant-info button {
+    height: 45px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #222;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    margin-top: 10px;
+}
+
+.restaurant-info button:hover {
+    background-color: #444;
+}

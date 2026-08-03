@@ -1,7 +1,9 @@
 package net.likelion.bebc25.bytebite.mypage.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import net.likelion.bebc25.bytebite.member.dto.LoginDto;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
@@ -10,7 +12,9 @@ import net.likelion.bebc25.bytebite.mypage.service.MypageService;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -48,5 +52,28 @@ public class MypageController {
         model.addAttribute("mypagePostList", mypagePostList); // Model 에 작성한 리뷰목록을 넣어라
         model.addAttribute("menu", "mypage"); // Model 에 메뉴를 보여주고 마이페이지 메뉴가 활성화되도록 해라
         return "mypage/mypage"; // 마이페이지 화면을 보여줘라
+    }
+
+    // 식당 정보 수정 화면
+    @GetMapping("/restaurant/edit")
+    public String getRestaurantEditForm(HttpSession session, Model model) {
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        RestaurantDto restaurantDto = RestaurantService.findByMemberId(loginMember.getMemberId());
+        model.addAttribute("restaurantForm", restaurantDto);
+        return "mypage/restaurantEdit";
+    }
+    // 식당 정보 수정
+    @PostMapping("/restaurant/edit")
+    public String restaurantEdit(@Valid @ModelAttribute("restaurantForm") RestaurantDto restaurantDto,
+                                 BindingResult bindingResult, HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            return "mypage/restaurantEdit";
+        }
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        RestaurantService.updateRestaurant(loginMember.getMemberId(), restaurantDto);
+
+        return "redirect:/mypage";
     }
 }

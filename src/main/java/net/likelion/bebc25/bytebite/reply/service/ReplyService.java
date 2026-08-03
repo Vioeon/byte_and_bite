@@ -9,4 +9,8 @@ public interface ReplyService {
     List<ReplyDto> findByPostId(int postId, int page);
 
     int countByPostId(int postId);
+
+    void writeReply(ReplyDto reply);
+
+    void updateReply(ReplyDto reply);
 }

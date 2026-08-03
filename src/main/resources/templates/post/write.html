@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <title>스프링 게시판 - 새 글 쓰기</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/board/css/write.css">
+<!--    <link rel="stylesheet" href="/board/css/write.css">-->
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/write.css}">
 </head>
 <body>
 <div th:replace="~{layout/common :: nav-header}"></div>
 <main class="wrapper">
-<div class="container">restaurant_id
-    <th:block th:text="${postForm.id == 0} ? '게시글 등록' : '게시글 수정'">
+<div class="container">
+    <th:block th:text="${postForm.id == 0} ? '리뷰 등록' : '리뷰 수정'">
         <h1>게시글 상세 정보</h1>
         <div class="nav">
-            <a href="@{/posts}">목록으로</a>
-            <a href="@{/posts/write}">새 글 쓰기</a>
+            <a th:href="@{/posts}">목록으로</a>
+            <a th:href="@{/posts/write}">새 글 쓰기</a>
         </div>
     </th:block>
 
@@ -29,8 +30,10 @@
 
         <div class="form-group">
             <label for="restaurantKeyword">식당 검색</label>
-            <input type="text" id="restaurantKeyword" placeholder="식당 이름을 입력하세요.">
-            <button type="button" id="searchButton">검색</button>
+            <div class="search-group">
+                <input type="text" id="restaurantKeyword" placeholder="식당 이름을 입력하세요.">
+                <button type="button" id="searchButton">검색</button>
+            </div>
         </div>
 
         <div>
@@ -40,13 +43,13 @@
         <div class="form-group">
             <label>선택된 식당</label>
             <input type="text" id="selectRestaurant" th:field="*{restaurantName}" readonly>
-
             <input type="hidden" id="restaurantId" th:field="*{restaurantId}">
+            <div class="field-error" th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}"></div>
         </div>
 
         <div class="form-group">
             <label for="images">사진 첨부</label>
-            <input type="file" id="images" name="images" multiple>
+            <input type="file" id="images" name="images" multiple required>
             <div class="field-error" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></div>
             <span>첫 번째 사진이 대표 이미지로 사용됩니다.</span>
         </div>
@@ -59,7 +62,7 @@
 
         <div style="margin-top: 20px;">
             <button type="submit" class="btn" th:text="${postForm.id == 0} ? '등록' : '수정'">등록</button>
-            <a th:if="${postForm.id == 0}" th:href="@{/posts/}" class="btn btn-secondary">취소</a>
+            <a th:if="${postForm.id == 0}" th:href="@{/posts}" class="btn btn-secondary">취소</a>
             <a th:unless="${postForm.id == 0}" th:href="@{/posts/{postId}(postId=${postForm.id})}" class="btn btn-secondary">취소</a>
         </div>
 
@@ -76,19 +79,24 @@
             return;
         }
 
-        fetch("/restaurant/search?keyword=" + keyword)
+        fetch("/posts/restaurant/search?keyword=" + keyword)
             .then(response => response.json()) // 서버에서 받은 응답을 json으로 변환
             .then(data => { // json으로 변환된 데이터 사용
-                if (!data) { // 검색 결과가 없을 시 "검색된 식당이 없습니다." 출력
-                    document.querySelector("#restaurantResult").innerText = "검색된 식당이 없습니다."
+                if (data == null || data.restaurantId == 0) { // 검색 결과가 없을 시 "검색된 식당이 없습니다." 출력
+                    document.querySelector("#restaurantResult").innerText = "검색된 식당이 없습니다.";
+                    // 검색된 식당 이름을 선택된 식당 칸에 입력
+                    document.querySelector("#selectRestaurant").value = "";
+
+                    // 게시글 등록 시 사용할 식당 번호를 숨겨진 값에 저장
+                    document.querySelector("#restaurantId").value = "";
                     return;
                 }
+                document.querySelector("#restaurantResult").innerText = "";
                 // 검색된 식당 이름을 선택된 식당 칸에 입력
-                document.querySelector("#selectRestaurant").value = data.rname;
+                document.querySelector("#selectRestaurant").value = data.restaurantName;
                 // 게시글 등록 시 사용할 식당 번호를 숨겨진 값에 저장
                 document.querySelector("#restaurantId").value = data.restaurantId;
             });
-
         });
 </script>
 </main>
