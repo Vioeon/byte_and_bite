@@ -87,5 +87,13 @@
         </a>
     </div>
 </main>
+<script>
+    // 뒤로가기 캐시(BFCache) 에서 페이지를 복원했으면 페이지 새로고침
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+            location.reload();
+        }
+    });
+</script>
 </body>
 </html>
