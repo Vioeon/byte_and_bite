@@ -85,72 +85,91 @@
         </th:block>
 
         <!-- 댓글 목록 -->
-        <div class="reply-list">
-            <div class="reply-item" th:each="reply : ${replies}">
-                <div class="reply-header">
-                    <strong>미식가A</strong>
-                    <span>2026-08-02 15:00</span>
-                </div>
-                <p>사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.</p>
-                <div class="reply-action">
-                    <a th:href="@{/posts/{id}/replies/{repliesId}/edit(id=${post.id})}" class="btn-action">수정</a>
-                    <form action="/posts/1/replies/1/delete" method="post" style="display:inline;">
-                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>
-                    </form>
-                </div>
-            </div>
+<!--        <div class="reply-list">-->
+<!--            <div class="reply-item" th:each="reply : ${replies}">-->
+<!--                <div class="reply-header">-->
+<!--                    <strong>미식가A</strong>-->
+<!--                    <span>2026-08-02 15:00</span>-->
+<!--                </div>-->
+<!--                <p>사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.</p>-->
+<!--                <div class="reply-action">-->
+<!--                    <a th:href="@{/posts/{id}/replies/{repliesId}/edit(id=${post.id})}" class="btn-action">수정</a>-->
+<!--                    <form action="/posts/1/replies/1/delete" method="post" style="display:inline;">-->
+<!--                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="reply-item">
+<!--            <div class="reply-item">-->
+<!--                <div class="reply-header">-->
+<!--                    <strong>푸드파이터</strong>-->
+<!--                    <span>2026-08-02 15:10</span>-->
+<!--                </div>-->
+<!--                <p>여기 진짜 인정입니다. 저도 단골이에요!</p>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <!-- 댓글 동적 렌더링 -->
+        <div class="reply-list">
+            <div class="reply-item" th:each="reply : ${replyList}">
                 <div class="reply-header">
-                    <strong>푸드파이터</strong>
-                    <span>2026-08-02 15:10</span>
+                    <strong th:text="${reply.nickname}">미식가A</strong>
+                    <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-02 15:00</span>
                 </div>
-                <p>여기 진짜 인정입니다. 저도 단골이에요!</p>
+                <p th:text="${reply.content}">
+                    사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.
+                </p>
+                <!-- 댓글 작성자 버튼 -->
+                <th:block th:if="${session.loginMember != null and session.loginMember.memberId == reply.memberId}">
+                    <div class="reply-action">
+                        <button type="button" class="reply-edit-btn" onclick="editReply(this)">수정</button>
+                        <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.replyId})}" method="post" style="display:inline;">
+                            <button type="submit" class="reply-delete-btn" onclick="return confirm('댓글을 삭제하시겠습니까?');">
+                                삭제
+                            </button>
+                        </form>
+                    </div>
+                </th:block>
+
+                <!-- 댓글 수정 -->
+                <form class="reply-edit-form"
+                      th:action="@{/posts/{postId}/replies/{replyId}/edit(postId=${post.id}, replyId=${reply.replyId})}"
+                      method="post" style="display:none;">
+                    <textarea name="content" th:text="${reply.content}"></textarea>
+                    <div class="reply-edit-buttons">
+                        <button type="submit">
+                            저장
+                        </button>
+                        <button type="button" onclick="cancelReplyEdit(this)">
+                            취소
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div th:if="${#lists.isEmpty(replyList)}">
+                등록된 댓글이 없습니다.
             </div>
         </div>
 
-        <!-- 댓글 동적 렌더링 -->
-<!--        <div class="reply-list">-->
-<!--            <div class="reply-item" th:each="reply : ${replyList}">-->
-<!--                <div class="reply-header">-->
-<!--                    <strong th:text="${reply.nickname}">미식가A</strong>-->
-<!--                    <span th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-02 15:00</span>-->
-<!--                </div>-->
-<!--                <p th:text="${reply.content}">-->
-<!--                    사진만 봐도 정말 군침이 도네요! 저도 주말에 가봐야겠습니다.-->
-<!--                </p>-->
-<!--&lt;!&ndash;                댓글 수정기능 주석처리&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="reply-action" th:if="${reply.writer}">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a th:href="@{/posts/{postId}/replies/{replyId}/edit(postId=${post.id}, replyId=${reply.id})}" class="btn-action">수정</a>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.id})}" method="post" style="display:inline;">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </form>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
-<!--            <div th:if="${#lists.isEmpty(replyList)}">-->
-<!--                등록된 댓글이 없습니다.-->
-<!--            </div>-->
-<!--        </div>-->
+        <!-- 댓글 페이징 -->
+        <div class="reply-pagination">
 
-<!--        &lt;!&ndash; 댓글 페이징 &ndash;&gt;-->
-<!--        <div class="reply-pagination">-->
+            <!-- 이전 페이지 -->
+            <a th:if="${page > 1}"
+               th:href="@{/posts/{postId}(postId=${post.id}, page=${page - 1})}">
+                &lt;
+            </a>
 
-<!--            &lt;!&ndash; 이전 페이지 &ndash;&gt;-->
-<!--            <a th:if="${page > 1}"-->
-<!--               th:href="@{/posts/{postId}(postId=${post.id}, page=${page - 1})}">-->
-<!--                &lt;-->
-<!--            </a>-->
+            <!-- 현재 페이지 -->
+            <span th:text="${page}"></span>
 
-<!--            &lt;!&ndash; 현재 페이지 &ndash;&gt;-->
-<!--            <span th:text="${page}"></span>-->
+            <!-- 다음 페이지 -->
+            <a th:if="${page < totalPage}"
+               th:href="@{/posts/{postId}(postId=${post.id}, page=${page + 1})}">
+                &gt;
+            </a>
 
-<!--            &lt;!&ndash; 다음 페이지 &ndash;&gt;-->
-<!--            <a th:if="${page < totalPage}"-->
-<!--               th:href="@{/posts/{postId}(postId=${post.id}, page=${page + 1})}">-->
-<!--                &gt;-->
-<!--            </a>-->
-
-<!--        </div>-->
+        </div>
     </section>
 
 </main>
