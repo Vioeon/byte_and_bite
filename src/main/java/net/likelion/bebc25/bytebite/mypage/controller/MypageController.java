@@ -1,7 +1,9 @@
 package net.likelion.bebc25.bytebite.mypage.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import net.likelion.bebc25.bytebite.member.dto.LoginDto;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
@@ -9,7 +11,9 @@ import net.likelion.bebc25.bytebite.member.service.RestaurantService;
 import net.likelion.bebc25.bytebite.mypage.service.MypageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
@@ -52,5 +56,28 @@ public class MypageController {
         model.addAttribute("memberInfo", memberInfo);
         model.addAttribute("menu", "mypage");
         return "mypage/mypage";
+    }
+
+    // 식당 정보 수정 화면
+    @GetMapping("/restaurant/edit")
+    public String getRestaurantEditForm(HttpSession session, Model model) {
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        RestaurantDto restaurantDto = RestaurantService.findByMemberId(loginMember.getMemberId());
+        model.addAttribute("restaurantForm", restaurantDto);
+        return "mypage/restaurantEdit";
+    }
+    // 식당 정보 수정
+    @PostMapping("/restaurant/edit")
+    public String restaurantEdit(@Valid @ModelAttribute("restaurantForm") RestaurantDto restaurantDto,
+                                 BindingResult bindingResult, HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            return "mypage/restaurantEdit";
+        }
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        RestaurantService.updateRestaurant(loginMember.getMemberId(), restaurantDto);
+
+        return "redirect:/mypage";
     }
 }

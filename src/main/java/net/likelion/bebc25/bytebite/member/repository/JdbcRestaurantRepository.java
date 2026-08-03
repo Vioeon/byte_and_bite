@@ -46,4 +46,16 @@ public class JdbcRestaurantRepository implements RestaurantRepository{
     public RestaurantDto findById(int id) {
         return jdbcTemplate.queryForObject("SELECT restaurant_id, category, rname, address, phone, image FROM restaurant WHERE member_id = ?", restaurantDetailRowMapper, id);
     }
+
+    @Override
+    public void update(int memberId, RestaurantDto restaurantDto) {
+        jdbcTemplate.update("UPDATE restaurant SET category = ?, rname = ?, address = ?, phone = ?, image = ? WHERE member_id = ?"
+                , restaurantDto.getCategory()
+                , restaurantDto.getRname()
+                , restaurantDto.getAddress()
+                , restaurantDto.getPhone()
+                , restaurantDto.getImageUrl()
+                , memberId);
+    }
+
 }
