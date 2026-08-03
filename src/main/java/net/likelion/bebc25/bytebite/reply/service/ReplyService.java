@@ -12,4 +12,5 @@ public interface ReplyService {
 
     void writeReply(ReplyDto reply);
 
+    void updateReply(ReplyDto reply);
 }

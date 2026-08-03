@@ -31,4 +31,9 @@ public class ReplyServiceImpl implements ReplyService {
     public void writeReply(ReplyDto reply) {
         replyRepository.save(reply);
     }
+
+    @Override
+    public void updateReply(ReplyDto reply) {
+        replyRepository.update(reply);
+    }
 }

@@ -90,4 +90,22 @@ public class JdbcReplyRepository implements ReplyRepository {
                 reply.getContent());
     }
 
+    // 댓글 수정
+    @Override
+    public void update(ReplyDto reply) {
+
+        String sql = """
+            UPDATE reply
+            SET content = ?
+            WHERE reply_id = ?
+              AND member_id = ?
+            """;
+
+        jdbcTemplate.update(
+                sql,
+                reply.getContent(),
+                reply.getReplyId(),
+                reply.getMemberId()
+        );
+    }
 }
