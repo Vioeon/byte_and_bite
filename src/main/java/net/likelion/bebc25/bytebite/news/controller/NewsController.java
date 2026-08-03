@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import net.likelion.bebc25.bytebite.file.FileStore;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class NewsController {
 
     private final NewsService newsService;
+    private final FileStore fileStore;
 
     public NewsController(NewsService newsService){
         this.newsService = newsService;
