@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>맛집 리뷰</title>
@@ -95,42 +95,26 @@
         </a>
 
         <!-- 데이터가 아예 없을 때 예외 처리 -->
-        <div th:if="${#lists.isEmpty(posts)}" style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
+        <div th:if="${#lists.isEmpty(posts)}"
+             style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
             등록된 리뷰가 없습니다.
         </div>
     </section>
 
-    <!-- 페이지네이션 -->
-    <div class="pagination" th:if="${posts != null and not #lists.isEmpty(posts)}">
-        <button><</button>
-        <span>1</span>
-        <button>></button>
+    <div class="pagination">
+        <!-- 이전 페이지 -->
+        <a th:if="${page > 1}"
+           th:href="@{/posts(page=${posts.number - 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
+            &lt;
+        </a>
+        <!-- 현재 페이지 -->
+        <span th:text="${page}"></span>
+        <!-- 다음 페이지 -->
+        <a th:if="${page < totalPage}"
+           th:href="@{/posts(page=${posts.number + 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
+            &gt;
+        </a>
     </div>
-
-    <!-- 페이지네이션 처리해야 함(sql로 페이징 처리해서 페이지당 데이터 9개씩 가져오게 해야함)-->
-    <!-- 이거 html 코드는 -->
-<!--    <div class="pagination" th:if="${posts != null and not #lists.isEmpty(posts)}">-->
-<!--        &lt;!&ndash; 이전 페이지로 이동 (첫 페이지면 비활성화 또는 숨김) &ndash;&gt;-->
-<!--        <a th:href="@{/posts(page=${posts.number - 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}"-->
-<!--           th:classappend="${posts.first} ? 'disabled' : ''">-->
-<!--            <button th:disabled="${posts.first}">&lt;</button>-->
-<!--        </a>-->
-
-<!--        &lt;!&ndash; 동적 페이지 번호 반복 출력 (Spring Data JPA 기준: 0부터 시작하므로 +1 처리) &ndash;&gt;-->
-<!--        <th:block th:each="pageNumber : ${#numbers.sequence(0, posts.totalPages - 1)}">-->
-<!--            &lt;!&ndash; 현재 페이지인 경우 active 클래스 추가 &ndash;&gt;-->
-<!--            <a th:href="@{/posts(page=${pageNumber}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}"-->
-<!--               th:text="${pageNumber + 1}"-->
-<!--               th:classappend="${pageNumber == posts.number} ? 'active' : ''">-->
-<!--            </a>-->
-<!--        </th:block>-->
-
-<!--        &lt;!&ndash; 다음 페이지로 이동 (마지막 페이지면 비활성화 또는 숨김) &ndash;&gt;-->
-<!--        <a th:href="@{/posts(page=${posts.number + 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}"-->
-<!--           th:classappend="${posts.last} ? 'disabled' : ''">-->
-<!--            <button th:disabled="${posts.last}">&gt;</button>-->
-<!--        </a>-->
-<!--    </div>-->
 </main>
 </body>
 </html>
