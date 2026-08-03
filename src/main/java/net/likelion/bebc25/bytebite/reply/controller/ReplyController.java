@@ -45,4 +45,35 @@ public class ReplyController {
         return "redirect:/posts/" + postId;
     }
 
+    // 댓글 수정
+    @PostMapping("/{replyId}/edit")
+    public String updateReply(@PathVariable int postId,
+                              @PathVariable int replyId,
+                              @ModelAttribute ReplyDto reply,
+                              HttpSession session) {
+
+        // 로그인한 회원 정보 조회
+        SessionMemberDto loginMember =
+                (SessionMemberDto) session.getAttribute("loginMember");
+
+        // 로그인하지 않은 경우 로그인 페이지로 이동
+        if (loginMember == null) {
+            return "redirect:/member/login";
+        }
+
+        // 게시글 번호 설정
+        reply.setPostId(postId);
+
+        // 댓글 번호 설정
+        reply.setReplyId(replyId);
+
+        // 로그인한 회원 번호 설정
+        reply.setMemberId(loginMember.getMemberId());
+
+        // 댓글 수정
+        replyService.updateReply(reply);
+
+        // 게시글 상세페이지로 이동
+        return "redirect:/posts/" + postId;
+    }
 }
