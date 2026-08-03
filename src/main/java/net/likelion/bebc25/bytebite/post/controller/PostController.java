@@ -85,7 +85,7 @@ public class PostController {
         model.addAttribute("page", page);
         model.addAttribute("totalPage", totalPage);
 
-        return "post/detail"; // 템플릿 파일 경로
+        return "post/detailTest"; // 템플릿 파일 경로
     }
 
     @GetMapping("/write")

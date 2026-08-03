@@ -93,4 +93,65 @@ public class JdbcTemplatePostRepository implements PostRepository{
     public void increaseView(int postid) {
         jdbcTemplate.update("UPDATE post SET view_count = view_count + 1 WHERE post_id = ?", postid);
     }
+
+    // news
+    private final RowMapper<PostDto> newsRowMapper = (ResultSet rs, int rowNum) -> {
+        return PostDto.builder()
+                .id(rs.getInt("post_id"))
+                .restaurantId(rs.getInt("restaurant_id"))
+                .restaurantName(rs.getString("rname"))
+                .category(rs.getString("category"))
+                .title(rs.getString("title"))
+                .views(rs.getInt("view_count"))
+                .image(rs.getString("image"))
+                .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
+    };
+
+    private final RowMapper<PostDto> newsDetailMapper = (ResultSet rs, int rowNum) -> {
+        return PostDto.builder()
+                .id(rs.getInt("post_id"))
+                //.restaurantId(rs.getInt("restaurant_id"))
+                .nickname(rs.getString("nickname"))
+                //.restaurantName(rs.getString("rname"))
+                //.category(rs.getString("category"))
+                .title(rs.getString("title"))
+                .content(rs.getString("content"))
+                //.views(rs.getInt("view_count"))
+                //.image(rs.getString("image"))
+                .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
+    };
+
+    // 작성일시순으로 정렬(default)
+    @Override
+    public List<PostDto> findAllNews() { // findAll query
+        return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
+                "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
+                "WHERE p.type = 'NEWS' " +
+                "ORDER BY p.created_at DESC;", newsRowMapper);
+    }
+
+    // view_count순으로 정렬
+    @Override
+    public List<PostDto> findAllNewsByViews() { // findAll query
+        return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
+                "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
+                "WHERE p.type = 'NEWS' " +
+                "ORDER BY p.view_count DESC;", newsRowMapper);
+    }
+
+    // 현재 detail.html에는 post_id, title, nickname, created_at, content가 포함
+    // 추후 맛집정보(rname, category, 주소, 전화번호) 가져올 쿼리 수정 필요
+    @Override
+    public PostDto findNewsById(int id) {
+        return jdbcTemplate.queryForObject("SELECT p.post_id, p.title, m.nickname, p.created_at, p.content " +
+                "FROM post p JOIN member m ON p.member_id = m.member_id " +
+                "WHERE p.post_id = ? AND p.type = 'NEWS'", newsDetailMapper, id);
+    }
+
+    // 작성한 소식 insert
+    @Override
+    public void saveNews(PostDto post) {
+        jdbcTemplate.update("INSERT INTO post(member_id, restaurant_id, type, title, content) VALUES (?, ?, ?, ?, ?)",
+                post.getMemberId(), post.getRestaurantId(), post.getType(), post.getTitle(), post.getContent());
+    }
 }

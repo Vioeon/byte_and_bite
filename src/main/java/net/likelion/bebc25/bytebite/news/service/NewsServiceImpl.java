@@ -1,7 +1,11 @@
-package net.likelion.bebc25.bytebite.news.service;
+package net.likelion.bebc25.bytebite.post.service;
 
-import net.likelion.bebc25.bytebite.news.dto.NewsDto;
-import net.likelion.bebc25.bytebite.news.repository.NewsRepository;
+//import net.likelion.bebc25.bytebite.news.dto.NewsDto;
+import net.likelion.bebc25.bytebite.post.dto.PostDto;
+//import net.likelion.bebc25.bytebite.news.repository.NewsRepository;
+import net.likelion.bebc25.bytebite.post.repository.PostRepository;
+import net.likelion.bebc25.bytebite.news.service.NewsService;
+import net.likelion.bebc25.bytebite.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -10,30 +14,30 @@ import java.util.List;
 @Service
 public class NewsServiceImpl implements NewsService {
 
-    private final NewsRepository newsRepository;
+    private final PostRepository postRepository;
 
-    public NewsServiceImpl(@Qualifier("jdbcTemplateNewsRepository") NewsRepository newsRepository){
-        this.newsRepository = newsRepository;
+    public NewsServiceImpl(@Qualifier("jdbcTemplatePostRepository") PostRepository postRepository){
+        this.postRepository = postRepository;
     }
 
     @Override
-    public List<NewsDto> getNews() {
-        return newsRepository.findAll();
+    public List<PostDto> getNews() {
+        return postRepository.findAllNews();
     }
 
-    public List<NewsDto> getNewsByViews() {
-        return newsRepository.findAllByViews();
+    public List<PostDto> getNewsByViews() {
+        return postRepository.findAllNewsByViews();
     }
 
-//    @Override
-//    public NewsDto getNews(int id) {
-//        return newsRepository.findById(id);
-//    }
-//
-//    @Override
-//    public void writeNews(NewsDto post) {
-//        newsRepository.save(post);
-//    }
+    @Override
+    public PostDto getNews(int id) {
+        return postRepository.findNewsById(id);
+    }
+
+    @Override
+    public void writeNews(PostDto post) {
+        postRepository.save(post);
+    }
 //
 //    @Override
 //    public void editNews(NewsDto post) {

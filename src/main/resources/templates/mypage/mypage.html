@@ -37,7 +37,7 @@
         </div>
     </section>
     <!-- 맛집 운영자 식당 정보 카드 -->
-    <th:block th:if="${session.loginMember != null} and ${session.loginMember.role == 'MANAGER'}">
+    <th:block th:if="${restaurant != null}">
         <section class="profile-restaurant-card">
             <div class="profile-restaurant-img">
                 <img th:src="${restaurant?.imageUrl}" alt="식당 이미지">
