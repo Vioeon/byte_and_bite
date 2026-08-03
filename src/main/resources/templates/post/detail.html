@@ -40,8 +40,9 @@
         <tr>
             <th>이미지</th>
             <td>
-                <img th:each="image : ${images}" th:if="${post.image != null}"
-                     th:src="@{/images/{image}(image=${image})}" width="300">
+                <div th:each="image : ${images}">
+                    <img th:src="${image}" width="300">
+                </div>
             </td>
         </tr>
     </table>
@@ -67,7 +68,14 @@
     </table>
 
     <div>
-        <a th:href="@{/posts/edit(id=${post.id})}" class="btn">수정하기</a>
+        <a th:if="${session.loginMember != null and (session.loginMember.role == 'MANAGER' or session.loginMember.memberId == post.memberId)}"
+           th:href="@{/posts/edit(id=${post.id})}" class="btn">수정</a>
+            <!--   삭제      -->
+        <form th:if="${session.loginMember != null and (session.loginMember.role == 'MANAGER' or session.loginMember.memberId == post.memberId)}"
+              th:action="@{/posts/delete}" method="post"  style="display:inline;">
+            <input type="hidden" name="id" th:value="${post.id}">
+            <button type="submit" class="btn">삭제</button>
+        </form>
         <a th:href="@{/posts}" class="btn btn-secondary">목록으로</a>
     </div>
 </div>

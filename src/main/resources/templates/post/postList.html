@@ -37,7 +37,7 @@
 
         <button type="submit" class="btn-search">검색</button>
 
-        <a href="@{/posts/write}" class="btn-write-link">
+        <a th:href="@{/posts/write}" class="btn-write-link">
             <button type="button" class="btn-write">리뷰작성</button>
         </a>
     </form>
@@ -82,7 +82,9 @@
            th:href="@{/posts/{postId}(postId=${post.id})}"
            class="card-link">
             <div class="card">
-                <div class="card-img">이미지</div>
+                <div class="card-img">
+                    <img th:src="${#strings.arraySplit(post.image, ',')[0]}" alt="대표 이미지">
+                </div>
                 <div class="card-info">
                     <div class="restaurant-name" th:text="${post.restaurantName}">식당 이름</div>
                     <div class="row">
