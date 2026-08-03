@@ -2,7 +2,6 @@ package net.likelion.bebc25.bytebite.news.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-//import net.likelion.bebc25.bytebite.news.dto.NewsDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.news.service.NewsService;
 import org.springframework.stereotype.Controller;
@@ -41,7 +40,7 @@ public class NewsController {
         }
 
         model.addAttribute("news", news); // Model transfer data to html(view)
-        return "admin/newsList"; // template/admin/list(.html)
+        return "news/newsList"; // template/admin/list(.html)
     }
 
     // 소식 상세 조회하는 컨트롤러
@@ -50,13 +49,13 @@ public class NewsController {
         PostDto news = newsService.getNews(id);
         System.out.println("news = " + news);
         model.addAttribute("news", news);
-        return "admin/detail"; // 템플릿 파일 경로
+        return "news/detail"; // 템플릿 파일 경로
     }
 
     // 게시글 수정 화면을 요청하는 컨트롤러
     @GetMapping("/write")
     public String getWriteNewsForm(@ModelAttribute("newsForm") PostDto post){
-        return "admin/write"; // 템플릿 파일 경로
+        return "news/write"; // 템플릿 파일 경로
     }
 
     // 게시글 등록 요청을 처리하는 컨트롤러
