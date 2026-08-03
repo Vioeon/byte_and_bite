@@ -100,3 +100,9 @@ WHERE type = 'NEWS';
 SELECT *
 FROM reply
 WHERE post_id = 9;
+
+SELECT r.rname, r.category, r.address, r.phone, p.title, m.nickname, p.view_count, p.created_at, p.content
+FROM post p
+JOIN member m ON p.member_id = m.member_id
+JOIN restaurant r ON p.restaurant_id = r.restaurant_id
+WHERE p.type = 'NEWS' LIMIT 5;

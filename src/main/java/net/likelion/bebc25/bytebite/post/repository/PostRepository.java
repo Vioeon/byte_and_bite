@@ -3,6 +3,7 @@ package net.likelion.bebc25.bytebite.post.repository;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository {
     List<PostDto> findAllPost(int offset, int pageSize);
@@ -31,6 +32,7 @@ public interface PostRepository {
     int countNews();
     PostDto findNewsById(int id);
     void saveNews(PostDto post);
+    Optional<Integer> findRestaurantIdByMemberId(int memberId);
     //    void update(NewsDto post);
     //    void deleteById(int id);
 }

@@ -1,13 +1,22 @@
 package net.likelion.bebc25.bytebite.news.service;
 
+import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
 import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.post.repository.PostRepository;
 import net.likelion.bebc25.bytebite.news.service.NewsService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -43,10 +52,55 @@ public class NewsServiceImpl implements NewsService {
         return postRepository.findNewsById(id);
     }
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     @Override
-    public void writeNews(PostDto post) {
-        postRepository.save(post);
+    public void writeNews(PostDto post, SessionMemberDto loginMember) {
+        if (!"MANAGER".equals(loginMember.getRole())) {
+            throw new IllegalArgumentException("매장 관리자만 소식을 작성할 수 있습니다.");
+        }
+
+        int restaurantId = postRepository.findRestaurantIdByMemberId(loginMember.getMemberId())
+                .orElseThrow(() ->
+                        new IllegalArgumentException("등록된 식당 정보가 없습니다."));
+
+        MultipartFile[] images = post.getImages();
+
+        if (images == null || images.length != 1 || images[0].isEmpty()) {
+            throw new IllegalArgumentException("대표 이미지를 한 장 첨부해주세요.");
+        }
+
+        post.setMemberId(loginMember.getMemberId());
+        post.setRestaurantId(restaurantId);
+        post.setType("NEWS");
+
+        MultipartFile imageFile = images[0];
+
+        try {
+            String originalName = imageFile.getOriginalFilename();
+            String extension = originalName.substring(originalName.lastIndexOf("."));
+            String savedName = UUID.randomUUID() + extension;
+
+            Path directory = Paths.get(uploadDir);
+            Files.createDirectories(directory);
+            imageFile.transferTo(directory.resolve(savedName));
+
+            post.setImage(savedName);
+            postRepository.saveNews(post);
+
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 저장에 실패했습니다.", e);
+        }
     }
+
+//    @Override
+//    public void writeNews(PostDto post) {
+//        MultipartFile imageFile = post.getImages()[0];
+//        String savedFileName = fileStorageService.save(imageFile);
+//        post.setImage(savedFileName);
+//        postRepository.saveNews(post);
+//    }
 //
 //    @Override
 //    public void editNews(NewsDto post) {

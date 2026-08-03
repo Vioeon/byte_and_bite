@@ -40,8 +40,7 @@
         <input type="text" class="search-input" name="keyword" placeholder="식당 이름을 입력해주세요.">
 
         <button type="submit" class="btn-search">검색</button>
-
-        <a href="write.html" class="btn-write-link">
+        <a th:href="@{/news/write}" class="btn-write-link">
             <button type="button" class="btn-write">소식작성</button>
         </a>
     </form>
@@ -57,7 +56,13 @@
                 <div class="card-info">
                     <div class="restaurant-name" th:text="${post.restaurantName}">식당 이름</div>
                     <div class="row">
-                        <span th:text="${post.category}">카테고리</span>
+                        <th:block th:switch="${post.category}">
+                            <span th:case="'KOR'">한식</span>
+                            <span th:case="'WST'">양식</span>
+                            <span th:case="'CHN'">중식</span>
+                            <span th:case="'JPN'">일식</span>
+                            <span th:case="'ETC'">기타</span>
+                        </th:block>
                         <span th:text="'조회수 ' + ${post.views}">조회수 0</span>
                     </div>
                 </div>

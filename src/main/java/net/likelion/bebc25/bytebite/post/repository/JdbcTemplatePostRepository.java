@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JdbcTemplatePostRepository implements PostRepository{
@@ -171,14 +172,16 @@ public class JdbcTemplatePostRepository implements PostRepository{
     private final RowMapper<PostDto> newsDetailMapper = (ResultSet rs, int rowNum) -> {
         return PostDto.builder()
                 .id(rs.getInt("post_id"))
-                //.restaurantId(rs.getInt("restaurant_id"))
+                .restaurantId(rs.getInt("restaurant_id"))
                 .nickname(rs.getString("nickname"))
-                //.restaurantName(rs.getString("rname"))
-                //.category(rs.getString("category"))
+                .restaurantName(rs.getString("rname"))
+                .address(rs.getString("address"))
+                .phone(rs.getString("phone"))
+                .category(rs.getString("category"))
                 .title(rs.getString("title"))
                 .content(rs.getString("content"))
-                //.views(rs.getInt("view_count"))
-                //.image(rs.getString("image"))
+                .views(rs.getInt("view_count"))
+                .image(rs.getString("image"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
     };
 
@@ -206,19 +209,27 @@ public class JdbcTemplatePostRepository implements PostRepository{
                 "SELECT COUNT(*) FROM post WHERE type = 'NEWS'", Integer.class);
     }
 
-    // 현재 detail.html에는 post_id, title, nickname, created_at, content가 포함
-    // 추후 맛집정보(rname, category, 주소, 전화번호) 가져올 쿼리 수정 필요
+    // template/news/detail.html에 매핑되는 sql 쿼리문(image 추가 필요)
     @Override
     public PostDto findNewsById(int id) {
-        return jdbcTemplate.queryForObject("SELECT p.post_id, p.title, m.nickname, p.created_at, p.content " +
+        return jdbcTemplate.queryForObject("SELECT p.post_id, r.restaurant_id, r.rname, r.category, r.address, " +
+                "r.phone, p.image, p.title, m.nickname, p.view_count, p.created_at, p.content, m.member_id " +
                 "FROM post p JOIN member m ON p.member_id = m.member_id " +
+                "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                 "WHERE p.post_id = ? AND p.type = 'NEWS'", newsDetailMapper, id);
     }
 
     // 작성한 소식 insert
     @Override
     public void saveNews(PostDto post) {
-        jdbcTemplate.update("INSERT INTO post(member_id, restaurant_id, type, title, content) VALUES (?, ?, ?, ?, ?)",
-                post.getMemberId(), post.getRestaurantId(), post.getType(), post.getTitle(), post.getContent());
+        jdbcTemplate.update("INSERT INTO post(member_id, restaurant_id, type, image, title, content) VALUES (?, ?, ?, ?, ?, ?)",
+                post.getMemberId(), post.getRestaurantId(), post.getType(), post.getImage(), post.getTitle(), post.getContent());
+    }
+
+    // manager member_id로 자신의 restaurant_id 조회
+    public Optional<Integer> findRestaurantIdByMemberId(int memberId) {
+        String sql = "SELECT restaurant_id FROM restaurant WHERE member_id = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("restaurant_id"), memberId).stream().findFirst();
     }
 }

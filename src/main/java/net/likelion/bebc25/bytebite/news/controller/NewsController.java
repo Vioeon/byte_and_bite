@@ -1,7 +1,10 @@
 package net.likelion.bebc25.bytebite.news.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
 import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.news.service.NewsService;
@@ -10,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import net.likelion.bebc25.bytebite.file.FileStore;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,12 +28,9 @@ import java.util.List;
 public class NewsController {
 
     private final NewsService newsService;
-    // file 로직 관련 구조체
-    private final FileStore fileStore;
 
-    public NewsController(NewsService newsService, @Qualifier("localFileStore") FileStore fileStore){
+    public NewsController(NewsService newsService){
         this.newsService = newsService;
-        this.fileStore = fileStore;
     }
 
     // 소식 목록 조회하는 컨트롤러
@@ -46,7 +46,7 @@ public class NewsController {
         model.addAttribute("pageResponse", news);
         model.addAttribute("sort", sort);
         model.addAttribute("menu", "news");
-        return "news/newsList"; // template/admin/list(.html)
+        return "news/newsList"; // template/news/list(.html)
     }
 
     // 소식 상세 조회하는 컨트롤러
@@ -67,12 +67,37 @@ public class NewsController {
 
     // 게시글 등록 요청을 처리하는 컨트롤러
     @PostMapping("/write")
-    public String writePost(@Valid @ModelAttribute("postForm") PostDto post, // Validation 검증 대상 객체
-                            BindingResult bindingResult){ // Validation 검증 결과 저장 객체(대상 객체 뒤에 기술해야 함)
+    public String writeNews(@Valid @ModelAttribute("newsForm") PostDto post, // Validation 검증 대상 객체
+                            BindingResult bindingResult, HttpSession session){ // Validation 검증 결과 저장 객체(대상 객체 뒤에 기술해야 함)
+
+        //MemberDto loginMember = (MemberDto) session.getAttribute("loginMember");
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        if (!"MANAGER".equals(loginMember.getRole())) {
+            return "redirect:/news";
+        }
+
+        post.setMemberId(loginMember.getMemberId());
+        post.setType("NEWS");
+        //post.setRestaurantId(loginMember.);
+
+        // 파일 첨부 객체 생성
+        MultipartFile[] images = post.getImages();
+
+        // 소식에서는 사진 한장만 첨부
+        if (images == null || images.length != 1 || images[0].isEmpty()) {
+            bindingResult.rejectValue("images", "required", "대표 이미지를 한 장 첨부해주세요.");
+        }
+
         if(bindingResult.hasErrors()){ // 검증에 실패했을 경우
             return "news/write"; // 작성중이던 페이지로 다시 보낸다.
         }
-        newsService.writeNews(post);
+
+        newsService.writeNews(post, loginMember);
         return "redirect:/news"; // 브라우저에 /news로 재요청하라고 응답
     }
 }
