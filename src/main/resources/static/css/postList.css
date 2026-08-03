@@ -197,6 +197,7 @@ main {
 
 /* 페이지네이션 */
 .pagination {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -204,17 +205,30 @@ main {
     margin-top: 20px;
 }
 
-.pagination button {
+.pagination a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
     border: 1px solid #ddd;
     background: white;
-    padding: 7px 13px;
+    color: #555;
     font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
     font-size: 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.pagination button:hover {
+.pagination a:hover {
+    background: #ff5252;
+    color: white;
+    border-color: #ff5252;
+}
+
+.pagination .active {
     background: #ff5252;
     color: white;
     border-color: #ff5252;

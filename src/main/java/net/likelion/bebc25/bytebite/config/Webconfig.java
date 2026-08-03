@@ -15,8 +15,10 @@ public class Webconfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns( // 로그인 체크할 경로
                         "/member/*",
+
                         "/post/write",
                         "/posts/*/edit",
+                        "/posts/*/delete",
 
                         "/posts/*/replies/write",
                         "/posts/*/replies/*/edit",
@@ -24,14 +26,19 @@ public class Webconfig implements WebMvcConfigurer {
 
                         "/news/write",
                         "/news/*/edit",
+                        "/news/*/delete",
+
                         "/mypage",
                         "/mypage/**")
                 .excludePathPatterns( // 제외할 경로
                         "/member/signup",
                         "/member/signup/restaurant",
                         "/member/login",
+
                         "/posts",
+                        "/posts/*",
                         "/news",
+                        "/news/*",
                         "/css/**", "/js/**", "/images/**", "/*.ico", "/*.svg", "/error");
     }
 }
