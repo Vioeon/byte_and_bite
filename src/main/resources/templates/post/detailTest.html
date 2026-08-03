@@ -29,7 +29,7 @@
                 <p>📍 서울 강남구 테헤란로 123</p>
                 <p>☎ 02-1234-5678</p>
             </div>
-<!--            식당 정보도 가져와야함-->
+            <!--            식당 정보도 가져와야함-->
             <!--            <h1 th:text="${post.rname}">맛있는 한끼 강남본점</h1>-->
             <!--            <div class="restaurant-category" th:text="${post.category}">-->
             <!--                한식-->
@@ -121,14 +121,13 @@
                     <textarea name="content" th:text="${reply.content}"></textarea>
                     <div class="reply-edit-buttons">
                         <button type="submit">
-                            저장
+                            수정
                         </button>
                         <button type="button" onclick="cancelReplyEdit(this)">
                             취소
                         </button>
                     </div>
                 </form>
-
             </div>
             <div th:if="${#lists.isEmpty(replyList)}">
                 등록된 댓글이 없습니다.
