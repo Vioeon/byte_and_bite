@@ -29,6 +29,8 @@ public class PostDto {
 //    @NotNull(message = "식당을 선택해주세요.")
     private int restaurantId;
     private String restaurantName;
+    private String address;
+    private String phone;
 
     private String type;
     private String category;

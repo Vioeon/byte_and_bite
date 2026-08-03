@@ -19,23 +19,19 @@
             <!--            <img th:src="@{/images/{image}(image=${post.image})}" alt="식당 이미지">-->
         </div>
         <div class="restaurant-info">
-            <h1>맛있는 한끼 강남본점</h1>
-            <div class="restaurant-category">
-                한식
-            </div>
-            <div class="restaurant-detail">
-                <p>📍 서울 강남구 테헤란로 123</p>
-                <p>☎ 02-1234-5678</p>
-            </div>
             <!--            식당 정보도 가져와야함-->
-            <!--            <h1 th:text="${post.rname}">맛있는 한끼 강남본점</h1>-->
-            <!--            <div class="restaurant-category" th:text="${post.category}">-->
-            <!--                한식-->
-            <!--            </div>-->
-            <!--            <div class="restaurant-detail">-->
-            <!--                <p th:text="'📍 ' + ${post.address}">📍 서울 강남구 테헤란로 123</p>-->
-            <!--                <p th:text="'☎ ' + ${post.phone}">☎ 02-1234-5678</p>-->
-            <!--            </div>-->
+                <h1 th:text="${news.restaurantName}">맛있는 한끼 강남본점</h1>
+                <div class="restaurant-category" th:switch="${news.category}">
+                    <span th:case="'KOR'">한식</span>
+                    <span th:case="'WST'">양식</span>
+                    <span th:case="'CHN'">중식</span>
+                    <span th:case="'JPN'">일식</span>
+                    <span th:case="'ETC'">기타</span>
+                </div>
+                <div class="restaurant-detail">
+                    <p th:text="'📍 ' + ${news.address}">📍 서울 강남구 테헤란로 123</p>
+                    <p th:text="'☎ ' + ${news.phone}">☎ 02-1234-5678</p>
+                </div>
         </div>
     </section>
 
