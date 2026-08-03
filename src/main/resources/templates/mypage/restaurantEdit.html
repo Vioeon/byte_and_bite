@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>식당 정보 수정</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" th:href="@{/css/restaurantEdit.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+
+<body>
+
+<div th:replace="~{layout/common :: nav-header}"></div>
+
+<main class="wrapper">
+
+    <form th:action="@{/mypage/restaurant/edit}" th:object="${restaurantForm}" method="post" enctype="multipart/form-data">
+        <section class="restaurant-box">
+            <!-- 식당 이미지 -->
+            <div class="profile-restaurant-img">
+                <img id="imagePreview" th:src="${restaurantForm.imageUrl}" alt="식당 이미지">
+
+                <label for="image" class="image-change-btn">식당 이미지 변경</label>
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)">
+            </div>
+
+            <!-- 식당 정보 -->
+            <div class="restaurant-info">
+                <div class="form-group">
+                    <label>식당명</label>
+                    <input type="text" th:field="*{rname}">
+                </div>
+
+                <div class="form-group">
+                    <label>카테고리</label>
+                    <select th:field="*{category}">
+                        <option value="KOR">한식</option>
+                        <option value="WTN">양식</option>
+                        <option value="CHN">중식</option>
+                        <option value="JPN">일식</option>
+                        <option value="ETC">기타</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>주소</label>
+                    <input type="text" th:field="*{address}">
+                </div>
+
+                <div class="form-group">
+                    <label>전화번호</label>
+                    <input type="text" th:field="*{phone}">
+                </div>
+
+                <button type="submit" class="restaurant-edit-btn">
+                    수정 완료
+                </button>
+            </div>
+        </section>
+    </form>
+</main>
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            document.getElementById("imagePreview").src =
+                URL.createObjectURL(input.files[0]);
+        }
+    }
+</script>
+</body>
+</html>

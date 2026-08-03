@@ -41,4 +41,16 @@ public class FileService {
             throw new RuntimeException("이미지 저장 중 오류가 발생했습니다.", e);
         }
     }
+
+    public void delete(String imagePath) {
+        try {
+            Path path = Paths.get(
+                    "src/main/resources/static" + imagePath
+            );
+            Files.deleteIfExists(path);
+
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 삭제 실패", e);
+        }
+    }
 }

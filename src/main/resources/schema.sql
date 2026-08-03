@@ -7,12 +7,12 @@ DROP TABLE IF EXISTS restaurant;
 DROP TABLE IF EXISTS member;
 
 
-SELECT post_id, title, image
-FROM post
-ORDER BY post_id DESC;
-
-SELECT post_id, image
-FROM post;
+# SELECT post_id, title, image
+# FROM post
+# ORDER BY post_id DESC;
+#
+# SELECT post_id, image
+# FROM post;
 
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,

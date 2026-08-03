@@ -9,4 +9,7 @@ public interface RestaurantRepository {
 
     // Id 식당 정보 조회
     RestaurantDto findById(int id);
+
+    // 식당 정보 수정
+    void update(int memberId, RestaurantDto restaurantDto);
 }
