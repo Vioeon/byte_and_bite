@@ -74,4 +74,20 @@ public class JdbcReplyRepository implements ReplyRepository {
         );
     }
 
+
+    // 댓글 등록
+    @Override
+    public void save(ReplyDto reply) {
+
+        String sql = """
+                INSERT INTO reply (post_id, member_id, content)
+                VALUES (?, ?, ?)
+                """;
+
+        jdbcTemplate.update(sql,
+                reply.getPostId(),
+                reply.getMemberId(),
+                reply.getContent());
+    }
+
 }
