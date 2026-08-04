@@ -15,8 +15,7 @@
     <!-- 식당 정보 -->
     <section class="restaurant-box">
         <div class="restaurant-image">
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500" alt="식당 이미지">
-<!--            <img th:src="@{/uploads/{image}(image=${news.image})}" alt="식당 이미지">-->
+            <img th:src="${news.restaurantImage}" alt="식당 이미지">
         </div>
         <div class="restaurant-info">
             <!--            식당 정보도 가져와야함-->
@@ -49,7 +48,7 @@
 
         <div class="review-image">
 <!--            <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800" alt="소식 이미지">-->
-            <img th:src="@{/uploads/{image}(image=${news.image})}" alt="소식 이미지">
+            <img th:src="${news.newsImage}" alt="소식 이미지">
         </div>
 
         <div class="review-content" th:text="${news.content}">

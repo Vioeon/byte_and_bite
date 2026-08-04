@@ -31,19 +31,26 @@ public class NewsServiceImpl implements NewsService {
     private static final int PAGE_BLOCK_SIZE = 5;
 
     @Override
-    public NewPageDto<PostDto> getNewsList(int page, int size, String sort) {
+    public NewPageDto<PostDto> getNewsList(int page, int size, String sort, String category) {
         int validPage = page < 1 ? 1 : page;
         int validSize = size < 1 ? PAGE_SIZE : size;
         int offset = (validPage - 1) * validSize;
 
         List<PostDto> content;
-        if ("views".equals(sort)) { // 조회수순 정렬
-            content = postRepository.findAllNewsByViews(offset, validSize);
-        } else { // 최신순 정렬 (default)
-            content = postRepository.findAllNews(offset, validSize);
+        int totalCount;
+
+        if (category == null || category.equals("all")) {
+            content = "views".equals(sort)
+                    ? postRepository.findAllNewsByViews(offset, validSize)
+                    : postRepository.findAllNews(offset, validSize);
+            totalCount = postRepository.countNews();
+        } else {
+            content = "views".equals(sort)
+                    ? postRepository.findCategoryNewsByViews(category, offset, validSize)
+                    : postRepository.findCategoryNews(category, offset, validSize);
+            totalCount = postRepository.countCategoryNews(category);
         }
 
-        int totalCount = postRepository.countNews();
         return new NewPageDto<>(content, validPage, validSize, totalCount, PAGE_BLOCK_SIZE);
     }
 
@@ -82,11 +89,11 @@ public class NewsServiceImpl implements NewsService {
             String extension = originalName.substring(originalName.lastIndexOf("."));
             String savedName = UUID.randomUUID() + extension;
 
-            Path directory = Paths.get(uploadDir);
+            Path directory = Paths.get(uploadDir, "news");
             Files.createDirectories(directory);
             imageFile.transferTo(directory.resolve(savedName));
 
-            post.setImage(savedName);
+            post.setImage("/uploads/news/" + savedName);
             postRepository.saveNews(post);
 
         } catch (IOException e) {
@@ -94,13 +101,18 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
-//    @Override
-//    public void writeNews(PostDto post) {
-//        MultipartFile imageFile = post.getImages()[0];
-//        String savedFileName = fileStorageService.save(imageFile);
-//        post.setImage(savedFileName);
-//        postRepository.saveNews(post);
-//    }
+    @Override
+    public NewPageDto<PostDto> searchNewsByKeyword(String keyword, int page, int size) {
+        int validPage = page < 1 ? 1 : page;
+        int validSize = size < 1 ? PAGE_SIZE : size;
+        int offset = (validPage - 1) * validSize;
+
+        List<PostDto> content = postRepository.findRestaurantNewsByKeyword(keyword, offset, validSize);
+        int totalCount = postRepository.countRestaurantNews(keyword);
+
+        return new NewPageDto<>(content, validPage, validSize, totalCount, PAGE_BLOCK_SIZE);
+    }
+
 //
 //    @Override
 //    public void editNews(NewsDto post) {

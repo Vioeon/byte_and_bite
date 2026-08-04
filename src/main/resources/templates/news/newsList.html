@@ -16,34 +16,37 @@
             <label>
                 <input type="radio" name="sort" value="latest"
                        th:checked="${sort == 'latest'}"
-                       onchange="location.href='?sort=latest'"> 최신순
+                       th:onclick="|location.href='@{/news(sort=latest, category=${category})}'|"> 최신순
             </label>
             <label>
                 <input type="radio" name="sort" value="views"
                        th:checked="${sort == 'views'}"
-                       onchange="location.href='?sort=views'"> 조회순
+                       th:onclick="|location.href='@{/news(sort=views, category=${category})}'|"> 조회순
             </label>
         </div>
     </div>
 
     <!-- 검색바 -->
-    <form class="search-bar" action="/search" method="GET" onsubmit="return false;">
-        <select class="category-select" name="category">
-            <option value="all">전체 카테고리</option>
-            <option value="korean">한식</option>
-            <option value="western">양식</option>
-            <option value="chinese">중식</option>
-            <option value="japanese">일식</option>
-            <option value="etc">기타</option>
+    <form class="search-bar" th:action="@{/news}" method="GET">
+        <select class="category-select" name="category" onchange="this.form.submit()">
+            <option value="all" th:selected="${category == 'all'}">전체 카테고리</option>
+            <option value="KOR" th:selected="${category == 'KOR'}">한식</option>
+            <option value="WST" th:selected="${category == 'WST'}">양식</option>
+            <option value="CHN" th:selected="${category == 'CHN'}">중식</option>
+            <option value="JPN" th:selected="${category == 'JPN'}">일식</option>
+            <option value="ETC" th:selected="${category == 'ETC'}">기타</option>
         </select>
 
         <input type="text" class="search-input" name="keyword" placeholder="식당 이름을 입력해주세요.">
 
+        <input type="hidden" name="sort" th:value="${sort}">
+
         <button type="submit" class="btn-search">검색</button>
-        <a th:href="@{/news/write}" class="btn-write-link">
-            <button type="button" class="btn-write">소식작성</button>
-        </a>
     </form>
+
+    <a th:href="@{/news/write}" class="btn-write-link">
+        <button type="button" class="btn-write">소식작성</button>
+    </a>
 
     <!-- 3x3 카드 그리드 -->
     <section class="card-grid">
@@ -52,7 +55,9 @@
            th:href="@{/news/{id}(id=${post.id})}"
            class="card-link">
             <div class="card">
-                <div class="card-img">이미지</div>
+                <div class="card-img">
+                    <img th:src="${post.image}" alt="이미지">
+                </div>
                 <div class="card-info">
                     <div class="restaurant-name" th:text="${post.restaurantName}">식당 이름</div>
                     <div class="row">
@@ -80,21 +85,21 @@
     <div class="pagination" th:if="${pageResponse != null and not #lists.isEmpty(news)}">
         <!-- 이전 페이지 버튼 -->
         <a th:if="${pageResponse.hasPrev}"
-           th:href="@{/news(page=${pageResponse.page - 1}, sort=${sort})}">&laquo; 이전</a>
-        <span th:unless="${pageResponse.hasPrev}" class="disabled">&laquo; 이전</span>
+           th:href="@{/news(page=${pageResponse.page - 1}, sort=${sort}, category=${category}, keyword=${keyword})}">&laquo; 이전</a>
+<!--        <span th:unless="${pageResponse.hasPrev}" class="disabled">&laquo; 이전</span>-->
 
         <!-- 페이지 번호 목록 -->
         <th:block th:each="p : ${#numbers.sequence(pageResponse.startPage, pageResponse.endPage)}">
             <a th:if="${p != pageResponse.page}"
-               th:href="@{/news(page=${p}, sort=${sort})}"
+               th:href="@{/news(page=${p}, sort=${sort}, category=${category}, keyword=${keyword})}"
                th:text="${p}">1</a>
             <span th:if="${p == pageResponse.page}" class="active" th:text="${p}">1</span>
         </th:block>
 
         <!-- 다음 페이지 버튼 -->
         <a th:if="${pageResponse.hasNext}"
-           th:href="@{/news(page=${pageResponse.page + 1}, sort=${sort})}">다음 &raquo;</a>
-        <span th:unless="${pageResponse.hasNext}" class="disabled">다음 &raquo;</span>
+           th:href="@{/news(page=${pageResponse.page + 1}, sort=${sort}, category=${category}, keyword=${keyword})}">다음 &raquo;</a>
+<!--        <span th:unless="${pageResponse.hasNext}" class="disabled">다음 &raquo;</span>-->
     </div>
 </main>
 <script>

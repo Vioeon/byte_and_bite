@@ -37,8 +37,16 @@ public interface PostRepository {
     List<PostDto> findAllNewsByViews(int offset, int limit);
     int countNews();
     PostDto findNewsById(int id);
+
     void saveNews(PostDto post);
     Optional<Integer> findRestaurantIdByMemberId(int memberId);
+
+    List<PostDto> findCategoryNews(String category, int offset, int limit);
+    List<PostDto> findCategoryNewsByViews(String category, int offset, int limit);
+    int countCategoryNews(String category);
+
+    List<PostDto> findRestaurantNewsByKeyword(String keyword, int offset, int limit);
+    int countRestaurantNews(String keyword);
     //    void update(NewsDto post);
     //    void deleteById(int id);
 }

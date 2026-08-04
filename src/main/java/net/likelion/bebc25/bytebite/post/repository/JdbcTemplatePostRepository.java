@@ -212,6 +212,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
         return PostDto.builder()
                 .id(rs.getInt("post_id"))
                 .restaurantId(rs.getInt("restaurant_id"))
+                .restaurantImage(rs.getString("restaurant_img"))
                 .nickname(rs.getString("nickname"))
                 .restaurantName(rs.getString("rname"))
                 .address(rs.getString("address"))
@@ -220,7 +221,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .title(rs.getString("title"))
                 .content(rs.getString("content"))
                 .views(rs.getInt("view_count"))
-                .image(rs.getString("image"))
+                .newsImage(rs.getString("news_img"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
     };
 
@@ -235,7 +236,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
     // view_count순으로 정렬
     @Override
-    public List<PostDto> findAllNewsByViews(int offset, int limit) { // findAll query
+    public List<PostDto> findAllNewsByViews(int offset, int limit) {
         return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
                 "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
                 "WHERE p.type = 'NEWS' ORDER BY p.view_count DESC " +
@@ -251,8 +252,9 @@ public class JdbcTemplatePostRepository implements PostRepository {
     // template/news/detail.html에 매핑되는 sql 쿼리문(image 추가 필요)
     @Override
     public PostDto findNewsById(int id) {
-        return jdbcTemplate.queryForObject("SELECT p.post_id, r.restaurant_id, r.rname, r.category, r.address, " +
-                "r.phone, p.image, p.title, m.nickname, p.view_count, p.created_at, p.content, m.member_id " +
+        return jdbcTemplate.queryForObject("SELECT p.post_id, r.restaurant_id, r.image AS restaurant_img, " +
+                "r.rname, r.category, r.address, r.phone, p.image AS news_img, p.title, m.nickname, " +
+                "p.view_count, p.created_at, p.content, m.member_id " +
                 "FROM post p JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                 "WHERE p.post_id = ? AND p.type = 'NEWS'", newsDetailMapper, id);
@@ -270,5 +272,48 @@ public class JdbcTemplatePostRepository implements PostRepository {
         String sql = "SELECT restaurant_id FROM restaurant WHERE member_id = ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("restaurant_id"), memberId).stream().findFirst();
+    }
+
+    // category별 검색
+    @Override
+    public List<PostDto> findCategoryNews(String category, int offset, int limit) {
+        return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
+                "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
+                "WHERE p.type = 'NEWS' AND r.category = ? " +
+                "ORDER BY p.created_at DESC LIMIT ? OFFSET ?;", newsRowMapper, category, limit, offset);
+    }
+
+    // category별 검색(view_count순으로 정렬)
+    @Override
+    public List<PostDto> findCategoryNewsByViews(String category, int offset, int limit) {
+        return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
+                "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
+                "WHERE p.type = 'NEWS' AND r.category = ? " +
+                "ORDER BY p.view_count DESC LIMIT ? OFFSET ?;", newsRowMapper, category, limit, offset);
+    }
+
+    @Override
+    public int countCategoryNews(String category) {
+        return jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM post p " +
+                        "JOIN restaurant r ON r.restaurant_id = p.restaurant_id " +
+                        "WHERE type = 'NEWS' AND r.category = ?", Integer.class, category);
+    }
+
+    // 검색 keyword로 식당 관련 소식 검색
+    @Override
+    public List<PostDto> findRestaurantNewsByKeyword(String keyword, int offset, int limit) { // findAll query
+        return jdbcTemplate.query("SELECT r.rname, r.category, p.* FROM post p\n" +
+                "JOIN restaurant r ON r.restaurant_id = p.restaurant_id\n" +
+                "WHERE p.type = 'NEWS' AND r.rname LIKE ? " +
+                "ORDER BY p.created_at DESC LIMIT ? OFFSET ?;", newsRowMapper, "%" + keyword + "%", limit, offset);
+    }
+
+    @Override
+    public int countRestaurantNews(String keyword) {
+        return jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM post p " +
+                        "JOIN restaurant r ON r.restaurant_id = p.restaurant_id " +
+                        "WHERE type = 'NEWS' AND r.rname LIKE ?", Integer.class, "%" + keyword + "%");
     }
 }

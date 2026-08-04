@@ -37,14 +37,22 @@ public class NewsController {
     @GetMapping // /news/list prefix
     public String getNewsBoardList(@RequestParam(value = "page", defaultValue = "1") int page,
                                    @RequestParam(value = "size", defaultValue = "9") int size,
-                                   @RequestParam(value = "sort", defaultValue = "latest") // 최신순, 조회순 정렬
-                                   String sort, Model model){
+                                   @RequestParam(value = "sort", defaultValue = "latest") String sort, // 정렬기준
+                                   @RequestParam(value = "category", defaultValue = "all") String category, // category
+                                   String keyword, Model model){
         // 게시글 목록 조회(데이터)
-        NewPageDto<PostDto> news = newsService.getNewsList(page, size, sort);
+        //NewPageDto<PostDto> news = newsService.getNewsList(page, size, sort, category);
+        NewPageDto<PostDto> news;
+        if (keyword != null && !keyword.isEmpty()) {
+            news = newsService.searchNewsByKeyword(keyword, page, size);
+        } else {
+            news = newsService.getNewsList(page, size, sort, category);
+        }
 
         model.addAttribute("news", news.getContent());
         model.addAttribute("pageResponse", news);
         model.addAttribute("sort", sort);
+        model.addAttribute("category", category);
         model.addAttribute("menu", "news");
         return "news/newsList"; // template/news/list(.html)
     }
@@ -83,7 +91,6 @@ public class NewsController {
 
         post.setMemberId(loginMember.getMemberId());
         post.setType("NEWS");
-        //post.setRestaurantId(loginMember.);
 
         // 파일 첨부 객체 생성
         MultipartFile[] images = post.getImages();

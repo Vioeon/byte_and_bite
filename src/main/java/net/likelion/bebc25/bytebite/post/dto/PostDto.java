@@ -29,6 +29,7 @@ public class PostDto {
 //    @NotNull(message = "식당을 선택해주세요.")
     private int restaurantId;
     private String restaurantName;
+    private String restaurantImage;
     private String address;
     private String phone;
 
@@ -58,6 +59,8 @@ public class PostDto {
     private String image;
     @NotNull
     private MultipartFile[] images;
+
+    private String newsImage;
 
     @NotBlank(message = "내용은 필수 입력 항목입니다.")
     private String content;
