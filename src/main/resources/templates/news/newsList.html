@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Byte&Bite - 맛집 리뷰</title>
@@ -40,9 +40,11 @@
         <input type="text" class="search-input" name="keyword" placeholder="식당 이름을 입력해주세요.">
 
         <button type="submit" class="btn-search">검색</button>
-        <a th:href="@{/news/write}" class="btn-write-link">
-            <button type="button" class="btn-write">소식작성</button>
-        </a>
+        <th:block th:if="${session.loginMember != null and session.loginMember.role.equals('MANAGER')}">
+            <a th:href="@{/news/write}" class="btn-write-link">
+                <button type="button" class="btn-write">소식작성</button>
+            </a>
+        </th:block>
     </form>
 
     <!-- 3x3 카드 그리드 -->
@@ -71,7 +73,8 @@
         </a>
 
         <!-- 데이터가 아예 없을 때 예외 처리 -->
-        <div th:if="${#lists.isEmpty(news)}" style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
+        <div th:if="${#lists.isEmpty(news)}"
+             style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
             등록된 소식이 없습니다.
         </div>
     </section>

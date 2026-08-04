@@ -14,16 +14,16 @@
 <main class="wrapper">
     <div class="post-write-container">
         <div class="write-header">
-            <h1 th:text="${postForm.id == 0} ? '리뷰 등록' : '리뷰 수정'">리뷰 작성</h1>
+            <h1 th:text="${newsForm.id == 0} ? '소식 등록' : '소식 수정'">리뷰 작성</h1>
             <div class="write-nav">
-                <a th:href="@{/posts}">목록으로</a>
+                <a th:href="@{/news}">목록으로</a>
                 <span class="divider">|</span>
-                <a th:href="@{/posts/write}">새 글 쓰기</a>
+                <a th:href="@{/news/write}">새 글 쓰기</a>
             </div>
         </div>
 
-        <form th:action="@{{action}(action=${postForm.id == 0} ? 'write' : 'edit')}" method="POST"
-              enctype="multipart/form-data" th:object="${postForm}">
+        <form th:action="@{{action}(action=${newsForm.id == 0} ? 'write' : 'edit')}" method="POST"
+              enctype="multipart/form-data" th:object="${newsForm}">
             <input type="hidden" th:field="*{id}">
             <div class="form-group">
                 <label for="title">제목</label>
@@ -31,37 +31,17 @@
                 <div class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">에러 메세지</div>
             </div>
 
-            <div class="form-group" th:if="${postForm.id == 0}">
-                <label for="restaurantKeyword">식당 검색</label>
-                <div class="search-group">
-                    <input type="text" id="restaurantKeyword" placeholder="식당 이름을 입력하세요.">
-                    <button type="button" id="searchButton">검색</button>
-                </div>
-            </div>
-
-            <div>
-                <div id="restaurantResult"></div>
-            </div>
-
-            <div class="form-group">
-                <label>선택된 식당</label>
-                <input type="text" id="selectRestaurant" th:field="*{restaurantName}" readonly>
-                <input type="hidden" id="restaurantId" th:field="*{restaurantId}">
-                <div class="field-error" th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}"></div>
-                <div id="searchMessage" style="color:red;"></div>
-            </div>
-
             <div class="form-group">
                 <label for="images">사진 첨부</label>
-                <div th:if="${postForm.id != 0}">
+                <div th:if="${newsForm.id != 0}">
                     <p>현재 이미지</p>
-                    <div th:each="img : ${#strings.arraySplit(postForm.image, ',')}">
-                        <img th:src="${postForm.image}" width="150">
+                    <div th:each="img : ${#strings.arraySplit(newsForm.image, ',')}">
+                        <img th:src="${newsForm.image}" width="150">
                     </div>
-                    <!--                <p>새 이미지를 선택하면 기존 이미지는 변경됩니다.</p>-->
+                                    <p>새 이미지를 선택하면 기존 이미지는 변경됩니다.</p>
                 </div>
                 <input type="file" id="images" name="images" multiple accept="image/*"
-                       th:required="${postForm.id == 0}">
+                       th:required="${newsForm.id == 0}">
                 <div class="field-error" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></div>
                 <span>첫 번째 사진이 대표 이미지로 사용됩니다.</span>
             </div>
@@ -73,57 +53,13 @@
             </div>
 
             <div style="margin-top: 20px;">
-                <button type="submit" class="btn" th:text="${postForm.id == 0} ? '등록' : '수정'">등록</button>
-                <a th:if="${postForm.id == 0}" th:href="@{/posts}" class="btn btn-secondary">취소</a>
-                <a th:unless="${postForm.id == 0}" th:href="@{/posts/{postId}(postId=${postForm.id})}"
+                <button type="submit" class="btn" th:text="${newsForm.id == 0} ? '등록' : '수정'">등록</button>
+                <a th:if="${newsForm.id == 0}" th:href="@{/news}" class="btn btn-secondary">취소</a>
+                <a th:unless="${newsForm.id == 0}" th:href="@{/news/{id}(id=${newsForm.id})}"
                    class="btn btn-secondary">취소</a>
             </div>
-
         </form>
     </div>
-
-    <script>
-        document.querySelector("#searchButton").addEventListener("click", function (e) {
-            // 검색어 가져오는 구문
-            let keyword = document.querySelector("#restaurantKeyword").value;
-            const msg = document.querySelector("#searchMessage")
-            const selectRestaurantName = document.querySelector("#selectRestaurant");
-            const restaurantId = document.querySelector("#restaurantId")
-
-            // 식당 검색, 조회를 하지 않았을때
-            if (keyword.trim() === "") {
-                msg.innerText = "식당 이름을 입력해주세요.";
-                return;
-            }
-
-            fetch("/posts/restaurant/search?keyword=" + keyword)
-                .then(response => response.json())
-                .then(data => {
-
-                    // 검색 결과가 없을 때
-                    if (data.restaurantId == 0) {
-                        msg.innerText = "등록된 식당이 없습니다.";
-                        selectRestaurantName.value = "";
-                        restaurantId.value = "";
-                        return;
-                    }
-
-                    // 검색 성공
-                    msg.innerText = "";
-                    // 선택된 식당 표시
-                    selectRestaurantName.value = data.restaurantName;
-                    restaurantId.value = data.restaurantId;
-                })
-
-                .catch(error => {
-                    console.log(error);
-                    msg.innerText = "검색 중 오류가 발생했습니다.";
-                    selectRestaurantName.value = "";
-                    restaurantId.value = "";
-                });
-
-        });
-    </script>
 </main>
 </body>
 </html>
