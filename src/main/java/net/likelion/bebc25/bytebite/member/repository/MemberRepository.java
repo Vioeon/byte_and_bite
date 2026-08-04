@@ -19,4 +19,8 @@ public interface MemberRepository {
 
   // id 회원 탈퇴 처리
   void withdrawUser(int id);
+
+  void updateNickname(int memberId, String nickname);
+
+  boolean existsByNickname(String nickname);
 }

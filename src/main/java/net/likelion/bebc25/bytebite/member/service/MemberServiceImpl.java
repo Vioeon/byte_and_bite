@@ -73,6 +73,16 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Transactional
+    public void updateNickname(int memberId, String newNickname) {
+
+        if (memberRepository.existsByNickname(newNickname)) {
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        }
+
+        memberRepository.updateNickname(memberId, newNickname);
+    }
+
     // 로그인
     @Override
     public MemberDto login(String email, String password) {
