@@ -122,13 +122,14 @@ public class PostController {
 
     @GetMapping("/write")
     public String getWriteForm(@ModelAttribute("postForm") PostDto post,
-                               HttpSession session){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
+                               HttpSession session, Model model){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
 
        // 비회원이 리뷰 작성을 누르면 로그인 화면으로
        if(loginMember == null){
            return "redirect:/member/login";
        }
+       model.addAttribute("menu", "posts");
        return "post/write";
     }
 

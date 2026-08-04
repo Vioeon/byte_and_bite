@@ -114,8 +114,8 @@ public class MemberController {
         // 세션 생성하여 사용자 정보 저장
         SessionMemberDto sessionMember = new SessionMemberDto(memberInfo);
         session.setAttribute("loginMember", sessionMember);
-        // 로그인한 세션 30분 설정
-        session.setMaxInactiveInterval(1800);
+        // 로그인한 세션 10분 설정
+        session.setMaxInactiveInterval(600);
 
         return "redirect:/posts";
     }

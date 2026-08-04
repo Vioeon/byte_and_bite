@@ -88,7 +88,7 @@
             <a th:if="${p != pageResponse.page}"
                th:href="@{/news(page=${p}, sort=${sort})}"
                th:text="${p}">1</a>
-            <span th:if="${p == pageResponse.page}" class="active" th:text="${p}">1</span>
+            <a th:if="${p == pageResponse.page}" class="active" th:text="${p}">1</a>
         </th:block>
 
         <!-- 다음 페이지 버튼 -->

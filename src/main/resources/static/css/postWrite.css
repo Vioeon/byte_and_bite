@@ -1,43 +1,47 @@
-/* 전체 영역 */
-.wrapper {
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-}
+/* postWrite.css */
 
-.container {
-    width: 800px;
-    background: #fff;
-    border: 1px solid #eee;
+.post-write-container {
+    max-width: 800px;
+    margin: 30px auto 60px; /* 상하 여백 및 중앙 배치 */
+    background: #ffffff;
+    border: 1px solid #e9ecef;
     border-radius: 16px;
     padding: 40px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
-/* 제목 */
-.container h1 {
-    margin-bottom: 32px;
-    font-size: 28px;
-    font-weight: 700;
-    color: #222;
-}
-
-/* 상단 메뉴 */
-.nav {
+.write-header {
     display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-bottom: 28px;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #222222;
 }
 
-.nav a {
+.write-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222222;
+}
+
+.write-nav {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.write-nav a {
     color: #666;
     text-decoration: none;
-    font-size: 14px;
 }
 
-.nav a:hover {
+.write-nav a:hover {
     color: #ff5252;
+}
+
+.write-nav .divider {
+    color: #ddd;
 }
 
 /* 입력 그룹 */
