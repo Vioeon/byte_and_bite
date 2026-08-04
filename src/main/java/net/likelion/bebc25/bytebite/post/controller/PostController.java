@@ -165,7 +165,6 @@ public class PostController {
 
         // 제목, 내용, 이미지 검증 실패 시 리턴
         if(bindingResult.hasErrors()){
-            bindingResult.getAllErrors().forEach(System.out::println);
             return "post/write";
         }
 
@@ -181,7 +180,6 @@ public class PostController {
 
         for(int i = 0; i < images.length; i++){
             MultipartFile image = images[i];
-            System.out.println(image.getOriginalFilename());
             if(!image.isEmpty()){
                 String fileName = java.util.UUID.randomUUID() + "_" + image.getOriginalFilename();
                 File saveFile = new File(uploadPath + fileName);
@@ -311,8 +309,23 @@ public class PostController {
         }
 
         PostDto post = postService.getPost(postId);
+
         if(!loginMember.getRole().equals("MANAGER") && loginMember.getMemberId() != post.getMemberId()){
             return "redirect:/login";
+        }
+
+        String uploadPath =System.getProperty("user.dir") + "/src/main/resources/uploads/posts/";
+        // 기존 이미지 삭제
+        if(post.getImage() != null && !post.getImage().isBlank()){
+            String[] images = post.getImage().split(",");
+            for(String image : images){
+                String fileName = image.replace("/uploads/posts/","");
+                File deleteFile = new File(uploadPath + fileName);
+
+                if(deleteFile.exists()){
+                    deleteFile.delete();
+                }
+            }
         }
 
         postService.removePost(postId);
