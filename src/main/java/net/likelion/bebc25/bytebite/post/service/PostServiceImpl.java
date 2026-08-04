@@ -18,18 +18,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PageDto<PostDto> getPosts(int page, int size, String sort) {
-        int offset = (page - 1) * size;
+    public PageDto<PostDto> getPosts(int page, int size, String sort, String category) {
+        // 페이지가 1보다 작으면 1 페이지로 처리
+        int validPage = page < 1 ? 1 : page;
+        // 한 페이지 게시글 수
+        int validSize = size < 1 ? 9 : size;
+        // 시작 위치 계산
+        int offset = (validPage - 1) * validSize;
 
         List<PostDto> posts;
-        if(sort.equals("popular")){
-             posts = postRepository.findPopular(offset, size);
+        int totalCount;
+        if(category.equals("all")){
+            if("views".equals(sort)){
+                posts = postRepository.findViews(offset, validSize);
+            } else {
+                posts = postRepository.findLatest(offset, validSize);
+            }
+            totalCount = postRepository.countPost();
         } else {
-            posts = postRepository.findLatest(offset, size);
-        }
+            posts = postRepository.findByCategory(category, sort, offset, validSize);
 
-        int totalCount = postRepository.countPost();
-        return new PageDto<>(posts, page, size, totalCount);
+            totalCount = postRepository.countCategory(category);
+        }
+        return new PageDto<>(posts, validPage, validSize, totalCount);
+
+    }
+
+    @Override
+    public List<PostDto> searchRestaurant(String keyword){
+        return postRepository.findByRestaurant(keyword);
     }
 
     @Override

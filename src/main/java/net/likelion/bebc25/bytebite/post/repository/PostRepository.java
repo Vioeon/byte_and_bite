@@ -12,7 +12,13 @@ public interface PostRepository {
 
     List<PostDto> findLatest(int offset, int limit);
 
-    List<PostDto> findPopular(int offset, int limit);
+    List<PostDto> findViews(int offset, int limit);
+
+    List<PostDto> findByCategory(String category, String sort, int offset, int limit);
+
+    List<PostDto> findByRestaurant(String keyword);
+
+    int countCategory(String category);
 
     PostDto findById(int id);
 

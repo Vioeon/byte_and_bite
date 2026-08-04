@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JdbcTemplatePostRepository implements PostRepository{
+public class JdbcTemplatePostRepository implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
     private final RowMapper<PostDto> searchMapper =
-            (rs,rowNum)->PostDto.builder()
+            (rs, rowNum) -> PostDto.builder()
                     .restaurantId(rs.getInt("restaurant_id"))
                     .restaurantName(rs.getString("rname"))
                     .build();
 
-    public JdbcTemplatePostRepository(JdbcTemplate jdbcTemplate){
+    public JdbcTemplatePostRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -78,7 +78,7 @@ public class JdbcTemplatePostRepository implements PostRepository{
 
     // 최신순 조회
     @Override
-    public List<PostDto> findLatest(int offset, int limit){
+    public List<PostDto> findLatest(int offset, int limit) {
         String sql = "SELECT p.*, m.nickname, r.category, r.rname " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
@@ -90,7 +90,7 @@ public class JdbcTemplatePostRepository implements PostRepository{
 
     // 조회수순 조회
     @Override
-    public List<PostDto> findPopular(int offset, int limit){
+    public List<PostDto> findViews(int offset, int limit) {
         String sql = "SELECT p.*, m.nickname, r.category, r.rname " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
@@ -98,6 +98,44 @@ public class JdbcTemplatePostRepository implements PostRepository{
                 "ORDER BY p.view_count DESC " +
                 "LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, postRowMapper, limit, offset);
+    }
+
+    @Override
+    public List<PostDto> findByCategory(String category, String sort, int offset, int limit) {
+        String orderBy;
+        if (sort.equals("views")) {
+            orderBy = "p.view_count DESC";
+        } else {
+            orderBy = "p.created_at DESC";
+        }
+
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname " +
+                "FROM post p " +
+                "JOIN member m ON p.member_id = m.member_id " +
+                "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE r.category = ? " +
+                "ORDER BY " + orderBy +
+                " LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, postRowMapper, category, limit, offset);
+    }
+
+    @Override
+    public List<PostDto> findByRestaurant(String keyword) {
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname FROM post p " +
+                "JOIN member m ON p.member_id = m.member_id " +
+                "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE r.rname LIKE ? " +
+                "ORDER BY p.created_at DESC";
+        return jdbcTemplate.query(sql, postRowMapper, "%" + keyword + "%");
+    }
+
+
+    @Override
+    public int countCategory(String category) {
+        String sql = "SELECT COUNT(*) FROM POST P " +
+                "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE r.category = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, category);
     }
 
     @Override
@@ -133,27 +171,28 @@ public class JdbcTemplatePostRepository implements PostRepository{
     }
 
     @Override
-    public PostDto findByName(String keyword){
-        String sql= "SELECT restaurant_id,rname " +
+    public PostDto findByName(String keyword) {
+        String sql = "SELECT restaurant_id, rname " +
                 "FROM restaurant " +
                 "WHERE rname LIKE ?";
 
-        List<PostDto> list=
-                jdbcTemplate.query(sql, searchMapper, "%"+keyword+"%");
+        List<PostDto> list =
+                jdbcTemplate.query(sql, searchMapper, "%" + keyword + "%");
+        System.out.println("검색 결과 개수 = " + list.size());
 
-        if(list.isEmpty())
+        if (list.isEmpty())
             return null;
-
+        System.out.println("찾은 식당 = " + list.get(0).getRestaurantName());
         return list.get(0);
     }
 
     @Override
-    public void increaseView(int postId){
-        String sql= "UPDATE post " +
+    public void increaseView(int postId) {
+        String sql = "UPDATE post " +
                 "SET view_count=view_count+1 " +
                 "WHERE post_id=?";
 
-        jdbcTemplate.update(sql,postId);
+        jdbcTemplate.update(sql, postId);
     }
 
     // news
