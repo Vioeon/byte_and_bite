@@ -173,7 +173,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
     @Override
     public void update(PostDto post) {
-        jdbcTemplate.update("UPDATE post SET title = ?, content = ? WHERE post_id = ?"
+        jdbcTemplate.update("UPDATE post SET title = ?, content = ?, image = ? WHERE post_id = ?"
                 , post.getTitle()
                 , post.getContent()
                 , post.getImage()
