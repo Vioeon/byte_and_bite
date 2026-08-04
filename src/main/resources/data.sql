@@ -110,3 +110,5 @@ FROM post p
 JOIN member m ON p.member_id = m.member_id
 JOIN restaurant r ON p.restaurant_id = r.restaurant_id
 WHERE p.type = 'NEWS' LIMIT 5;
+
+SELECT image FROM post WHERE type = 'NEWS';
