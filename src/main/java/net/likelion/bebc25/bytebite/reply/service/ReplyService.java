@@ -13,4 +13,6 @@ public interface ReplyService {
     void writeReply(ReplyDto reply);
 
     void updateReply(ReplyDto reply);
+
+    void deleteReply(int replyId, int memberId);
 }

@@ -36,4 +36,9 @@ public class ReplyServiceImpl implements ReplyService {
     public void updateReply(ReplyDto reply) {
         replyRepository.update(reply);
     }
+
+    @Override
+    public void deleteReply(int replyId, int memberId) {
+        replyRepository.delete(replyId, memberId);
+    }
 }
