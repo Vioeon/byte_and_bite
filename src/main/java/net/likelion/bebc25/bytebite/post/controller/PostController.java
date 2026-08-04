@@ -206,17 +206,20 @@ public class PostController {
     @GetMapping("/{postId}/edit")
     public String getEditForm(@PathVariable int postId, HttpSession session, Model model){
         SessionMemberDto loginMember = (SessionMemberDto)session.getAttribute("loginMember");
+        // 로그인 확인
         if(loginMember == null){
             return "redirect:/login";
         }
-
+        // 기존 게시글 조회
         PostDto post = postService.getPost(postId);
-
+        // 작성자, 관리자만 수정 가능
         if(!loginMember.getRole().equals("MANAGER") &&  loginMember.getMemberId()!=post.getMemberId()){
             model.addAttribute("postForm", post);
-            return "/posts";
+            return "redirect:/posts";
         }
         model.addAttribute("postForm", post);
+        // 수정 여부 구분
+        model.addAttribute("edit",true);
         return "post/write";
     }
 

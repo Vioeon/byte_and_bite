@@ -32,6 +32,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .nickname(rs.getString("nickname"))
                 .title(rs.getString("title"))
                 .image(rs.getString("image"))
+                .restaurantImage(rs.getString("restaurantImage"))
                 .category(rs.getString("category"))
                 .restaurantName(rs.getString("rname"))
                 .address(rs.getString("address"))
@@ -49,6 +50,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .title(rs.getString("title"))
                 .content(rs.getString("content"))
                 .image(rs.getString("image"))
+                .restaurantImage(rs.getString("restaurantImage"))
                 .category(rs.getString("category"))
                 .restaurantName(rs.getString("rname"))
                 .address(rs.getString("address"))
@@ -73,8 +75,8 @@ public class JdbcTemplatePostRepository implements PostRepository {
     }
 
     @Override
-    public PostDto findById(int id) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone FROM post p " +
+    public PostDto findById(int id) { // image 컬럼이 겹치기 때문에, alias로 restaurant 테이블에 image 컬럼 호출
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                 "WHERE p.post_id = ? " +
@@ -85,7 +87,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
     // 최신순 조회
     @Override
     public List<PostDto> findLatest(int offset, int limit) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
@@ -98,7 +100,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
     // 조회수순 조회
     @Override
     public List<PostDto> findViews(int offset, int limit) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
@@ -117,7 +119,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
             orderBy = "p.created_at DESC";
         }
 
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
@@ -130,7 +132,8 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
     @Override
     public List<PostDto> findByRestaurant(String keyword) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone FROM post p " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage " +
+                " FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                 "WHERE p.type='POST' " +

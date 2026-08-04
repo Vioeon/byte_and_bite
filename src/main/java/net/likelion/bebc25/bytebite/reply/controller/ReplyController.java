@@ -76,4 +76,26 @@ public class ReplyController {
         // 게시글 상세페이지로 이동
         return "redirect:/posts/" + postId + "#reply-section";
     }
+
+    // 댓글 삭제
+    @PostMapping("/{replyId}/delete")
+    public String deleteReply(@PathVariable int postId,
+                              @PathVariable int replyId,
+                              HttpSession session) {
+
+        // 로그인한 회원 정보 조회
+        SessionMemberDto loginMember =
+                (SessionMemberDto) session.getAttribute("loginMember");
+
+        // 로그인하지 않은 경우 로그인 페이지로 이동
+        if (loginMember == null) {
+            return "redirect:/member/login";
+        }
+
+        // 댓글 삭제
+        replyService.deleteReply(replyId, loginMember.getMemberId());
+
+        // 게시글 상세페이지로 이동
+        return "redirect:/posts/" + postId;
+    }
 }
