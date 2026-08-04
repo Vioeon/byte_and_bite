@@ -95,6 +95,7 @@ public class MypageController {
         SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
 
         try {
+            // 닉네임 변경
             memberService.updateNickname(loginMember.getMemberId(), newNickname);
 
             // 세션 닉네임도 변경

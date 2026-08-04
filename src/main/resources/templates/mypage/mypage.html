@@ -79,7 +79,7 @@
 
             <div class="posts-list">
                 <div class="post-item" th:each="post : ${mypagePostList}">
-                    <img class="post-img" th:src="@{/uploads/posts/{image}(image=${post.imageUrl})}" alt="리뷰 이미지">
+                    <img class="post-img" th:src="@{/uploads/posts/{image}(image=${#strings.arraySplit(post.imageUrl, ',')[0]})}" alt="리뷰 이미지">
                     <div class="post-main-content">
                         <a th:href="@{/posts/{postId}(postId=${post.id})}" class="post-title-link">
                             <h3 class="post-title" th:text="${post.title}">리뷰 제목이 들어가는 위치입니다.</h3>

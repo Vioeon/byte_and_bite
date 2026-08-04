@@ -54,7 +54,7 @@
 
         <div class="review-buttons">
             <a th:href="@{/posts}" class="btn-action">목록</a>
-            <th:block th:if="${session.loginMember != null and (session.loginMember.memberId == post.memberId or session.loginMember.role == 'MANAGER')}">
+            <th:block th:if="${session.loginMember != null and session.loginMember.memberId == post.memberId}">
                 <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn-action">수정</a>
                 <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" style="display:inline;">
                     <button type="submit" class="btn-action" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>

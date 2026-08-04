@@ -10,6 +10,8 @@ public interface MemberService {
 
   // email 중복 체크
   void validateDuplicateEmail(SignupDto signupDto);
+  // 닉네임 중복 체크
+  void validateDuplicateNickname(SignupDto signupDto);
 
   // 회원가입
   void signup(SignupDto signupDto);

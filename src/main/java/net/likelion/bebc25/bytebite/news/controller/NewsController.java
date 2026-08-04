@@ -116,6 +116,7 @@ public class NewsController {
         }
 
         model.addAttribute("newsForm", news);
+        model.addAttribute("menu", "news");
         return "news/write";
     }
 
