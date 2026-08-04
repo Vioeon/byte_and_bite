@@ -100,7 +100,7 @@ public class NewsServiceImpl implements NewsService {
             throw new RuntimeException("이미지 저장에 실패했습니다.", e);
         }
     }
-
+    HEAD
     @Override
     public NewPageDto<PostDto> searchNewsByKeyword(String keyword, int page, int size) {
         int validPage = page < 1 ? 1 : page;
@@ -149,8 +149,8 @@ public class NewsServiceImpl implements NewsService {
 
 //
 //    @Override
-//    public void editNews(NewsDto post) {
-//        newsRepository.update(post);
+//    public void editNews(NewsDto posts) {
+//        newsRepository.update(posts);
 //    }
 //
 //    @Override

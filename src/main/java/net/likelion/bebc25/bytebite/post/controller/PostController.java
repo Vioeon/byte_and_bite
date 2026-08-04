@@ -141,12 +141,6 @@ public class PostController {
                                 MultipartFile[] images,
                             HttpSession session){
         SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
-        // 이미지 첨부 필수 검사
-        if(images == null || images.length == 0 || images[0].isEmpty()){
-            bindingResult.rejectValue("images", "required",
-                    "이미지는 필수 첨부 항목입니다.");
-        }
-
         // 로그인 검사
         if(loginMember == null){
             return "redirect:/login";
@@ -157,6 +151,18 @@ public class PostController {
             bindingResult.rejectValue("restaurantId", "required", "식당을 선택해주세요.");
         }
 
+        // 이미지 첨부 필수 검사
+        if(images == null || images.length == 0 || images[0].isEmpty()){
+            bindingResult.rejectValue("images", "required",
+                    "이미지는 필수 첨부 항목입니다.");
+        }
+
+        // 등록된 이미지 갯수 제한 검사
+        if(images != null && images.length > 3){
+            bindingResult.rejectValue("images", "max",
+                    "이미지는 최대 3장까지 업로드 가능합니다.");
+        }
+
         // 제목, 내용, 이미지 검증 실패 시 리턴
         if(bindingResult.hasErrors()){
             bindingResult.getAllErrors().forEach(System.out::println);
@@ -164,17 +170,18 @@ public class PostController {
         }
 
         // 이미지 저장 경로
-        String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
+        String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/uploads/posts/";
         File uploadDir = new File(uploadPath);
 
         if(!uploadDir.exists()){
             uploadDir.mkdirs();
         }
         // DB 저장용 url 생성
-        StringBuilder imageUrl = new StringBuilder();
+        StringBuilder imgUrl = new StringBuilder();
 
         for(int i = 0; i < images.length; i++){
             MultipartFile image = images[i];
+            System.out.println(image.getOriginalFilename());
             if(!image.isEmpty()){
                 String fileName = java.util.UUID.randomUUID() + "_" + image.getOriginalFilename();
                 File saveFile = new File(uploadPath + fileName);
@@ -187,17 +194,17 @@ public class PostController {
                 }
 
                 // DB 저장 url
-                imageUrl.append("/uploads/").append(fileName);
+                imgUrl.append("/uploads/posts/").append(fileName);
                 // 여러 이미지 구분
                 if(i < images.length -1) {
-                    imageUrl.append(",");
+                    imgUrl.append(",");
                 }
             }
         }
 
         post.setMemberId(loginMember.getMemberId());
         post.setType("POST");
-        post.setImage(imageUrl.toString()); // DB에 url 저장
+        post.setImage(imgUrl.toString()); // DB에 url 저장
 
         postService.writePost(post);
         return "redirect:/posts"; //
@@ -232,30 +239,51 @@ public class PostController {
         if(loginMember == null){
             return "redirect:/login";
         }
+
+        // 기존 게시글 가져오기
         PostDto origin = postService.getPost(post.getId());
+        if(images != null && images.length > 3){
+            bindingResult.rejectValue("images", "max",
+                    "이미지는 최대 3장까지 업로드 가능합니다.");
+        }
+        // 업로드 경로
+        String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/uploads/posts/";
 
-        String uploadPath =System.getProperty("user.dir") + "/src/main/resources/static/uploads";
-
+        // 기존 이미지 삭제
         if(images != null && !images[0].isEmpty()) {
+            String[] oldImg = origin.getImage().split(",");
+            for(String oldImages : oldImg){
+                String fileName = oldImages.replace("/uploads/posts/","");
+                File deleteFile = new File(uploadPath + fileName);
+
+                if(deleteFile.exists()){
+                    deleteFile.delete();
+                }
+            }
+
+            // 새 이미지 저장
             StringBuilder imgUrl = new StringBuilder();
-            for (int i = 0; i < images.length; i++) {
+            for(int i = 0; i < images.length; i++){
                 MultipartFile image = images[i];
 
                 String fileName = java.util.UUID.randomUUID() + "_" + image.getOriginalFilename();
                 File saveFile = new File(uploadPath + fileName);
-                try {
+
+                try{
                     image.transferTo(saveFile);
-                } catch (IOException e) {
+                } catch (IOException e){
                     throw new RuntimeException(e);
                 }
-                imgUrl.append("/uploads").append(fileName);
 
-                if (i < images.length - 1) {
+                imgUrl.append("/uploads/posts/").append(fileName);
+
+                if(i < images.length - 1){
                     imgUrl.append(",");
                 }
             }
-            // 새 이미지 저장
+            // DB에 새로운 이미지 저장
             post.setImage(imgUrl.toString());
+
         } else {
             // 이미지 미선택 시 기존 이미지 유지
             post.setImage(origin.getImage());

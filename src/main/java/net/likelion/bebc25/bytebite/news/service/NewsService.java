@@ -11,6 +11,7 @@ public interface NewsService {
     NewPageDto<PostDto> getNewsList(int page, int size, String sort, String category); // 정렬기준 sort로 전달
 
     PostDto getNews(int id); // get
+
     void writeNews(PostDto post, SessionMemberDto loginMember); // post
 
     NewPageDto<PostDto> searchNewsByKeyword(String keyword, int page, int size); // keyword 검색

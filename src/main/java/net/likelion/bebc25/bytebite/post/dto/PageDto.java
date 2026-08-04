@@ -16,10 +16,7 @@ public class PageDto<T> {
     private int totalPage; // 전체 페이지 수
 
 
-    public PageDto(List<T> content,
-                   int page,
-                   int size,
-                   int totalCount) {
+    public PageDto(List<T> content, int page, int size, int totalCount) {
 
         this.content = content;
         this.page = page;
