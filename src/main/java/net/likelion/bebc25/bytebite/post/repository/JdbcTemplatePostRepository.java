@@ -236,6 +236,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .content(rs.getString("content"))
                 .views(rs.getInt("view_count"))
                 .image(rs.getString("image"))
+                .memberId(rs.getInt("member_id"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
     };
 
