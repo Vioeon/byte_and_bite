@@ -65,7 +65,7 @@ public class MemberServiceImpl implements MemberService {
             Files.createDirectories(directory);
             imageFile.transferTo(directory.resolve(savedName));
 
-            restaurantDto.setImageUrl("/uploads/restaurant/" + savedName);
+            restaurantDto.setImageUrl(savedName);
             restaurantRepository.save(restaurantDto);
 
         } catch (IOException e) {
