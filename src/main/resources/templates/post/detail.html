@@ -94,7 +94,8 @@
                 <th:block th:if="${session.loginMember != null and session.loginMember.memberId == reply.memberId}">
                     <div class="reply-action">
                         <button type="button" class="reply-edit-btn" onclick="editReply(this)">수정</button>
-                        <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.replyId})}" method="post" style="display:inline;">
+                        <form th:action="@{/posts/{postId}/replies/{replyId}/delete(postId=${post.id}, replyId=${reply.replyId})}"
+                              method="post" style="display:inline;">
                             <button type="submit" class="reply-delete-btn" onclick="return confirm('댓글을 삭제하시겠습니까?');">
                                 삭제
                             </button>
@@ -123,18 +124,29 @@
         </div>
 
         <!-- 댓글 페이징 -->
-        <div class="pagination">
-            <!-- 이전 페이지 -->
-            <a th:if="${page > 1}"
-               th:href="@{'/posts/' + ${post.id} + '?page=' + ${page - 1} + '#reply-section'}">
-                &lt;
+        <div class="pagination" th:if="${pageResponse != null and not #lists.isEmpty(replyList)}">
+            <!-- 이전 -->
+            <a th:if="${pageResponse.hasPrev}"
+               th:href="@{/posts/{postId}(postId=${post.id}, page=${pageResponse.page - 1})}">
+                &laquo; 이전
             </a>
-            <!-- 현재 페이지 -->
-            <span th:text="${page}"></span>
-            <!-- 다음 페이지 -->
-            <a th:if="${page < totalPage}"
-               th:href="@{'/posts/' + ${post.id} + '?page=' + ${page + 1} + '#reply-section'}">
-                &gt;
+
+            <!-- 페이지 번호 -->
+            <th:block th:each="p : ${#numbers.sequence(pageResponse.startPage, pageResponse.endPage)}">
+                <a th:if="${p != pageResponse.page}"
+                   th:href="@{/posts/{postId}(postId=${post.id}, page=${p})}"
+                   th:text="${p}">
+                </a>
+                <span th:if="${p == pageResponse.page}"
+                      class="active"
+                      th:text="${p}">
+                </span>
+            </th:block>
+
+            <!-- 다음 -->
+            <a th:if="${pageResponse.hasNext}"
+               th:href="@{/posts/{postId}(postId=${post.id}, page=${pageResponse.page + 1})}">
+                다음 &raquo;
             </a>
         </div>
     </section>
