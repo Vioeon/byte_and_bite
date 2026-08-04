@@ -53,7 +53,6 @@ VALUES-- NEWS (맛집 운영자 작성)
       (11, 11, 'NEWS', '베이커리온 신제품 안내', '신규 빵 메뉴가 출시되었습니다.', 11, 'default.jpg', '2026-07-30 12:00:00'),
       (12, 12, 'NEWS', '한상차림 예약 안내', '주말 예약 방문을 권장합니다.', 22, 'default.jpg', '2026-07-30 14:00:00'),
 
-
 -- POST (일반 사용자 리뷰)
       (13, 1, 'POST', '진국 방문 후기', '국물이 진하고 깔끔해서 만족했습니다.', 15, 'default.jpg', '2026-07-30 10:00:00'),
       (13, 5, 'POST', '진국 설렁탕 먹어본 후기', '국물이 깊고 담백해서 해장하기 좋은 메뉴였습니다. 고기도 부드럽고 양도 충분했습니다.', 15, 'default.jpg', '2026-07-30 10:00:00'),
@@ -105,3 +104,9 @@ WHERE type = 'NEWS';
 SELECT *
 FROM reply
 WHERE post_id = 9;
+
+SELECT r.rname, r.category, r.address, r.phone, p.title, m.nickname, p.view_count, p.created_at, p.content
+FROM post p
+JOIN member m ON p.member_id = m.member_id
+JOIN restaurant r ON p.restaurant_id = r.restaurant_id
+WHERE p.type = 'NEWS' LIMIT 5;
