@@ -6,8 +6,9 @@ import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import java.util.List;
 
 public interface PostService {
-//    List<PostDto> getPosts(int offset, int pageSize);
-    PageDto<PostDto> getPosts(int page, int size, String sort);
+    PageDto<PostDto> getPosts(int page, int size, String sort, String category);
+
+    List<PostDto> searchRestaurant(String keyword);
 
     int getPostCount();
 

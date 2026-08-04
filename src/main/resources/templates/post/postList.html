@@ -13,24 +13,27 @@
 <main class="wrapper">
     <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
         <div class="sort-options">
-            <label>
-                <input type="radio" name="sort" value="latest" checked> 최신순
-            </label>
-            <label>
-                <input type="radio" name="sort" value="views"> 조회순
-            </label>
+            <!--     조건별 정렬 버튼 가로 정렬      -->
+            <form action="/posts" method="get" style="display: flex; align-items: center; gap: 18px;">
+                <label>
+                    <input type="radio" name="sort" value="latest" th:checked="${sort == 'latest'}" onchange="this.form.submit()"> 최신순
+                </label>
+                <label>
+                    <input type="radio" name="sort" value="views" th:checked="${sort == 'views'}" onchange="this.form.submit()"> 조회순
+                </label>
+            </form>
         </div>
     </div>
 
     <!-- 검색바 -->
-    <form class="search-bar" action="/search" method="GET" onsubmit="return false;">
-        <select class="category-select" name="category">
-            <option value="all">전체 카테고리</option>
-            <option value="korean">한식</option>
-            <option value="western">양식</option>
-            <option value="chinese">중식</option>
-            <option value="japanese">일식</option>
-            <option value="etc">기타</option>
+    <form class="search-bar" action="/posts" method="GET">
+        <select class="category-select" name="category" onchange="this.form.submit()">
+            <option value="all" th:selected="${category == 'all'}">전체 카테고리</option>
+            <option value="KOR" th:selected="${category == 'KOR'}">한식</option>
+            <option value="WST" th:selected="${category == 'WST'}">양식</option>
+            <option value="CHN" th:selected="${category == 'CHN'}">중식</option>
+            <option value="JPN" th:selected="${category == 'JPN'}">일식</option>
+            <option value="ETC" th:selected="${category == 'ETC'}">기타</option>
         </select>
 
         <input type="text" class="search-input" name="keyword" placeholder="식당 이름을 입력해주세요.">
@@ -106,14 +109,14 @@
     <div class="pagination">
         <!-- 이전 페이지 -->
         <a th:if="${page > 1}"
-           th:href="@{/posts(page=${posts.number - 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
+           th:href="@{/posts(page=${page - 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
             &lt;
         </a>
         <!-- 현재 페이지 -->
         <span th:text="${page}"></span>
         <!-- 다음 페이지 -->
         <a th:if="${page < totalPage}"
-           th:href="@{/posts(page=${posts.number + 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
+           th:href="@{/posts(page=${page + 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
             &gt;
         </a>
     </div>

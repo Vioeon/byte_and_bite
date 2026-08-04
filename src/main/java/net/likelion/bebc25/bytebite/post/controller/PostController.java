@@ -8,6 +8,7 @@ import net.likelion.bebc25.bytebite.post.dto.PageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.post.service.PostService;
 import net.likelion.bebc25.bytebite.reply.service.ReplyService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,18 +36,31 @@ public class PostController {
     }
 
     @GetMapping
-    public String getBoardList(@RequestParam(defaultValue = "1") int page,
+    public String getPostList(@RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "9") int size,
                                @RequestParam(defaultValue = "latest") String sort,
+                               @RequestParam(defaultValue = "all") String category,
+                               @RequestParam(required = false) String keyword,
                                Model model){
-        int size = 9;
 
-        PageDto<PostDto> pageDto = postService.getPosts(page, size, sort);
+        PageDto<PostDto> pageDto;
+        if(keyword != null && !keyword.isEmpty()){
+            List<PostDto> searchList = postService.searchRestaurant(keyword);
+
+            pageDto = new PageDto<>(searchList, 1, size, searchList.size());
+        } else {
+            pageDto = postService.getPosts(page, size, sort, category);
+        }
+
+//        PageDto<PostDto> pageDto = postService.getPosts(page, size, sort, category);
 
 
-        model.addAttribute("pageDto", pageDto);
         model.addAttribute("posts", pageDto.getContent());
+        model.addAttribute("page", page);
         model.addAttribute("sort", sort);
-        model.addAttribute("menu", "posts");
+        model.addAttribute("category", category);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("totalPage", pageDto.getTotalPage());
         return "post/postList";
     }
 
@@ -55,6 +69,12 @@ public class PostController {
                             @RequestParam(defaultValue = "1") int page,
                             HttpSession session,
                             Model model){
+
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if(loginMember != null) {
+            model.addAttribute(("loginMember"), loginMember);
+        }
+
         // 조회수 처리 - 중복되면 안돼서 HashSet
         Set<Integer> viewPostIds = (Set<Integer>) session.getAttribute("viewPostIds");
 
@@ -94,7 +114,7 @@ public class PostController {
         model.addAttribute("page", page);
         model.addAttribute("totalPage", totalPage);
 
-        return "post/detailTest"; // 템플릿 파일 경로
+        return "post/detail"; // 템플릿 파일 경로
     }
 
     @GetMapping("/write")
@@ -128,6 +148,11 @@ public class PostController {
             return "redirect:/login";
         }
 
+        // 식당 필수 입력 검사
+        if(post.getRestaurantId() == 0){
+            bindingResult.rejectValue("restaurantId", "required", "식당을 선택해주세요.");
+        }
+
         // 제목, 내용, 이미지 검증 실패 시 리턴
         if(bindingResult.hasErrors()){
             bindingResult.getAllErrors().forEach(System.out::println);
@@ -158,7 +183,7 @@ public class PostController {
                 }
 
                 // DB 저장 url
-                imageUrl.append("/uploads/").append(image.getOriginalFilename());
+                imageUrl.append("/uploads/").append(fileName);
                 // 여러 이미지 구분
                 if(i < images.length -1) {
                     imageUrl.append(",");
@@ -167,7 +192,6 @@ public class PostController {
         }
 
         post.setMemberId(loginMember.getMemberId());
-        post.setRestaurantId(1); // 임시 식당 번호
         post.setType("POST");
         post.setImage(imageUrl.toString()); // DB에 url 저장
 
@@ -233,7 +257,12 @@ public class PostController {
 
     @GetMapping("/restaurant/search")
     @ResponseBody
-    public PostDto search(@RequestParam String keyword){
-        return postService.findByName(keyword);
+    public PostDto search(@RequestParam String keyword) {
+        PostDto post = postService.findByName(keyword);
+
+        if (post == null) {
+            return new PostDto();
+        }
+        return post;
     }
 }
