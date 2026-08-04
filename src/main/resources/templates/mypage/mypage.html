@@ -16,26 +16,36 @@
     <section class="profile-card">
         <div class="profile-info">
             <h2>
+
                 <!-- 닉네임 th 필드 설정 -->
-                <span th:text="${memberInfo?.nickname}" name="nickname"></span>
+                <span th:text="${memberInfo?.nickname}"></span>
                 <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
             </h2>
-            <div class="email" th:text="${memberInfo?.email}" email="email"></div>
+            <div class="email" th:text="${memberInfo?.email}"></div>
         </div>
 
         <div class="profile-stats">
-            <div class="stat-item">
+            <!-- 일반 사용자: 작성한 리뷰 -->
+            <div class="stat-item" th:if="${restaurant == null}">
                 <span class="stat-label">작성한 리뷰</span>
                 <span class="stat-value" th:text="${mypagePostList != null ? mypagePostList.size() : 0}">0</span>
             </div>
+            <!-- 맛집 운영자: 작성한 소식 -->
+            <div class="stat-item" th:if="${restaurant != null}">
+                <span class="stat-label">작성한 소식</span>
+                <span class="stat-value" th:text="${mypageNewsList != null ? mypageNewsList.size() : 0}">0</span>
+            </div>
+
+            <!-- 가입일 th 필드 설정 -->
             <div class="stat-item">
                 <span class="stat-label">가입일</span>
-                <!-- 가입일 th 필드 설정 -->
-                <span class="stat-value" th:text="${memberInfo != null ? #temporals.format(memberInfo.createdAt, 'yyyy-MM-dd') : ''}">2026-07-28</span>
-
+                <span class="stat-value"
+                      th:text="${memberInfo != null ? #temporals.format(memberInfo.createdAt, 'yyyy-MM-dd') : ''}">2026-07-28</span>
             </div>
+
         </div>
     </section>
+
     <!-- 맛집 운영자 식당 정보 카드 -->
     <th:block th:if="${restaurant != null}">
         <section class="profile-restaurant-card">
@@ -58,48 +68,97 @@
         </section>
     </th:block>
 
-    <!-- 작성한 리뷰 -->
-    <section class="posts-section">
-        <div class="section-header">
-            <div class="section-title">
-                작성한 리뷰
-                <span class="count-badge" th:text="${mypagePostList != null ? mypagePostList.size() : 0}">0</span>
+    <!-- 1. 일반 사용자인 경우: 리뷰 목록만 표시 -->
+    <th:block th:if="${restaurant == null}">
+        <!-- 작성한 리뷰 -->
+        <section class="posts-section">
+            <div class="section-header">
+                <div class="section-title">
+                    작성한 리뷰
+                    <span class="count-badge" th:text="${mypagePostList != null ? mypagePostList.size() : 0}">0</span>
+                </div>
             </div>
-        </div>
 
-        <div class="posts-list">
-            <div class="post-item" th:each="post : ${mypagePostList}">
-                <div class="post-img" th:text="${post.image != null ? '이미지' : '노이미지'}">
-                    이미지
-                </div>
-                <div class="post-main-content">
-                    <a th:href="@{/post/detail/{id}(id=${post.id})}" class="post-title-link">
-                        <h3 class="post-title" th:text="${post.title}">리뷰 제목이 들어가는 위치입니다.</h3>
-                    </a>
-                    <span class="restaurant-tag" th:text="${post.restaurantName}">식당 이름</span>
-                </div>
-                <div class="post-meta">
-                    <span class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
-                    <div class="post-actions">
-                        <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn-action">수정</a>
-                        <form th:action="@{/post/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
-                            <button type="submit" class="btn-action">삭제</button>
-                        </form>
+            <div class="posts-list">
+                <div class="post-item" th:each="post : ${mypagePostList}">
+                    <img class="post-img" th:src="${post.imageUrl}">
+                    </img>
+                    <div class="post-main-content">
+                        <a th:href="@{/posts/{postId}(postId=${post.id})}" class="post-title-link">
+                            <h3 class="post-title" th:text="${post.title}">리뷰 제목이 들어가는 위치입니다.</h3>
+                        </a>
+                        <span class="restaurant-tag" th:text="${post.restaurantName}">식당 이름</span>
+                    </div>
+                    <div class="post-meta">
+                        <span class="post-date"
+                              th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
+                        <div class="post-actions">
+                            <a th:href="@{/posts/{postId}(postId=${post.id})}" class="btn-action">수정</a>
+                            <form th:action="@{/posts/{postId}(postId=${post.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn-action">삭제</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
+
+                <div class="empty-box" th:if="${mypagePostList == null or #lists.isEmpty(mypagePostList)}">
+                    작성한 리뷰가 없습니다.
+                </div>
             </div>
 
-            <div class="empty-box" th:if="${mypagePostList == null or #lists.isEmpty(mypagePostList)}">
-                작성한 리뷰가 없습니다.
+            <div class="pagination" th:if="${mypagePostList != null and not #lists.isEmpty(mypagePostList)}">
+                <button>&lt;</button>
+                <span>1</span>
+                <button>&gt;</button>
             </div>
-        </div>
+        </section>
+    </th:block>
 
-        <div class="pagination" th:if="${mypagePostList != null and not #lists.isEmpty(mypagePostList)}">
-            <button>&lt;</button>
-            <span>1</span>
-            <button>&gt;</button>
-        </div>
-    </section>
+    <!-- 2. 식당 운영자(MANAGER)인 경우: 소식 목록만 표시 -->
+    <th:block th:if="${restaurant != null}">
+        <!-- 작성한 소식 -->
+        <section class="posts-section">
+            <div class="section-header">
+                <div class="section-title">
+                    작성한 소식
+                    <span class="count-badge" th:text="${mypageNewsList != null ? mypageNewsList.size() : 0}">0</span>
+                </div>
+            </div>
+
+            <div class="posts-list">
+                <div class="post-item" th:each="news : ${mypageNewsList}">
+                    <img class="post-img" th:src="${news.imageUrl}">
+                    </img>
+                    <div class="post-main-content">
+                        <a th:href="@{/news/{newsId}(newsId=${news.id})}" class="post-title-link">
+                            <h3 class="post-title" th:text="${news.title}">소식 제목이 들어가는 위치입니다.</h3>
+                        </a>
+                        <span class="restaurant-tag" th:text="${news.restaurantName}">식당 이름</span>
+                    </div>
+                    <div class="post-meta">
+                        <span class="post-date"
+                              th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
+                        <div class="post-actions">
+                            <a th:href="@{/news/{newsId}(newsId=${news.id})}" class="btn-action">수정</a>
+                            <form th:action="@{/news/{newsId}(newsId=${news.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn-action">삭제</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="empty-box" th:if="${mypageNewsList == null or #lists.isEmpty(mypageNewsList)}">
+                    작성한 소식이 없습니다.
+                </div>
+            </div>
+
+            <div class="pagination" th:if="${mypageNewsList != null and not #lists.isEmpty(mypageNewsList)}">
+                <button>&lt;</button>
+                <span>1</span>
+                <button>&gt;</button>
+            </div>
+        </section>
+    </th:block>
 
     <!-- 회원 탈퇴 -->
     <div class="account-action">
@@ -107,7 +166,6 @@
             <button type="submit" class="btn-unregister" onclick="return confirm('정말 탈퇴하시겠습니까?');">회원 탈퇴하기</button>
         </form>
     </div>
-
 </main>
 
 <!-- 닉네임 변경 모달 -->
