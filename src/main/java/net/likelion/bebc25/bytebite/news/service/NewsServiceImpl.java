@@ -147,14 +147,19 @@ public class NewsServiceImpl implements NewsService {
         postRepository.updateNews(post);
     }
 
-//
-//    @Override
-//    public void editNews(NewsDto posts) {
-//        newsRepository.update(posts);
-//    }
-//
-//    @Override
-//    public void removeNews(int id) {
-//        newsRepository.deleteById(id);
-//    }
+    @Override
+    public void removeNews(int id, SessionMemberDto loginMember) {
+        PostDto origin = postRepository.findNewsById(id);
+
+        if (!"MANAGER".equals(loginMember.getRole()) || loginMember.getMemberId() != origin.getMemberId()) {
+            throw new IllegalArgumentException("작성자 본인만 삭제할 수 있습니다.");
+        }
+
+        postRepository.deleteNewsById(id);
+    }
+
+    @Override
+    public void increaseView(int id) {
+        postRepository.increaseView(id);   // post와 완전히 동일한 메서드 재사용
+    }
 }

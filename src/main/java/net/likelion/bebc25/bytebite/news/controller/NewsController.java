@@ -15,7 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // 맛집 소식 (GET /news)
 // 맛집 소식 상세 조회 (GET /news/{newsId})
@@ -55,16 +57,6 @@ public class NewsController {
         model.addAttribute("category", category);
         model.addAttribute("menu", "news");
         return "news/newsList"; // template/news/list(.html)
-    }
-
-    // 소식 상세 조회하는 컨트롤러
-    @GetMapping("/{id}")
-    public String getNewsDetail(@PathVariable int id, Model model){
-        PostDto news = newsService.getNews(id);
-        System.out.println("news = " + news);
-        model.addAttribute("news", news);
-        model.addAttribute("menu", "news");
-        return "news/detail"; // 템플릿 파일 경로
     }
 
     // 게시글 수정 화면을 요청하는 컨트롤러
@@ -148,5 +140,40 @@ public class NewsController {
 
         newsService.editNews(post, loginMember);
         return "redirect:/news/" + id;
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteNews(@PathVariable int id, HttpSession session){
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        newsService.removeNews(id, loginMember);
+        return "redirect:/news";
+    }
+
+    // 소식 상세 조회하는 컨트롤러
+    @GetMapping("/{id}")
+    public String getNewsDetail(@PathVariable int id, HttpSession session, Model model){
+
+        // 조회수 처리 - 중복되면 안돼서 HashSet
+        Set<Integer> viewNewsIds = (Set<Integer>) session.getAttribute("viewNewsIds");
+
+        if (viewNewsIds == null) {
+            viewNewsIds = new HashSet<>();
+            session.setAttribute("viewNewsIds", viewNewsIds);
+        }
+
+        // 처음 조회 시에만 조회수 1 증가
+        if (!viewNewsIds.contains(id)) {
+            newsService.increaseView(id);
+            viewNewsIds.add(id);
+        }
+
+        PostDto news = newsService.getNews(id);
+        model.addAttribute("news", news);
+        model.addAttribute("menu", "news");
+        return "news/detail";
     }
 }

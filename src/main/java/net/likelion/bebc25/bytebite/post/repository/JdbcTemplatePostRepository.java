@@ -340,4 +340,9 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 "UPDATE post SET title = ?, content = ?, image = ? WHERE post_id = ? AND type = 'NEWS'",
                 post.getTitle(), post.getContent(), post.getImage(), post.getId());
     }
+
+    @Override
+    public void deleteNewsById(int id) {
+        jdbcTemplate.update("DELETE FROM post WHERE type = 'NEWS' AND post_id = ?", id);
+    }
 }
