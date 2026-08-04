@@ -34,6 +34,8 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .image(rs.getString("image"))
                 .category(rs.getString("category"))
                 .restaurantName(rs.getString("rname"))
+                .address(rs.getString("address"))
+                .phone(rs.getString("phone"))
                 .views(rs.getInt("view_count"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .build();
@@ -49,6 +51,8 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .image(rs.getString("image"))
                 .category(rs.getString("category"))
                 .restaurantName(rs.getString("rname"))
+                .address(rs.getString("address"))
+                .phone(rs.getString("phone"))
                 .views(rs.getInt("view_count"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class))
                 .build();
@@ -70,19 +74,22 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
     @Override
     public PostDto findById(int id) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname FROM post p JOIN member m ON p.member_id = m.member_id " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone FROM post p " +
+                "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
-                "WHERE p.post_id = ?";
+                "WHERE p.post_id = ? " +
+                "AND p.type='POST'";
         return jdbcTemplate.queryForObject(sql, postDetailMapper, id);
     }
 
     // 최신순 조회
     @Override
     public List<PostDto> findLatest(int offset, int limit) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE p.type='POST' " +
                 "ORDER BY p.created_at DESC " +
                 "LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, postRowMapper, limit, offset);
@@ -91,10 +98,11 @@ public class JdbcTemplatePostRepository implements PostRepository {
     // 조회수순 조회
     @Override
     public List<PostDto> findViews(int offset, int limit) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE p.type='POST' " +
                 "ORDER BY p.view_count DESC " +
                 "LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, postRowMapper, limit, offset);
@@ -109,11 +117,12 @@ public class JdbcTemplatePostRepository implements PostRepository {
             orderBy = "p.created_at DESC";
         }
 
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone " +
                 "FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
-                "WHERE r.category = ? " +
+                "WHERE p.type='POST' " +
+                "AND r.category = ? " +
                 "ORDER BY " + orderBy +
                 " LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, postRowMapper, category, limit, offset);
@@ -121,10 +130,11 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
     @Override
     public List<PostDto> findByRestaurant(String keyword) {
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname FROM post p " +
+        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
-                "WHERE r.rname LIKE ? " +
+                "WHERE p.type='POST' " +
+                "AND r.rname LIKE ? " +
                 "ORDER BY p.created_at DESC";
         return jdbcTemplate.query(sql, postRowMapper, "%" + keyword + "%");
     }
@@ -134,7 +144,8 @@ public class JdbcTemplatePostRepository implements PostRepository {
     public int countCategory(String category) {
         String sql = "SELECT COUNT(*) FROM POST P " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
-                "WHERE r.category = ?";
+                "WHERE p.type='POST' " +
+                "AND r.category = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, category);
     }
 
@@ -162,6 +173,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
         jdbcTemplate.update("UPDATE post SET title = ?, content = ? WHERE post_id = ?"
                 , post.getTitle()
                 , post.getContent()
+                , post.getImage()
                 , post.getId());
     }
 

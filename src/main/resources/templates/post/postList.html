@@ -107,17 +107,26 @@
     </section>
 
     <div class="pagination">
-        <!-- 이전 페이지 -->
+        <!-- 이전 -->
         <a th:if="${page > 1}"
-           th:href="@{/posts(page=${page - 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
-            &lt;
+           th:href="@{/posts(page=${page - 1}, sort=${sort}, category=${category}, keyword=${keyword})}">
+            « 이전
         </a>
-        <!-- 현재 페이지 -->
-        <span th:text="${page}"></span>
-        <!-- 다음 페이지 -->
+        <!-- 페이지 번호 -->
+        <th:block th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${i == page}"
+               class="active"
+               th:text="${i}">
+            </a>
+            <a th:if="${i != page}"
+               th:href="@{/posts(page=${i}, sort=${sort}, category=${category}, keyword=${keyword})}"
+               th:text="${i}">
+            </a>
+        </th:block>
+        <!-- 다음 -->
         <a th:if="${page < totalPage}"
-           th:href="@{/posts(page=${page + 1}, sort=${param.sort}, category=${param.category}, keyword=${param.keyword})}">
-            &gt;
+           th:href="@{/posts(page=${page + 1}, sort=${sort}, category=${category}, keyword=${keyword})}">
+            다음 »
         </a>
     </div>
 </main>
