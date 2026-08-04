@@ -23,7 +23,7 @@ public class MypageServiceImpl implements MypageService {
 
         return mypageRepository.findProfileById(memberId);
     }
-
+    // id 에 해당하는 일반 사용자가 작성한 리뷰 목록 조회
     @Override
     public List<PostDto> getPostListById(int memberId) {
         return mypageRepository.findPostListById(memberId);
