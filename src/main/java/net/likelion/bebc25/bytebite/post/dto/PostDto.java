@@ -34,6 +34,24 @@ public class PostDto {
 
     private String type;
     private String category;
+    // DB에 저정되어있는 카테고리명을 화면 표시에서 한글로 변환해서 출력
+    public String categoryName() {
+
+        if (category == null) {
+            return "";
+        }
+
+        // 향상된 switch 문
+        return switch (category) {
+            case "KOR" -> "한식";
+            case "WST" -> "양식";
+            case "CHN" -> "중식";
+            case "JPN" -> "일식";
+            case "ETC" -> "기타";
+            // 정해지지 않은 값이 들어오면 원래 값으로 반환
+            default -> category;
+        };
+    }
 
     private String role;
 

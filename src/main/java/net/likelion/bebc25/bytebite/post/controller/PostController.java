@@ -60,6 +60,7 @@ public class PostController {
         model.addAttribute("category", category);
         model.addAttribute("keyword", keyword);
         model.addAttribute("totalPage", pageDto.getTotalPage());
+        model.addAttribute("menu", "posts");
         return "post/postList";
     }
 
