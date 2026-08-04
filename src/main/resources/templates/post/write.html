@@ -58,12 +58,12 @@
                     <div th:each="img : ${#strings.arraySplit(postForm.image, ',')}">
                         <img th:src="${postForm.image}" width="150">
                     </div>
-                    <!--                <p>새 이미지를 선택하면 기존 이미지는 변경됩니다.</p>-->
+<!--                                    <p>새 이미지를 선택하면 기존 이미지는 변경됩니다.</p>-->
                 </div>
                 <input type="file" id="images" name="images" multiple accept="image/*"
                        th:required="${postForm.id == 0}">
                 <div class="field-error" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></div>
-                <span>첫 번째 사진이 대표 이미지로 사용됩니다.</span>
+                <span>첫 번째 사진이 메인 이미지로 사용됩니다.</span>
             </div>
 
             <div class="form-group">

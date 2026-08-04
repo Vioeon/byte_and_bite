@@ -69,7 +69,8 @@ public class NewsController {
 
     // 게시글 수정 화면을 요청하는 컨트롤러
     @GetMapping("/write")
-    public String getWriteNewsForm(@ModelAttribute("newsForm") PostDto post){
+    public String getWriteNewsForm(@ModelAttribute("newsForm") PostDto post, Model model){
+        model.addAttribute("menu", "news");
         return "news/write"; // 템플릿 파일 경로
     }
 
@@ -84,6 +85,7 @@ public class NewsController {
         if (loginMember == null) {
             return "redirect:/login";
         }
+        log.info(post.toString());
 
         if (!"MANAGER".equals(loginMember.getRole())) {
             return "redirect:/news";
@@ -103,7 +105,6 @@ public class NewsController {
         if(bindingResult.hasErrors()){ // 검증에 실패했을 경우
             return "news/write"; // 작성중이던 페이지로 다시 보낸다.
         }
-
         newsService.writeNews(post, loginMember);
         return "redirect:/news"; // 브라우저에 /news로 재요청하라고 응답
     }

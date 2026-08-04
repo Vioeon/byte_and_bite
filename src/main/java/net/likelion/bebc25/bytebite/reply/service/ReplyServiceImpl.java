@@ -1,5 +1,6 @@
 package net.likelion.bebc25.bytebite.reply.service;
 
+import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.reply.dto.ReplyDto;
 import net.likelion.bebc25.bytebite.reply.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,19 @@ public class ReplyServiceImpl implements ReplyService {
 
     // 댓글 조회
     @Override
-    public List<ReplyDto> findByPostId(int postId, int page) {
-        return replyRepository.findByPostId(postId, page);
+    public NewPageDto<ReplyDto> findByPostId(int postId, int page, int size) {
+
+        List<ReplyDto> content = replyRepository.findByPostId(postId, page);
+
+        int totalCount = replyRepository.countByPostId(postId);
+
+        return new NewPageDto<>(
+                content,
+                page,
+                size,
+                totalCount,
+                5
+        );
     }
 
     @Override

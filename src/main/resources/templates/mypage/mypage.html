@@ -81,11 +81,10 @@
 
             <div class="posts-list">
                 <div class="post-item" th:each="post : ${mypagePostList}">
-                    <div class="post-img" th:text="${post.image != null ? '이미지' : '노이미지'}">
-                        이미지
-                    </div>
+                    <img class="post-img" th:src="${post.imageUrl}">
+                    </img>
                     <div class="post-main-content">
-                        <a th:href="@{/post/detail/{id}(id=${post.id})}" class="post-title-link">
+                        <a th:href="@{/posts/{postId}(postId=${post.id})}" class="post-title-link">
                             <h3 class="post-title" th:text="${post.title}">리뷰 제목이 들어가는 위치입니다.</h3>
                         </a>
                         <span class="restaurant-tag" th:text="${post.restaurantName}">식당 이름</span>
@@ -94,8 +93,8 @@
                         <span class="post-date"
                               th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
                         <div class="post-actions">
-                            <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn-action">수정</a>
-                            <form th:action="@{/post/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+                            <a th:href="@{/posts/{postId}(postId=${post.id})}" class="btn-action">수정</a>
+                            <form th:action="@{/posts/{postId}(postId=${post.id})}" method="post" style="display:inline;">
                                 <button type="submit" class="btn-action">삭제</button>
                             </form>
                         </div>

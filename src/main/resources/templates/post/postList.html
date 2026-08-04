@@ -16,10 +16,12 @@
             <!--     조건별 정렬 버튼 가로 정렬      -->
             <form action="/posts" method="get" style="display: flex; align-items: center; gap: 18px;">
                 <label>
-                    <input type="radio" name="sort" value="latest" th:checked="${sort == 'latest'}" onchange="this.form.submit()"> 최신순
+                    <input type="radio" name="sort" value="latest" th:checked="${sort == 'latest'}"
+                           onchange="this.form.submit()"> 최신순
                 </label>
                 <label>
-                    <input type="radio" name="sort" value="views" th:checked="${sort == 'views'}" onchange="this.form.submit()"> 조회순
+                    <input type="radio" name="sort" value="views" th:checked="${sort == 'views'}"
+                           onchange="this.form.submit()"> 조회순
                 </label>
             </form>
         </div>
@@ -40,9 +42,11 @@
 
         <button type="submit" class="btn-search">검색</button>
 
-        <a th:href="@{/posts/write}" class="btn-write-link">
-            <button type="button" class="btn-write">리뷰작성</button>
-        </a>
+        <th:block th:if="${session.loginMember != null and session.loginMember.role.equals('USER')}">
+            <a th:href="@{/posts/write}" class="btn-write-link">
+                <button type="button" class="btn-write">리뷰작성</button>
+            </a>
+        </th:block>
     </form>
 
     <!-- 검색 및 정렬을 포함 전체 Form -->
