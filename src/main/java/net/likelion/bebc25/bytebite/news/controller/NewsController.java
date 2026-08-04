@@ -71,7 +71,7 @@ public class NewsController {
     @GetMapping("/write")
     public String getWriteNewsForm(@ModelAttribute("newsForm") PostDto post, Model model){
         model.addAttribute("menu", "news");
-        return "news/write"; // 템플릿 파일 경로
+        return "news/writeTest"; // 템플릿 파일 경로
     }
 
     // 게시글 등록 요청을 처리하는 컨트롤러

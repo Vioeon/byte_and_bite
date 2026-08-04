@@ -42,11 +42,14 @@
         <input type="hidden" name="sort" th:value="${sort}">
 
         <button type="submit" class="btn-search">검색</button>
+        <th:block th:if="${session.loginMember != null and session.loginMember.role.equals('MANAGER')}">
+            <a th:href="@{/news/write}" class="btn-write-link">
+                <button type="button" class="btn-write">소식작성</button>
+            </a>
+        </th:block>
     </form>
 
-    <a th:href="@{/news/write}" class="btn-write-link">
-        <button type="button" class="btn-write">소식작성</button>
-    </a>
+
 
     <!-- 3x3 카드 그리드 -->
     <section class="card-grid">
