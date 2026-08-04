@@ -1,6 +1,7 @@
 package net.likelion.bebc25.bytebite.mypage.service;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
 import net.likelion.bebc25.bytebite.mypage.repository.MypageRepository;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,13 @@ public class MypageServiceImpl implements MypageService {
     }
     // id 에 해당하는 일반 사용자가 작성한 리뷰 목록 조회
     @Override
-    public List<PostDto> getPostListById(int memberId) {
+    public List<mypagePostDto> getPostListById(int memberId) {
         return mypageRepository.findPostListById(memberId);
     }
 
     // id 에 해당하는 맛집 운영자가 작성한 리뷰 소식 조회
     @Override
-    public List<PostDto> getNewsListById(int memberId) {
+    public List<mypagePostDto> getNewsListById(int memberId) {
         return mypageRepository.findNewsListById(memberId);
     }
 

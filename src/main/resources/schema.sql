@@ -28,6 +28,10 @@ DROP TABLE IF EXISTS member;
 # FROM restaurant
 # WHERE rname LIKE '%없는식당%';
 
+
+# ALTER TABLE post
+#     MODIFY COLUMN image TEXT;
+
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,
                         email VARCHAR(100) NOT NULL UNIQUE,
@@ -77,6 +81,3 @@ CREATE TABLE reply (
                        CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
                        CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
-
-ALTER TABLE post
-    MODIFY COLUMN image TEXT;

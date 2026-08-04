@@ -1,6 +1,7 @@
 package net.likelion.bebc25.bytebite.mypage.repository;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
+import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,9 +28,10 @@ public class MypageRepositoryImpl implements MypageRepository {
                 .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
     };
 
-    private final RowMapper<PostDto> postRowMapper = (ResultSet rs, int rowNum) -> {
-        return PostDto.builder()
-                .image(rs.getString("image"))
+    private final RowMapper<mypagePostDto> postRowMapper = (ResultSet rs, int rowNum) -> {
+        return mypagePostDto.builder()
+                .id(rs.getInt("post_id"))
+                .imageUrl(rs.getString("image"))
                 .title(rs.getString("title"))
                 .restaurantName(rs.getString("rname"))
                 .createdAt(rs.getObject("created_at", LocalDateTime.class)).build();
@@ -43,8 +45,8 @@ public class MypageRepositoryImpl implements MypageRepository {
 
     // id 에 해당하는 일반 사용자가 작성한 리뷰 목록 찾기
     @Override
-    public List<PostDto> findPostListById(int memberId) {
-        String sql = "SELECT p.image, p.title, p.created_at, r.rname " +
+    public List<mypagePostDto> findPostListById(int memberId) {
+        String sql = "SELECT p.post_id, p.image, p.title, p.created_at, r.rname " +
                      "FROM post p " +
                      "INNER JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                      "WHERE p.member_id = ? AND p.type = 'POST' ";
@@ -54,8 +56,8 @@ public class MypageRepositoryImpl implements MypageRepository {
 
     // id 에 해당하는 맛집 운영자가 작성한 소식 목록 찾기
     @Override
-    public List<PostDto> findNewsListById(int memberId) {
-        String sql = "SELECT p.image, p.title, p.created_at, r.rname " +
+    public List<mypagePostDto> findNewsListById(int memberId) {
+        String sql = "SELECT p.post_id, p.image, p.title, p.created_at, r.rname " +
                 "FROM post p " +
                 "INNER JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                 "WHERE p.member_id = ? AND p.type = 'NEWS' ";

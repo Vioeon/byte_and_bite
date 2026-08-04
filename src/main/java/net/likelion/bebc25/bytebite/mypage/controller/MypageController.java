@@ -8,6 +8,7 @@ import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
 import net.likelion.bebc25.bytebite.member.service.RestaurantService;
+import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
 import net.likelion.bebc25.bytebite.mypage.service.MypageService;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.stereotype.Controller;
@@ -46,12 +47,13 @@ public class MypageController {
         }
 
         MemberDto memberInfo = mypageService.getProfileById(loginMember.getMemberId()); // MemberDto 를 memberInfo 변수라고 하겠다, 로그인한 아이디에 맞는 회원 정보를 받아와라
-        List<PostDto> mypagePostList = mypageService.getPostListById(loginMember.getMemberId()); // List<PostDto> 를 mypagePostList 변수라고 하겠다, 로그인한 아이디에 맞는 리뷰목록을 받아와라
-        List<PostDto> mypageNewsList = mypageService.getNewsListById(loginMember.getMemberId());
+        List<mypagePostDto> mypagePostList = mypageService.getPostListById(loginMember.getMemberId()); // List<PostDto> 를 mypagePostList 변수라고 하겠다, 로그인한 아이디에 맞는 리뷰목록을 받아와라
+        List<mypagePostDto> mypageNewsList = mypageService.getNewsListById(loginMember.getMemberId());
 
         model.addAttribute("memberInfo", memberInfo); // Model 에 회원정보를 넣어라
         model.addAttribute("mypagePostList", mypagePostList); // Model 에 작성한 리뷰목록을 넣어라
         model.addAttribute("mypageNewsList", mypageNewsList);
+        log.info(mypageNewsList.toString());
 
         model.addAttribute("menu", "mypage"); // Model 에 메뉴를 보여주고 마이페이지 메뉴가 활성화되도록 해라
         return "mypage/mypage"; // 마이페이지 화면을 보여줘라

@@ -127,22 +127,21 @@
             </div>
 
             <div class="posts-list">
-                <div class="post-item" th:each="post : ${mypageNewsList}">
-                    <div class="post-img" th:text="${post.image != null ? '이미지' : '노이미지'}">
-                        이미지
-                    </div>
+                <div class="post-item" th:each="news : ${mypageNewsList}">
+                    <img class="post-img" th:src="${news.imageUrl}">
+                    </img>
                     <div class="post-main-content">
-                        <a th:href="@{/post/detail/{id}(id=${post.id})}" class="post-title-link">
-                            <h3 class="post-title" th:text="${post.title}">소식 제목이 들어가는 위치입니다.</h3>
+                        <a th:href="@{/news/{newsId}(newsId=${news.id})}" class="post-title-link">
+                            <h3 class="post-title" th:text="${news.title}">소식 제목이 들어가는 위치입니다.</h3>
                         </a>
-                        <span class="restaurant-tag" th:text="${post.restaurantName}">식당 이름</span>
+                        <span class="restaurant-tag" th:text="${news.restaurantName}">식당 이름</span>
                     </div>
                     <div class="post-meta">
                         <span class="post-date"
-                              th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
+                              th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
                         <div class="post-actions">
-                            <a th:href="@{/post/edit/{id}(id=${post.id})}" class="btn-action">수정</a>
-                            <form th:action="@{/post/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+                            <a th:href="@{/news/{newsId}(newsId=${news.id})}" class="btn-action">수정</a>
+                            <form th:action="@{/news/{newsId}(newsId=${news.id})}" method="post" style="display:inline;">
                                 <button type="submit" class="btn-action">삭제</button>
                             </form>
                         </div>
