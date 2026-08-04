@@ -149,3 +149,11 @@ src/main/resources/static/uploads/**
 !src/main/resources/static/uploads/
 !src/main/resources/static/uploads/restaurant/
 !src/main/resources/static/uploads/restaurant/**
+
+# news 이미지 허용
+!src/main/resources/static/uploads/news/
+!src/main/resources/static/uploads/news/**
+
+# news 이미지 허용
+!src/main/resources/static/uploads/posts/
+!src/main/resources/static/uploads/posts/**
