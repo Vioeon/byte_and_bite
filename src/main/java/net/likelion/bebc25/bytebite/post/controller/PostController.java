@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
+import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.post.dto.PageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.post.service.PostService;
+import net.likelion.bebc25.bytebite.reply.dto.ReplyDto;
 import net.likelion.bebc25.bytebite.reply.service.ReplyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -101,21 +103,19 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("images", images);
         model.addAttribute("menu", "posts");
+
         // 댓글 조회 (페이지당 10개)
-        model.addAttribute("replyList", replyService.findByPostId(postId, page));
+        NewPageDto<ReplyDto> replyPage =
+                replyService.findByPostId(postId, page, 10);
+
+        model.addAttribute("replyList", replyPage.getContent());
 
         // 전체 댓글 수 조회
         int totalReply = replyService.countByPostId(postId);
-
-        // 화면으로 전달
         model.addAttribute("replyCount", totalReply);
 
-        // 전체 페이지 수 계산
-        int totalPage = (int) Math.ceil((double) totalReply / 10);
-
-        // 화면으로 전달
-        model.addAttribute("page", page);
-        model.addAttribute("totalPage", totalPage);
+        // 페이지 정보 전달
+        model.addAttribute("pageResponse", replyPage);
 
         return "post/detailTest"; // 템플릿 파일 경로
     }

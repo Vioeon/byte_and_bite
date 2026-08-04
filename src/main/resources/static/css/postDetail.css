@@ -2,7 +2,7 @@
 .detail-wrapper {
     width: 1000px;
     margin: 40px auto;
-    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    /*font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;*/
     color: #333;
 }
 
@@ -354,7 +354,15 @@
 }
 
 .pagination .active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #ff5252;
     background: #ff5252;
     color: white;
-    border-color: #ff5252;
+    font-weight: bold;
+    border-radius: 6px;
 }
