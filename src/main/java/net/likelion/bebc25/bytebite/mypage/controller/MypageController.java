@@ -44,16 +44,17 @@ public class MypageController {
 
             // 모델에 식당 정보 담기
             model.addAttribute("restaurant", restaurant); // model 에 식당정보를 추가해라
+
+            List<mypagePostDto> mypageNewsList = mypageService.getNewsListById(loginMember.getMemberId());
+            model.addAttribute("mypageNewsList", mypageNewsList);
         }
 
         MemberDto memberInfo = mypageService.getProfileById(loginMember.getMemberId()); // MemberDto 를 memberInfo 변수라고 하겠다, 로그인한 아이디에 맞는 회원 정보를 받아와라
         List<mypagePostDto> mypagePostList = mypageService.getPostListById(loginMember.getMemberId()); // List<PostDto> 를 mypagePostList 변수라고 하겠다, 로그인한 아이디에 맞는 리뷰목록을 받아와라
-        List<mypagePostDto> mypageNewsList = mypageService.getNewsListById(loginMember.getMemberId());
 
         model.addAttribute("memberInfo", memberInfo); // Model 에 회원정보를 넣어라
         model.addAttribute("mypagePostList", mypagePostList); // Model 에 작성한 리뷰목록을 넣어라
-        model.addAttribute("mypageNewsList", mypageNewsList);
-        log.info(mypageNewsList.toString());
+
 
         model.addAttribute("menu", "mypage"); // Model 에 메뉴를 보여주고 마이페이지 메뉴가 활성화되도록 해라
         return "mypage/mypage"; // 마이페이지 화면을 보여줘라

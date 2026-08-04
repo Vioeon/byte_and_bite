@@ -52,7 +52,7 @@ public class RestaurantServiceImpl implements RestaurantService{
                 Files.createDirectories(directory);
                 imageFile.transferTo(directory.resolve(savedName));
 
-                restaurantDto.setImageUrl("/uploads/restaurant/" + savedName);
+                restaurantDto.setImageUrl(savedName);
 
                 // db 이미지 변경
                 restaurantRepository.update(memberId, restaurantDto);

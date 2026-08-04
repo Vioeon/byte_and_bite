@@ -16,7 +16,6 @@
     <section class="profile-card">
         <div class="profile-info">
             <h2>
-
                 <!-- 닉네임 th 필드 설정 -->
                 <span th:text="${memberInfo?.nickname}"></span>
                 <button type="button" class="btn-sm" onclick="openModal()">닉네임 변경</button>
@@ -42,7 +41,6 @@
                 <span class="stat-value"
                       th:text="${memberInfo != null ? #temporals.format(memberInfo.createdAt, 'yyyy-MM-dd') : ''}">2026-07-28</span>
             </div>
-
         </div>
     </section>
 
@@ -50,7 +48,7 @@
     <th:block th:if="${restaurant != null}">
         <section class="profile-restaurant-card">
             <div class="profile-restaurant-img">
-                <img th:src="${restaurant?.imageUrl}" alt="식당 이미지">
+                <img th:src="@{/uploads/restaurant/{image}(image=${restaurant?.imageUrl})}" alt="식당 이미지">
             </div>
             <div class="profile-restaurant-info">
                 <h2>
@@ -81,8 +79,7 @@
 
             <div class="posts-list">
                 <div class="post-item" th:each="post : ${mypagePostList}">
-                    <img class="post-img" th:src="${post.imageUrl}">
-                    </img>
+                    <img class="post-img" th:src="@{/uploads/posts/{image}(image=${post.imageUrl})}" alt="리뷰 이미지">
                     <div class="post-main-content">
                         <a th:href="@{/posts/{postId}(postId=${post.id})}" class="post-title-link">
                             <h3 class="post-title" th:text="${post.title}">리뷰 제목이 들어가는 위치입니다.</h3>
@@ -127,7 +124,7 @@
 
             <div class="posts-list">
                 <div class="post-item" th:each="news : ${mypageNewsList}">
-                    <img class="post-img" th:src="${news.imageUrl}">
+                    <img class="post-img" th:src="@{/uploads/news/{image}(image=${news.imageUrl})}" alt="소식 이미지">
                     </img>
                     <div class="post-main-content">
                         <a th:href="@{/news/{newsId}(newsId=${news.id})}" class="post-title-link">
