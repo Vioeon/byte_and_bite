@@ -6,31 +6,6 @@ DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS restaurant;
 DROP TABLE IF EXISTS member;
 
-
-# SELECT post_id, title, image
-# FROM posts
-# ORDER BY post_id DESC;
-#
-# SELECT post_id, image
-# FROM posts;
-
-# SELECT restaurant_id, rname
-# FROM restaurant;
-#
-# SELECT restaurant_id, rname
-# FROM restaurant
-# WHERE rname LIKE '%없는식당%';
-#
-# SELECT restaurant_id, rname
-# FROM restaurant;
-#
-# SELECT restaurant_id, rname
-# FROM restaurant
-# WHERE rname LIKE '%없는식당%';
-
-#ALTER TABLE posts
- #   MODIFY COLUMN image TEXT;
-
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,
                         email VARCHAR(100) NOT NULL UNIQUE,
@@ -80,3 +55,6 @@ CREATE TABLE reply (
                        CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
                        CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
+
+ALTER TABLE post
+    MODIFY COLUMN image TEXT;

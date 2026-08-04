@@ -31,19 +31,26 @@ public class NewsServiceImpl implements NewsService {
     private static final int PAGE_BLOCK_SIZE = 5;
 
     @Override
-    public NewPageDto<PostDto> getNewsList(int page, int size, String sort) {
+    public NewPageDto<PostDto> getNewsList(int page, int size, String sort, String category) {
         int validPage = page < 1 ? 1 : page;
         int validSize = size < 1 ? PAGE_SIZE : size;
         int offset = (validPage - 1) * validSize;
 
         List<PostDto> content;
-        if ("views".equals(sort)) { // 조회수순 정렬
-            content = postRepository.findAllNewsByViews(offset, validSize);
-        } else { // 최신순 정렬 (default)
-            content = postRepository.findAllNews(offset, validSize);
+        int totalCount;
+
+        if (category == null || category.equals("all")) {
+            content = "views".equals(sort)
+                    ? postRepository.findAllNewsByViews(offset, validSize)
+                    : postRepository.findAllNews(offset, validSize);
+            totalCount = postRepository.countNews();
+        } else {
+            content = "views".equals(sort)
+                    ? postRepository.findCategoryNewsByViews(category, offset, validSize)
+                    : postRepository.findCategoryNews(category, offset, validSize);
+            totalCount = postRepository.countCategoryNews(category);
         }
 
-        int totalCount = postRepository.countNews();
         return new NewPageDto<>(content, validPage, validSize, totalCount, PAGE_BLOCK_SIZE);
     }
 
@@ -82,25 +89,64 @@ public class NewsServiceImpl implements NewsService {
             String extension = originalName.substring(originalName.lastIndexOf("."));
             String savedName = UUID.randomUUID() + extension;
 
-            Path directory = Paths.get(uploadDir);
+            Path directory = Paths.get(uploadDir, "news");
             Files.createDirectories(directory);
             imageFile.transferTo(directory.resolve(savedName));
 
-            post.setImage(savedName);
+            post.setImage("/uploads/news/" + savedName);
             postRepository.saveNews(post);
 
         } catch (IOException e) {
             throw new RuntimeException("이미지 저장에 실패했습니다.", e);
         }
     }
+    HEAD
+    @Override
+    public NewPageDto<PostDto> searchNewsByKeyword(String keyword, int page, int size) {
+        int validPage = page < 1 ? 1 : page;
+        int validSize = size < 1 ? PAGE_SIZE : size;
+        int offset = (validPage - 1) * validSize;
 
-//    @Override
-//    public void writeNews(PostDto posts) {
-//        MultipartFile imageFile = posts.getImages()[0];
-//        String savedFileName = fileStorageService.save(imageFile);
-//        posts.setImage(savedFileName);
-//        postRepository.saveNews(posts);
-//    }
+        List<PostDto> content = postRepository.findRestaurantNewsByKeyword(keyword, offset, validSize);
+        int totalCount = postRepository.countRestaurantNews(keyword);
+
+        return new NewPageDto<>(content, validPage, validSize, totalCount, PAGE_BLOCK_SIZE);
+    }
+
+    @Override
+    public void editNews(PostDto post, SessionMemberDto loginMember) {
+        PostDto origin = postRepository.findNewsById(post.getId());
+
+        if (!"MANAGER".equals(loginMember.getRole()) || loginMember.getMemberId() != origin.getMemberId()) {
+            throw new IllegalArgumentException("작성자 본인만 수정할 수 있습니다.");
+        }
+
+        MultipartFile[] images = post.getImages();
+
+        if (images != null && images.length == 1 && !images[0].isEmpty()) {
+            // 새로운 image 첨부했을때
+            MultipartFile imageFile = images[0];
+            try {
+                String originalName = imageFile.getOriginalFilename();
+                String extension = originalName.substring(originalName.lastIndexOf("."));
+                String savedName = UUID.randomUUID() + extension;
+
+                Path directory = Paths.get(uploadDir, "news");
+                Files.createDirectories(directory);
+                imageFile.transferTo(directory.resolve(savedName));
+
+                post.setImage("/uploads/news/" + savedName);
+            } catch (IOException e) {
+                throw new RuntimeException("이미지 저장에 실패했습니다.", e);
+            }
+        } else {
+            // 없으면 기존 이미지 경로 유지
+            post.setImage(origin.getImage());
+        }
+
+        postRepository.updateNews(post);
+    }
+
 //
 //    @Override
 //    public void editNews(NewsDto posts) {

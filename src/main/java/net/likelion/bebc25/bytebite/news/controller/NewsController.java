@@ -37,14 +37,22 @@ public class NewsController {
     @GetMapping // /news/list prefix
     public String getNewsBoardList(@RequestParam(value = "page", defaultValue = "1") int page,
                                    @RequestParam(value = "size", defaultValue = "9") int size,
-                                   @RequestParam(value = "sort", defaultValue = "latest") // 최신순, 조회순 정렬
-                                   String sort, Model model){
+                                   @RequestParam(value = "sort", defaultValue = "latest") String sort, // 정렬기준
+                                   @RequestParam(value = "category", defaultValue = "all") String category, // category
+                                   String keyword, Model model){
         // 게시글 목록 조회(데이터)
-        NewPageDto<PostDto> news = newsService.getNewsList(page, size, sort);
+        //NewPageDto<PostDto> news = newsService.getNewsList(page, size, sort, category);
+        NewPageDto<PostDto> news;
+        if (keyword != null && !keyword.isEmpty()) {
+            news = newsService.searchNewsByKeyword(keyword, page, size);
+        } else {
+            news = newsService.getNewsList(page, size, sort, category);
+        }
 
         model.addAttribute("news", news.getContent());
         model.addAttribute("pageResponse", news);
         model.addAttribute("sort", sort);
+        model.addAttribute("category", category);
         model.addAttribute("menu", "news");
         return "news/newsList"; // template/news/list(.html)
     }
@@ -85,7 +93,6 @@ public class NewsController {
 
         post.setMemberId(loginMember.getMemberId());
         post.setType("NEWS");
-        //posts.setRestaurantId(loginMember.);
 
         // 파일 첨부 객체 생성
         MultipartFile[] images = post.getImages();
@@ -100,5 +107,46 @@ public class NewsController {
         }
         newsService.writeNews(post, loginMember);
         return "redirect:/news"; // 브라우저에 /news로 재요청하라고 응답
+    }
+
+    // 수정할 게시물 newsForm 호출
+    @GetMapping("/{id}/edit")
+    public String getEditNewsForm(@PathVariable int id, HttpSession session, Model model){
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        PostDto news = newsService.getNews(id);
+
+        if (!"MANAGER".equals(loginMember.getRole()) || loginMember.getMemberId() != news.getMemberId()) {
+            return "redirect:/news/" + id;
+        }
+
+        model.addAttribute("newsForm", news);
+        return "news/write";
+    }
+
+    // post edit
+    @PostMapping("/{id}/edit")
+    public String editNews(@PathVariable int id,
+                           @Valid @ModelAttribute("newsForm") PostDto post,
+                           BindingResult bindingResult,
+                           HttpSession session){
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        post.setId(id);
+
+        bindingResult.getFieldErrors("images").forEach(e -> {});
+        if (bindingResult.hasErrors()
+                && bindingResult.getFieldErrorCount() > (bindingResult.getFieldErrorCount("images"))) {
+            return "news/write";
+        }
+
+        newsService.editNews(post, loginMember);
+        return "redirect:/news/" + id;
     }
 }
