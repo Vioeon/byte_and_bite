@@ -92,22 +92,58 @@
     align-items: center;
 }
 
-.review-image {
+/*.review-image {*/
+/*    margin-top: 30px;*/
+/*    max-height: 400px;*/
+/*    background: #f7f7f7;*/
+/*    border-radius: 15px;*/
+/*    overflow: hidden;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.review-image img {*/
+/*    width: auto;*/
+/*    height: 100%;*/
+/*    max-height: 450px;*/
+/*    object-fit: contain;*/
+/*}*/
+/* 리뷰 이미지 갤러리 */
+.review-images {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
     margin-top: 30px;
-    max-height: 450px;
-    background: #f7f7f7;
+    padding-bottom: 10px;
+}
+/* 기본 이미지 (여러 장일 때) */
+.review-image {
+    width: 400px;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    flex-shrink: 0;
     border-radius: 15px;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
-
 .review-image img {
-    width: auto;
+    width: 100%;
     height: 100%;
-    max-height: 450px;
     object-fit: cover;
+    display: block;
+}
+/* 이미지가 1장일 때 */
+.review-images:has(.review-image:only-child) .review-image {
+    width: 600px;
+    aspect-ratio: 4 / 3;
+    height: auto;
+}
+/* 이미지가 1장일 때 */
+.review-images:has(.review-image:only-child) img {
+    object-fit: cover;
+}
+.review-images:has(.review-image:only-child) {
+    justify-content: center;
 }
 
 .review-content {
