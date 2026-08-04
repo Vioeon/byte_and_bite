@@ -1,5 +1,6 @@
 package net.likelion.bebc25.bytebite.post.service;
 
+import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
 import net.likelion.bebc25.bytebite.post.dto.PageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 
@@ -14,11 +15,11 @@ public interface PostService {
 
     PostDto getPost(int id);
 
-    void writePost(PostDto post);
+    void writePost(PostDto post, SessionMemberDto loginMember);
 
-    void editPost(PostDto post);
+    void editPost(PostDto post, SessionMemberDto loginMember);
 
-    void removePost(int id);
+    void removePost(int id, SessionMemberDto loginMember);
 
     PostDto findByName(String keyword);
 
