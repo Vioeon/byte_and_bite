@@ -22,4 +22,6 @@ public interface MemberService {
 
   // 맛집 운영자 회원가입
   void signupWithRestaurant(SignupDto signupDto, RestaurantDto restaurantDto);
+
+  void updateNickname(int memberId, String newNickname);
 }

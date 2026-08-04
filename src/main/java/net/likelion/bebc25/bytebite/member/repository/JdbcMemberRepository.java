@@ -88,4 +88,15 @@ public class JdbcMemberRepository implements MemberRepository {
         jdbcTemplate.update("UPDATE member SET status = 'DELETED' WHERE member_id = ?", id);
     }
 
+    public boolean existsByNickname(String nickname) {
+        String sql = "SELECT COUNT(*) FROM member WHERE nickname = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, nickname);
+        return count != null && count > 0;
+    }
+
+    public void updateNickname(int memberId, String nickname) {
+        String sql = "UPDATE member SET nickname = ? WHERE member_id = ?";
+        jdbcTemplate.update(sql, nickname, memberId);
+    }
+
 }

@@ -7,6 +7,7 @@ import net.likelion.bebc25.bytebite.member.dto.LoginDto;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
+import net.likelion.bebc25.bytebite.member.service.MemberService;
 import net.likelion.bebc25.bytebite.member.service.RestaurantService;
 import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
 import net.likelion.bebc25.bytebite.mypage.service.MypageService;
@@ -26,10 +27,13 @@ public class MypageController {
 
     private final MypageService mypageService;
     private final RestaurantService RestaurantService;
+    private final MemberService memberService;
 
-    public MypageController(MypageService mypageService, RestaurantService RestaurantService) {
+
+    public MypageController(MypageService mypageService, RestaurantService RestaurantService, MemberService memberService) {
         this.mypageService = mypageService;
         this.RestaurantService = RestaurantService;
+        this.memberService = memberService;
     }
 
     @GetMapping
@@ -81,6 +85,26 @@ public class MypageController {
 
         RestaurantService.updateRestaurant(loginMember.getMemberId(), restaurantDto);
 
+        return "redirect:/mypage";
+    }
+    @PostMapping("/nickname")
+    public String nicknameEdit(@RequestParam String newNickname,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+
+        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
+
+        try {
+            memberService.updateNickname(loginMember.getMemberId(), newNickname);
+
+            // 세션 닉네임도 변경
+            loginMember.setNickname(newNickname);
+            session.setAttribute("loginMember", loginMember);
+
+        } catch (IllegalArgumentException e) { //??????????????
+            redirectAttributes.addFlashAttribute("nicknameError", e.getMessage());
+            redirectAttributes.addFlashAttribute("newNickname", newNickname);
+        }
         return "redirect:/mypage";
     }
 }
