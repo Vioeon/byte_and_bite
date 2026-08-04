@@ -2,111 +2,62 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Byte&Bite - 맛집 리뷰</title>
+    <title>맛집 소식 작성</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" th:href="@{/css/postList.css}">
+    <!--    <link rel="stylesheet" href="/board/css/write.css">-->
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/postWrite.css}">
 </head>
 <body>
 
 <div th:replace="~{layout/common :: nav-header}"></div>
 <main class="wrapper">
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
-        <div class="sort-options">
-            <label>
-                <input type="radio" name="sort" value="latest"
-                       th:checked="${sort == 'latest'}"
-                       onchange="location.href='?sort=latest'"> 최신순
-            </label>
-            <label>
-                <input type="radio" name="sort" value="views"
-                       th:checked="${sort == 'views'}"
-                       onchange="location.href='?sort=views'"> 조회순
-            </label>
-        </div>
-    </div>
-
-    <!-- 검색바 -->
-    <form class="search-bar" action="/search" method="GET" onsubmit="return false;">
-        <select class="category-select" name="category">
-            <option value="all">전체 카테고리</option>
-            <option value="korean">한식</option>
-            <option value="western">양식</option>
-            <option value="chinese">중식</option>
-            <option value="japanese">일식</option>
-            <option value="etc">기타</option>
-        </select>
-
-        <input type="text" class="search-input" name="keyword" placeholder="식당 이름을 입력해주세요.">
-
-        <button type="submit" class="btn-search">검색</button>
-        <th:block th:if="${session.loginMember != null and session.loginMember.role.equals('MANAGER')}">
-            <a th:href="@{/news/write}" class="btn-write-link">
-                <button type="button" class="btn-write">소식작성</button>
-            </a>
-        </th:block>
-    </form>
-
-    <!-- 3x3 카드 그리드 -->
-    <section class="card-grid">
-        <!-- DB에서 가져온 개수만큼 카드가 동적으로 반복 생성됩니다 -->
-        <a th:each="post : ${news}"
-           th:href="@{/news/{id}(id=${post.id})}"
-           class="card-link">
-            <div class="card">
-                <div class="card-img">이미지</div>
-                <div class="card-info">
-                    <div class="restaurant-name" th:text="${post.restaurantName}">식당 이름</div>
-                    <div class="row">
-                        <th:block th:switch="${post.category}">
-                            <span th:case="'KOR'">한식</span>
-                            <span th:case="'WST'">양식</span>
-                            <span th:case="'CHN'">중식</span>
-                            <span th:case="'JPN'">일식</span>
-                            <span th:case="'ETC'">기타</span>
-                        </th:block>
-                        <span th:text="'조회수 ' + ${post.views}">조회수 0</span>
-                    </div>
-                </div>
-                <div class="card-title" th:text="${post.title}">리뷰 제목</div>
+    <div class="post-write-container">
+        <div class="write-header">
+            <h1 th:text="${newsForm.id == 0} ? '소식 등록' : '소식 수정'">리뷰 작성</h1>
+            <div class="write-nav">
+                <a th:href="@{/news}">목록으로</a>
+                <span class="divider">|</span>
+                <a th:href="@{/news/write}">새 글 쓰기</a>
             </div>
-        </a>
-
-        <!-- 데이터가 아예 없을 때 예외 처리 -->
-        <div th:if="${#lists.isEmpty(news)}"
-             style="grid-column: 1 / -1; text-align: center; padding: 50px 0; font-size: 18px; font-weight: bold;">
-            등록된 소식이 없습니다.
         </div>
-    </section>
 
-    <!-- 페이지네이션 -->
-    <div class="pagination" th:if="${pageResponse != null and not #lists.isEmpty(news)}">
-        <!-- 이전 페이지 버튼 -->
-        <a th:if="${pageResponse.hasPrev}"
-           th:href="@{/news(page=${pageResponse.page - 1}, sort=${sort})}">&laquo; 이전</a>
-        <span th:unless="${pageResponse.hasPrev}" class="disabled">&laquo; 이전</span>
+        <form th:action="${newsForm.id == 0} ? @{/news/write} : @{/news/{id}/edit(id=${newsForm.id})}"
+              method="POST" enctype="multipart/form-data" th:object="${newsForm}">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요" required>
+                <div class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">에러 메세지</div>
+            </div>
 
-        <!-- 페이지 번호 목록 -->
-        <th:block th:each="p : ${#numbers.sequence(pageResponse.startPage, pageResponse.endPage)}">
-            <a th:if="${p != pageResponse.page}"
-               th:href="@{/news(page=${p}, sort=${sort})}"
-               th:text="${p}">1</a>
-            <a th:if="${p == pageResponse.page}" class="active" th:text="${p}">1</a>
-        </th:block>
+            <div class="form-group">
+                <label for="images">사진 첨부</label>
+                <div th:if="${newsForm.id != 0}">
+                    <p>현재 이미지</p>
+                    <img th:src="${newsForm.newsImage}" width="150">
+                    <p>새 이미지를 선택하면 기존 이미지는 변경됩니다.</p>
+                </div>
+                <input type="file" id="images" name="images" multiple accept="image/*"
+                       th:required="${newsForm.id == 0}">
+                <div class="field-error" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></div>
+                <span>이미지는 한장은 필수로 첨부해야합니다.</span>
+            </div>
 
-        <!-- 다음 페이지 버튼 -->
-        <a th:if="${pageResponse.hasNext}"
-           th:href="@{/news(page=${pageResponse.page + 1}, sort=${sort})}">다음 &raquo;</a>
-        <span th:unless="${pageResponse.hasNext}" class="disabled">다음 &raquo;</span>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" th:field="*{content}" rows="10" placeholder="내용을 입력하세요" required></textarea>
+                <div class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">에러 메세지</div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn" th:text="${newsForm.id == 0} ? '등록' : '수정'">등록</button>
+                <a th:if="${newsForm.id == 0}" th:href="@{/news}" class="btn btn-secondary">취소</a>
+                <a th:unless="${newsForm.id == 0}" th:href="@{/news/{id}(id=${newsForm.id})}"
+                   class="btn btn-secondary">취소</a>
+            </div>
+        </form>
     </div>
 </main>
-<script>
-    // 뒤로가기 캐시(BFCache) 에서 페이지를 복원했으면 페이지 새로고침
-    window.addEventListener("pageshow", function (event) {
-        if (event.persisted) {
-            location.reload();
-        }
-    });
-</script>
 </body>
 </html>
