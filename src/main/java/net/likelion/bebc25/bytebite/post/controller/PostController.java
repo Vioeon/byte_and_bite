@@ -117,7 +117,7 @@ public class PostController {
         // 페이지 정보 전달
         model.addAttribute("pageResponse", replyPage);
 
-        return "post/detailTest"; // 템플릿 파일 경로
+        return "post/detail"; // 템플릿 파일 경로
     }
 
     @GetMapping("/write")
