@@ -35,7 +35,7 @@
                 <label for="images">사진 첨부</label>
                 <div th:if="${newsForm.id != 0}">
                     <p>현재 이미지</p>
-                    <img th:src="${newsForm.newsImage}" width="150">
+                    <img th:src="@{/uploads/news/{image}(image=${newsForm.newsImage})}" width="150">
                     <p>새 이미지를 선택하면 기존 이미지는 변경됩니다.</p>
                 </div>
                 <input type="file" id="images" name="images" multiple accept="image/*"

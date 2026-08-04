@@ -93,7 +93,7 @@ public class NewsServiceImpl implements NewsService {
             Files.createDirectories(directory);
             imageFile.transferTo(directory.resolve(savedName));
 
-            post.setImage("/uploads/news/" + savedName);
+            post.setImage(savedName);
             postRepository.saveNews(post);
 
         } catch (IOException e) {
@@ -135,7 +135,7 @@ public class NewsServiceImpl implements NewsService {
                 Files.createDirectories(directory);
                 imageFile.transferTo(directory.resolve(savedName));
 
-                post.setImage("/uploads/news/" + savedName);
+                post.setImage(savedName);
             } catch (IOException e) {
                 throw new RuntimeException("이미지 저장에 실패했습니다.", e);
             }
