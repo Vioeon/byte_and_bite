@@ -45,6 +45,7 @@
             <input type="text" id="selectRestaurant" th:field="*{restaurantName}" readonly>
             <input type="hidden" id="restaurantId" th:field="*{restaurantId}">
             <div class="field-error" th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}"></div>
+            <div id="searchMessage" style="color:red;"></div>
         </div>
 
         <div class="form-group">
@@ -70,34 +71,46 @@
 </div>
 
 <script>
-    document.querySelector("#searchButton").addEventListener("click", function(){
+    document.querySelector("#searchButton").addEventListener("click", function(e){
         // 검색어 가져오는 구문
         let keyword = document.querySelector("#restaurantKeyword").value;
-        // 입력값이 비어있으면 검색 X
-        if(keyword.trim() === "") {
-            alert("식당 이름을 입력하세요.");
+        const msg = document.querySelector("#searchMessage")
+        const selectRestaurantName = document.querySelector("#selectRestaurant");
+        const restaurantId = document.querySelector("#restaurantId")
+
+        // 식당 검색, 조회를 하지 않았을때
+        if(keyword.trim() === ""){
+            msg.innerText = "식당 이름을 입력해주세요.";
             return;
         }
 
         fetch("/posts/restaurant/search?keyword=" + keyword)
-            .then(response => response.json()) // 서버에서 받은 응답을 json으로 변환
-            .then(data => { // json으로 변환된 데이터 사용
-                if (data == null || data.restaurantId == 0) { // 검색 결과가 없을 시 "검색된 식당이 없습니다." 출력
-                    document.querySelector("#restaurantResult").innerText = "검색된 식당이 없습니다.";
-                    // 검색된 식당 이름을 선택된 식당 칸에 입력
-                    document.querySelector("#selectRestaurant").value = "";
+            .then(response => response.json())
+            .then(data => {
 
-                    // 게시글 등록 시 사용할 식당 번호를 숨겨진 값에 저장
-                    document.querySelector("#restaurantId").value = "";
+                // 검색 결과가 없을 때
+                if (data.restaurantId == 0) {
+                    msg.innerText = "등록된 식당이 없습니다.";
+                    selectRestaurantName.value = "";
+                    restaurantId.value = "";
                     return;
                 }
-                document.querySelector("#restaurantResult").innerText = "";
-                // 검색된 식당 이름을 선택된 식당 칸에 입력
-                document.querySelector("#selectRestaurant").value = data.restaurantName;
-                // 게시글 등록 시 사용할 식당 번호를 숨겨진 값에 저장
-                document.querySelector("#restaurantId").value = data.restaurantId;
+
+                // 검색 성공
+                msg.innerText = "";
+                // 선택된 식당 표시
+                selectRestaurantName.value = data.restaurantName;
+                restaurantId.value = data.restaurantId;
+            })
+
+            .catch(error => {
+                console.log(error);
+                msg.innerText = "검색 중 오류가 발생했습니다.";
+                selectRestaurantName.value = "";
+                restaurantId.value = "";
             });
-        });
+
+    });
 </script>
 </main>
 </body>

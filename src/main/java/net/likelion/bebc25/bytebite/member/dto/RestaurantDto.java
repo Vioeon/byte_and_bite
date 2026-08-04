@@ -12,7 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @ToString
 @Builder
-public class RestaurantDto {
+public class
+RestaurantDto {
 
     // 식당 ID
     private Integer restaurantId;
