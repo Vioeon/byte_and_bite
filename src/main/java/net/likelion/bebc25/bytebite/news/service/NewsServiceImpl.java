@@ -95,16 +95,16 @@ public class NewsServiceImpl implements NewsService {
     }
 
 //    @Override
-//    public void writeNews(PostDto post) {
-//        MultipartFile imageFile = post.getImages()[0];
+//    public void writeNews(PostDto posts) {
+//        MultipartFile imageFile = posts.getImages()[0];
 //        String savedFileName = fileStorageService.save(imageFile);
-//        post.setImage(savedFileName);
-//        postRepository.saveNews(post);
+//        posts.setImage(savedFileName);
+//        postRepository.saveNews(posts);
 //    }
 //
 //    @Override
-//    public void editNews(NewsDto post) {
-//        newsRepository.update(post);
+//    public void editNews(NewsDto posts) {
+//        newsRepository.update(posts);
 //    }
 //
 //    @Override

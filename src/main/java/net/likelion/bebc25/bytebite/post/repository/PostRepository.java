@@ -39,6 +39,6 @@ public interface PostRepository {
     PostDto findNewsById(int id);
     void saveNews(PostDto post);
     Optional<Integer> findRestaurantIdByMemberId(int memberId);
-    //    void update(NewsDto post);
+    //    void update(NewsDto posts);
     //    void deleteById(int id);
 }

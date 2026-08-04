@@ -8,11 +8,11 @@ DROP TABLE IF EXISTS member;
 
 
 # SELECT post_id, title, image
-# FROM post
+# FROM posts
 # ORDER BY post_id DESC;
 #
 # SELECT post_id, image
-# FROM post;
+# FROM posts;
 
 # SELECT restaurant_id, rname
 # FROM restaurant;
@@ -28,8 +28,8 @@ DROP TABLE IF EXISTS member;
 # FROM restaurant
 # WHERE rname LIKE '%없는식당%';
 
-# ALTER TABLE post
-#     MODIFY COLUMN image TEXT;
+#ALTER TABLE posts
+ #   MODIFY COLUMN image TEXT;
 
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,7 +63,7 @@ CREATE TABLE post (
                       title VARCHAR(200) NOT NULL,
                       content TEXT NOT NULL,
                       view_count INT NOT NULL DEFAULT 0,
-                      image VARCHAR(100) NOT NULL,
+                      image VARCHAR(1000) NOT NULL,
                       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                       CONSTRAINT fk_post_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,

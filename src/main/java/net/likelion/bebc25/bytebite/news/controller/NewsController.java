@@ -85,7 +85,7 @@ public class NewsController {
 
         post.setMemberId(loginMember.getMemberId());
         post.setType("NEWS");
-        //post.setRestaurantId(loginMember.);
+        //posts.setRestaurantId(loginMember.);
 
         // 파일 첨부 객체 생성
         MultipartFile[] images = post.getImages();
