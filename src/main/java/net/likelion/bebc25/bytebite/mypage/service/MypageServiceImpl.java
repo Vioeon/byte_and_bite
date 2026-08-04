@@ -29,4 +29,10 @@ public class MypageServiceImpl implements MypageService {
         return mypageRepository.findPostListById(memberId);
     }
 
+    // id 에 해당하는 맛집 운영자가 작성한 리뷰 소식 조회
+    @Override
+    public List<PostDto> getNewsListById(int memberId) {
+        return mypageRepository.findNewsListById(memberId);
+    }
+
 }

@@ -52,4 +52,15 @@ public class MypageRepositoryImpl implements MypageRepository {
         return jdbcTemplate.query(sql, postRowMapper, memberId);
     }
 
+    // id 에 해당하는 맛집 운영자가 작성한 소식 목록 찾기
+    @Override
+    public List<PostDto> findNewsListById(int memberId) {
+        String sql = "SELECT p.image, p.title, p.created_at, r.rname " +
+                "FROM post p " +
+                "INNER JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
+                "WHERE p.member_id = ? AND p.type = 'NEWS' ";
+
+        return jdbcTemplate.query(sql, postRowMapper, memberId);
+    }
+
 }

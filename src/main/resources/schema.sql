@@ -13,20 +13,20 @@ DROP TABLE IF EXISTS member;
 #
 # SELECT post_id, image
 # FROM post;
-
-SELECT restaurant_id, rname
-FROM restaurant;
-
-SELECT restaurant_id, rname
-FROM restaurant
-WHERE rname LIKE '%없는식당%';
-
-SELECT restaurant_id, rname
-FROM restaurant;
-
-SELECT restaurant_id, rname
-FROM restaurant
-WHERE rname LIKE '%없는식당%';
+#
+# SELECT restaurant_id, rname
+# FROM restaurant;
+#
+# SELECT restaurant_id, rname
+# FROM restaurant
+# WHERE rname LIKE '%없는식당%';
+#
+# SELECT restaurant_id, rname
+# FROM restaurant;
+#
+# SELECT restaurant_id, rname
+# FROM restaurant
+# WHERE rname LIKE '%없는식당%';
 
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,

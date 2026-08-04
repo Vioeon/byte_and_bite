@@ -13,4 +13,7 @@ public interface MypageRepository {
     // id 에 해당하는 일반 사용자가 작성한 리뷰 목록 찾기
     List<PostDto> findPostListById(int memberId);
 
+    // id 에 해당하는 맛집 운영자가 작성한 소식 목록 찾기
+    List<PostDto> findNewsListById(int memberId);
+
 }
