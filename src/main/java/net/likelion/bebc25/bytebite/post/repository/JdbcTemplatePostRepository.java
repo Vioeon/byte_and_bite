@@ -47,6 +47,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 .id(rs.getInt("post_id"))
                 .memberId(rs.getInt("member_id"))
                 .nickname(rs.getString("nickname"))
+                .resMemberId(rs.getInt("resMemberId"))
                 .title(rs.getString("title"))
                 .content(rs.getString("content"))
                 .image(rs.getString("image"))
@@ -76,7 +77,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
     @Override
     public PostDto findById(int id) { // image 컬럼이 겹치기 때문에, alias로 restaurant 테이블에 image 컬럼 호출
-        String sql = "SELECT p.*, m.nickname, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage FROM post p " +
+        String sql = "SELECT p.*, m.nickname, r.member_id AS resMemberId, r.category, r.rname, r.address, r.phone, r.image AS restaurantImage FROM post p " +
                 "JOIN member m ON p.member_id = m.member_id " +
                 "JOIN restaurant r ON p.restaurant_id = r.restaurant_id " +
                 "WHERE p.post_id = ? " +

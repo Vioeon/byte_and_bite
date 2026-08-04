@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ public class PostDto {
 
 //    @NotNull(message = "식당을 선택해주세요.")
     private int restaurantId;
+    private int resMemberId;
     private String restaurantName;
     private String restaurantImage;
     private String address;
@@ -69,5 +71,13 @@ public class PostDto {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public boolean canWrite(SessionMemberDto member) {
+        if (member == null) {
+            return false;
+        }
+
+        return member.getRole().equals("USER") || member.getMemberId() == resMemberId;
+    }
 
 }

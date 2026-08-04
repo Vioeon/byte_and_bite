@@ -76,9 +76,8 @@ public class PostController {
                             Model model){
 
         SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
-        if(loginMember != null) {
-            model.addAttribute(("loginMember"), loginMember);
-        }
+
+        model.addAttribute(("loginMember"), loginMember);
 
         // 조회수 처리 - 중복되면 안돼서 HashSet
         Set<Integer> viewPostIds = (Set<Integer>) session.getAttribute("viewPostIds");
