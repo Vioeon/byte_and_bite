@@ -199,6 +199,7 @@ public class PostController {
         model.addAttribute("postForm", post);
         // 수정 여부 구분
         model.addAttribute("edit",true);
+        model.addAttribute("menu", "posts");
         return "post/write";
     }
 

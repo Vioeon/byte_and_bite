@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import net.likelion.bebc25.bytebite.exception.DuplicateEmailException;
+import net.likelion.bebc25.bytebite.exception.DuplicateNicknameException;
 import net.likelion.bebc25.bytebite.member.dto.*;
 import net.likelion.bebc25.bytebite.member.service.MemberService;
 import net.likelion.bebc25.bytebite.member.service.RestaurantService;
@@ -70,6 +71,14 @@ public class MemberController {
             memberService.validateDuplicateEmail(signupDto);
         }catch (DuplicateEmailException e){
             bindingResult.rejectValue("email", "duplicate", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/signup";
+        }
+        // 닉네임 중복 체크
+        try {
+            memberService.validateDuplicateNickname(signupDto);
+        } catch (DuplicateNicknameException e) {
+            bindingResult.rejectValue("nickname", "duplicate", e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
             return "member/signup";
         }

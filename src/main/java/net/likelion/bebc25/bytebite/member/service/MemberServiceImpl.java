@@ -1,6 +1,7 @@
 package net.likelion.bebc25.bytebite.member.service;
 
 import net.likelion.bebc25.bytebite.exception.DuplicateEmailException;
+import net.likelion.bebc25.bytebite.exception.DuplicateNicknameException;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SignupDto;
@@ -38,6 +39,14 @@ public class MemberServiceImpl implements MemberService {
         boolean isDuplicate = memberRepository.existsByEmail(signupDto.getEmail());
         if (isDuplicate) {
             throw new DuplicateEmailException("이미 사용중인 계정입니다.");
+        }
+    }
+
+    @Override
+    public void validateDuplicateNickname(SignupDto signupDto) {
+        boolean isDuplicate = memberRepository.existsByNickname(signupDto.getNickname());
+        if (isDuplicate) {
+            throw new DuplicateNicknameException("이미 사용중인 닉네임입니다.");
         }
     }
 
