@@ -54,13 +54,13 @@ public class PostController {
 
 //        PageDto<PostDto> pageDto = postService.getPosts(page, size, sort, category);
 
-
         model.addAttribute("posts", pageDto.getContent());
         model.addAttribute("page", page);
         model.addAttribute("sort", sort);
         model.addAttribute("category", category);
         model.addAttribute("keyword", keyword);
         model.addAttribute("totalPage", pageDto.getTotalPage());
+        model.addAttribute("menu", "posts");
         return "post/postList";
     }
 
@@ -114,7 +114,7 @@ public class PostController {
         model.addAttribute("page", page);
         model.addAttribute("totalPage", totalPage);
 
-        return "post/detail"; // 템플릿 파일 경로
+        return "post/detailTest"; // 템플릿 파일 경로
     }
 
     @GetMapping("/write")

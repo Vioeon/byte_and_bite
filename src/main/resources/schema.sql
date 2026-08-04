@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS member;
 #
 # SELECT post_id, image
 # FROM post;
-#
+
 # SELECT restaurant_id, rname
 # FROM restaurant;
 #
@@ -77,3 +77,6 @@ CREATE TABLE reply (
                        CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
                        CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
+
+ALTER TABLE post
+    MODIFY COLUMN image TEXT;

@@ -53,9 +53,8 @@
             </div>
         </div>
 
-        <div class="review-image">
-            <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800" alt="리뷰 음식 이미지">
-            <!--            <img th:src="@{/images/{image}(image=${post.image})}" alt="리뷰 음식 이미지">-->
+        <div class="review-image" th:each="image : ${images}">
+            <img th:src="${image}" width="300">
         </div>
 
         <div class="review-content" th:text="${post.content}">
