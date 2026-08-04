@@ -28,6 +28,9 @@ SELECT restaurant_id, rname
 FROM restaurant
 WHERE rname LIKE '%없는식당%';
 
+ALTER TABLE post
+    MODIFY COLUMN image TEXT;
+
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,
                         email VARCHAR(100) NOT NULL UNIQUE,
