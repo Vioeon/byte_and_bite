@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS member;
 # WHERE rname LIKE '%없는식당%';
 
 #ALTER TABLE post
- #   MODIFY COLUMN image TEXT;
+#MODIFY COLUMN image TEXT;
 
 CREATE TABLE member (
                         member_id INT AUTO_INCREMENT PRIMARY KEY,
