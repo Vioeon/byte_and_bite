@@ -108,4 +108,21 @@ public class JdbcReplyRepository implements ReplyRepository {
                 reply.getMemberId()
         );
     }
+
+    // 댓글 삭제
+    @Override
+    public void delete(int replyId, int memberId) {
+
+        String sql = """
+                DELETE FROM reply
+                WHERE reply_id = ?
+                  AND member_id = ?
+                """;
+
+        jdbcTemplate.update(
+                sql,
+                replyId,
+                memberId
+        );
+    }
 }

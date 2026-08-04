@@ -47,12 +47,13 @@ public class PostController {
         if(keyword != null && !keyword.isEmpty()){
             List<PostDto> searchList = postService.searchRestaurant(keyword);
 
-            pageDto = new PageDto<>(searchList, 1, size, searchList.size());
+            pageDto = new PageDto<>(searchList, page, size, searchList.size());
         } else {
             pageDto = postService.getPosts(page, size, sort, category);
         }
 
-//        PageDto<PostDto> pageDto = postService.getPosts(page, size, sort, category);
+        int startPage = ((page - 1) / 5) * 5 + 1;
+        int endPage = Math.min(startPage + 4, pageDto.getTotalPage());
 
         model.addAttribute("posts", pageDto.getContent());
         model.addAttribute("page", page);
@@ -60,6 +61,8 @@ public class PostController {
         model.addAttribute("category", category);
         model.addAttribute("keyword", keyword);
         model.addAttribute("totalPage", pageDto.getTotalPage());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("menu", "posts");
         return "post/postList";
     }
@@ -119,13 +122,14 @@ public class PostController {
 
     @GetMapping("/write")
     public String getWriteForm(@ModelAttribute("postForm") PostDto post,
-                               HttpSession session){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
+                               HttpSession session, Model model){ // 모델에 자동으로 주입까지 됨(postDto 이름으로)
        SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
 
        // 비회원이 리뷰 작성을 누르면 로그인 화면으로
        if(loginMember == null){
            return "redirect:/member/login";
        }
+       model.addAttribute("menu", "posts");
        return "post/write";
     }
 
@@ -199,32 +203,63 @@ public class PostController {
         return "redirect:/posts"; //
     }
 
-    @GetMapping("/edit")
-    public String getEditForm(@RequestParam("id") int id, HttpSession session, Model model){
+    @GetMapping("/{postId}/edit")
+    public String getEditForm(@PathVariable int postId, HttpSession session, Model model){
         SessionMemberDto loginMember = (SessionMemberDto)session.getAttribute("loginMember");
+        // 로그인 확인
         if(loginMember == null){
             return "redirect:/login";
         }
-
-        PostDto post = postService.getPost(id);
-
+        // 기존 게시글 조회
+        PostDto post = postService.getPost(postId);
+        // 작성자, 관리자만 수정 가능
         if(!loginMember.getRole().equals("MANAGER") &&  loginMember.getMemberId()!=post.getMemberId()){
             model.addAttribute("postForm", post);
-            return "/posts";
+            return "redirect:/posts";
         }
         model.addAttribute("postForm", post);
+        // 수정 여부 구분
+        model.addAttribute("edit",true);
         return "post/write";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/{postId}/edit")
     public String editPost(@Valid @ModelAttribute("postForm") PostDto post,
                            BindingResult bindingResult,
+                           @RequestParam(value="images", required = false) MultipartFile[] images,
                            HttpSession session){
         SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
         if(loginMember == null){
             return "redirect:/login";
         }
         PostDto origin = postService.getPost(post.getId());
+
+        String uploadPath =System.getProperty("user.dir") + "/src/main/resources/static/uploads";
+
+        if(images != null && !images[0].isEmpty()) {
+            StringBuilder imgUrl = new StringBuilder();
+            for (int i = 0; i < images.length; i++) {
+                MultipartFile image = images[i];
+
+                String fileName = java.util.UUID.randomUUID() + "_" + image.getOriginalFilename();
+                File saveFile = new File(uploadPath + fileName);
+                try {
+                    image.transferTo(saveFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                imgUrl.append("/uploads").append(fileName);
+
+                if (i < images.length - 1) {
+                    imgUrl.append(",");
+                }
+            }
+            // 새 이미지 저장
+            post.setImage(imgUrl.toString());
+        } else {
+            // 이미지 미선택 시 기존 이미지 유지
+            post.setImage(origin.getImage());
+        }
 
         if(!loginMember.getRole().equals("MANAGER") && loginMember.getMemberId() != origin.getMemberId()){
             return "redirect:/posts";
@@ -238,20 +273,21 @@ public class PostController {
         return "redirect:/posts/" + post.getId();
     }
 
-    @PostMapping("/delete")
-    public String deletePost(@RequestParam int id, HttpSession session){
+    @PostMapping("/{postId}/delete")
+    public String deletePost(@PathVariable int postId,
+                             HttpSession session){
         SessionMemberDto loginMember = (SessionMemberDto) session.getAttribute("loginMember");
 
         if(loginMember == null){
             return "redirect:/login";
         }
 
-        PostDto post = postService.getPost(id);
+        PostDto post = postService.getPost(postId);
         if(!loginMember.getRole().equals("MANAGER") && loginMember.getMemberId() != post.getMemberId()){
             return "redirect:/login";
         }
 
-        postService.removePost(id);
+        postService.removePost(postId);
         return "redirect:/posts";
     }
 
