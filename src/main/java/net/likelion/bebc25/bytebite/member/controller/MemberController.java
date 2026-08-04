@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -139,6 +140,8 @@ public class MemberController {
             // 세션 만료 시 처음으로
             return "redirect:/member/signup";
         }
+//        MultipartFile images = restaurantDto.getImage(); // asdfg
+
         // 회원 + 식당 저장
         memberService.signupWithRestaurant(signupDto, restaurantDto);
 

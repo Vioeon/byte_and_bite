@@ -141,19 +141,3 @@ $RECYCLE.BIN/
 # =========================================================
 HELP.md
 application.properties
-
-# uploads 폴더 내부의 모든 파일 및 하위 폴더를 Git 추적에서 제외
-src/main/resources/static/uploads/**
-
-# restaurant 이미지 허용
-!src/main/resources/static/uploads/
-!src/main/resources/static/uploads/restaurant/
-!src/main/resources/static/uploads/restaurant/**
-
-# news 이미지 허용
-!src/main/resources/static/uploads/news/
-!src/main/resources/static/uploads/news/**
-
-# news 이미지 허용
-!src/main/resources/static/uploads/posts/
-!src/main/resources/static/uploads/posts/**

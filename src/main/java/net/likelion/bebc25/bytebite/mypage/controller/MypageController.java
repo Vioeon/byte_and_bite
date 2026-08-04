@@ -68,6 +68,7 @@ public class MypageController {
         model.addAttribute("restaurantForm", restaurantDto);
         return "mypage/restaurantEdit";
     }
+
     // 식당 정보 수정
     @PostMapping("/restaurant/edit")
     public String restaurantEdit(@Valid @ModelAttribute("restaurantForm") RestaurantDto restaurantDto,
