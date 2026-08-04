@@ -193,11 +193,10 @@ public class JdbcTemplatePostRepository implements PostRepository {
 
         List<PostDto> list =
                 jdbcTemplate.query(sql, searchMapper, "%" + keyword + "%");
-        System.out.println("검색 결과 개수 = " + list.size());
 
         if (list.isEmpty())
             return null;
-        System.out.println("찾은 식당 = " + list.get(0).getRestaurantName());
+
         return list.get(0);
     }
 
