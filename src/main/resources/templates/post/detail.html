@@ -41,9 +41,10 @@
                 <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-02 14:30</span>
             </div>
         </div>
-
-        <div class="review-image" th:each="image : ${images}">
-            <img th:src="${image}" width="300">
+        <div class="review-images">
+            <div class="review-image" th:each="image : ${images}">
+                <img th:src="${image}" width="300">
+            </div>
         </div>
 
         <div class="review-content" th:text="${post.content}">
