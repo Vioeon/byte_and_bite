@@ -48,5 +48,5 @@ public interface PostRepository {
     List<PostDto> findRestaurantNewsByKeyword(String keyword, int offset, int limit);
     int countRestaurantNews(String keyword);
     void updateNews(PostDto post);
-    //    void deleteById(int id);
+    void deleteNewsById(int id);
 }
