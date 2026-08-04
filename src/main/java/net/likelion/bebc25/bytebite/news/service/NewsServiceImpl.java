@@ -113,6 +113,40 @@ public class NewsServiceImpl implements NewsService {
         return new NewPageDto<>(content, validPage, validSize, totalCount, PAGE_BLOCK_SIZE);
     }
 
+    @Override
+    public void editNews(PostDto post, SessionMemberDto loginMember) {
+        PostDto origin = postRepository.findNewsById(post.getId());
+
+        if (!"MANAGER".equals(loginMember.getRole()) || loginMember.getMemberId() != origin.getMemberId()) {
+            throw new IllegalArgumentException("작성자 본인만 수정할 수 있습니다.");
+        }
+
+        MultipartFile[] images = post.getImages();
+
+        if (images != null && images.length == 1 && !images[0].isEmpty()) {
+            // 새로운 image 첨부했을때
+            MultipartFile imageFile = images[0];
+            try {
+                String originalName = imageFile.getOriginalFilename();
+                String extension = originalName.substring(originalName.lastIndexOf("."));
+                String savedName = UUID.randomUUID() + extension;
+
+                Path directory = Paths.get(uploadDir, "news");
+                Files.createDirectories(directory);
+                imageFile.transferTo(directory.resolve(savedName));
+
+                post.setImage("/uploads/news/" + savedName);
+            } catch (IOException e) {
+                throw new RuntimeException("이미지 저장에 실패했습니다.", e);
+            }
+        } else {
+            // 없으면 기존 이미지 경로 유지
+            post.setImage(origin.getImage());
+        }
+
+        postRepository.updateNews(post);
+    }
+
 //
 //    @Override
 //    public void editNews(NewsDto post) {

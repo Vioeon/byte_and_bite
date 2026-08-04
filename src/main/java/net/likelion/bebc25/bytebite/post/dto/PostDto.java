@@ -57,7 +57,6 @@ public class PostDto {
     private String role;
 
     private String image;
-    private String restaurantImage;
     @NotNull
     private MultipartFile[] images;
 

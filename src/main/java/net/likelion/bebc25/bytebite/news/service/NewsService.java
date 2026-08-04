@@ -14,6 +14,6 @@ public interface NewsService {
     void writeNews(PostDto post, SessionMemberDto loginMember); // post
 
     NewPageDto<PostDto> searchNewsByKeyword(String keyword, int page, int size); // keyword 검색
-//    void editNews(NewsDto post); // post
+    void editNews(PostDto post, SessionMemberDto loginMember); // post
 //    void removeNews(int id); // post
 }

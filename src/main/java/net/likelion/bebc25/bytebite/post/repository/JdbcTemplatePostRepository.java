@@ -226,6 +226,7 @@ public class JdbcTemplatePostRepository implements PostRepository {
     private final RowMapper<PostDto> newsDetailMapper = (ResultSet rs, int rowNum) -> {
         return PostDto.builder()
                 .id(rs.getInt("post_id"))
+                .memberId(rs.getInt("member_id"))
                 .restaurantId(rs.getInt("restaurant_id"))
                 .restaurantImage(rs.getString("restaurant_img"))
                 .nickname(rs.getString("nickname"))
@@ -330,5 +331,13 @@ public class JdbcTemplatePostRepository implements PostRepository {
                 "SELECT COUNT(*) FROM post p " +
                         "JOIN restaurant r ON r.restaurant_id = p.restaurant_id " +
                         "WHERE type = 'NEWS' AND r.rname LIKE ?", Integer.class, "%" + keyword + "%");
+    }
+
+    // news 게시물 수정
+    @Override
+    public void updateNews(PostDto post) {
+        jdbcTemplate.update(
+                "UPDATE post SET title = ?, content = ?, image = ? WHERE post_id = ? AND type = 'NEWS'",
+                post.getTitle(), post.getContent(), post.getImage(), post.getId());
     }
 }
