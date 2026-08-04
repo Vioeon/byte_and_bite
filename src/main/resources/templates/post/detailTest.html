@@ -16,28 +16,17 @@
     <!-- 식당 정보 -->
     <section class="restaurant-box">
         <div class="restaurant-image">
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500" alt="식당 이미지">
-            <!--            <img th:src="@{/images/{image}(image=${post.image})}" alt="식당 이미지">-->
+            <img th:src="${post.restaurantImage}" alt="식당 이미지">
         </div>
 
         <div class="restaurant-info">
-            <h1>맛있는 한끼 강남본점</h1>
-            <div class="restaurant-category">
-                한식
-            </div>
+            <h1 th:text="${post.restaurantName}">식당명</h1>
+            <div class="restaurant-category" th:text="${post.categoryName}"></div>
             <div class="restaurant-detail">
-                <p>📍 서울 강남구 테헤란로 123</p>
-                <p>☎ 02-1234-5678</p>
+                <p th:text="'📍' + ${post.address}">주소</p>
+                <p th:text="'☎ ' + ${post.phone}">전화번호</p>
             </div>
-            <!--            식당 정보도 가져와야함-->
-            <!--            <h1 th:text="${post.rname}">맛있는 한끼 강남본점</h1>-->
-            <!--            <div class="restaurant-category" th:text="${post.category}">-->
-            <!--                한식-->
-            <!--            </div>-->
-            <!--            <div class="restaurant-detail">-->
-            <!--                <p th:text="'📍 ' + ${post.address}">📍 서울 강남구 테헤란로 123</p>-->
-            <!--                <p th:text="'☎ ' + ${post.phone}">☎ 02-1234-5678</p>-->
-            <!--            </div>-->
+
         </div>
     </section>
 

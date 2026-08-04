@@ -13,4 +13,6 @@ public interface ReplyRepository {
     void save(ReplyDto reply);
 
     void update(ReplyDto reply);
+
+    void delete(int replyId, int memberId);
 }
