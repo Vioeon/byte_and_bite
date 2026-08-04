@@ -1,5 +1,6 @@
 package net.likelion.bebc25.bytebite.member.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,41 +14,18 @@ import java.util.UUID;
 @Service
 public class FileService {
 
-    private final String uploadPath = "src/main/resources/static/uploads/restaurant/";
-
-    public String save(MultipartFile file) {
-
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
-        try {
-            Path uploadDir = Paths.get(uploadPath);
-
-            // 폴더가 없으면 생성
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
-            // uuid로 파일명 중복 방지
-            String originalFilename = file.getOriginalFilename();
-            String savedFilename = UUID.randomUUID() + "_" + originalFilename;
-
-            // 최종 저장 경로
-            Path path = uploadDir.resolve(savedFilename);
-            Files.copy(file.getInputStream(), path);
-
-            // db 저장
-            return "/uploads/restaurant/" + savedFilename;
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 저장 중 오류가 발생했습니다.", e);
-        }
-    }
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     public void delete(String imagePath) {
         if (imagePath == null || imagePath.isBlank()) {
             return;
         }
         try {
-            Path path = Paths.get("src/main/resources/static" + imagePath);
+            // /uploads/restaurant/abc.png 제거
+            String filePath = imagePath.replace("/uploads/", "");
+
+            Path path = Paths.get(uploadDir, filePath);
             Files.deleteIfExists(path);
 
         } catch (IOException e) {

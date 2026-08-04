@@ -70,7 +70,7 @@
         </h3>
 
         <!-- 댓글 작성 폼 -->
-        <th:block th:if="${session.loginMember != null}">
+        <th:block th:if="${post.canWrite(session.loginMember)}">
             <form th:action="@{/posts/{postId}/replies/write(postId=${post.id})}"
                   method="post"
                   class="reply-form">

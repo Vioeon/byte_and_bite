@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
-    <title>Byte&Bite - 맛집 리뷰</title>
+    <title>Byte&Bite - 맛집 소식</title>
     <link rel="icon" href="/favicon.ico">
     <link rel="stylesheet" th:href="@{/css/postList.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
@@ -42,11 +42,14 @@
         <input type="hidden" name="sort" th:value="${sort}">
 
         <button type="submit" class="btn-search">검색</button>
+        <th:block th:if="${session.loginMember != null and session.loginMember.role.equals('MANAGER')}">
+            <a th:href="@{/news/write}" class="btn-write-link">
+                <button type="button" class="btn-write">소식작성</button>
+            </a>
+        </th:block>
     </form>
 
-    <a th:href="@{/news/write}" class="btn-write-link">
-        <button type="button" class="btn-write">소식작성</button>
-    </a>
+
 
     <!-- 3x3 카드 그리드 -->
     <section class="card-grid">
