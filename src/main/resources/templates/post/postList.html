@@ -15,6 +15,8 @@
         <div class="sort-options">
             <!--     조건별 정렬 버튼 가로 정렬      -->
             <form action="/posts" method="get" style="display: flex; align-items: center; gap: 18px;">
+                <input type="hidden" name="category" th:value="${category}">
+                <input type="hidden" name="keyword" th:value="${keyword}">
                 <label>
                     <input type="radio" name="sort" value="latest" th:checked="${sort == 'latest'}"
                            onchange="this.form.submit()"> 최신순
@@ -28,7 +30,8 @@
     </div>
 
     <!-- 검색바 -->
-    <form class="search-bar" action="/posts" method="GET">
+    <form class="search-bar" th:action="@{/posts}" method="GET">
+        <input type="hidden" name="sort" th:value="${sort}">
         <select class="category-select" name="category" onchange="this.form.submit()">
             <option value="all" th:selected="${category == 'all'}">전체 카테고리</option>
             <option value="KOR" th:selected="${category == 'KOR'}">한식</option>
