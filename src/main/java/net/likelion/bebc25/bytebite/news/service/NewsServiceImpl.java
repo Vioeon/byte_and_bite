@@ -1,11 +1,9 @@
 package net.likelion.bebc25.bytebite.news.service;
 
-import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
 import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import net.likelion.bebc25.bytebite.post.repository.PostRepository;
-import net.likelion.bebc25.bytebite.news.service.NewsService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

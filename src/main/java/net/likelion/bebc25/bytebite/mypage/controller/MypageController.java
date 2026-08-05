@@ -3,7 +3,6 @@ package net.likelion.bebc25.bytebite.mypage.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import net.likelion.bebc25.bytebite.member.dto.LoginDto;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import net.likelion.bebc25.bytebite.member.dto.SessionMemberDto;
@@ -11,7 +10,6 @@ import net.likelion.bebc25.bytebite.member.service.MemberService;
 import net.likelion.bebc25.bytebite.member.service.RestaurantService;
 import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
 import net.likelion.bebc25.bytebite.mypage.service.MypageService;
-import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -71,6 +69,7 @@ public class MypageController {
 
         RestaurantDto restaurantDto = RestaurantService.findByMemberId(loginMember.getMemberId());
         model.addAttribute("restaurantForm", restaurantDto);
+        model.addAttribute("menu", "mypage");
         return "mypage/restaurantEdit";
     }
 

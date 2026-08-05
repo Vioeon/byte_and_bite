@@ -18,7 +18,7 @@
         <section class="restaurant-box">
             <!-- 식당 이미지 -->
             <div class="profile-restaurant-img">
-                <img id="imagePreview" th:src="${restaurantForm.imageUrl}" alt="식당 이미지">
+                <img id="imagePreview" th:src="@{/uploads/restaurant/{image}(image=${restaurantForm.imageUrl})}" alt="식당 이미지">
 
                 <label for="image" class="image-change-btn">식당 이미지 변경</label>
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)">

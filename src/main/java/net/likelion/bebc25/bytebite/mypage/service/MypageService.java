@@ -2,7 +2,6 @@ package net.likelion.bebc25.bytebite.mypage.service;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
-import net.likelion.bebc25.bytebite.post.dto.PostDto;
 
 import java.util.List;
 

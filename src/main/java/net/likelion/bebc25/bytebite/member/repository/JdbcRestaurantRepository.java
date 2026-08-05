@@ -1,13 +1,11 @@
 package net.likelion.bebc25.bytebite.member.repository;
 
-import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.RestaurantDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 
 @Repository
 public class JdbcRestaurantRepository implements RestaurantRepository{

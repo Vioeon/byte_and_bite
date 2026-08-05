@@ -11,16 +11,12 @@ import net.likelion.bebc25.bytebite.post.service.PostService;
 import net.likelion.bebc25.bytebite.reply.dto.ReplyDto;
 import net.likelion.bebc25.bytebite.reply.service.ReplyService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Member;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
