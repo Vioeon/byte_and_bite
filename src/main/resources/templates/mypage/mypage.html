@@ -136,9 +136,9 @@
                         <span class="post-date"
                               th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd')}">2026-07-29</span>
                         <div class="post-actions">
-                            <a th:href="@{/news/{newsId}(newsId=${news.id})}" class="btn-action">수정</a>
-                            <form th:action="@{/news/{newsId}(newsId=${news.id})}" method="post" style="display:inline;">
-                                <button type="submit" class="btn-action">삭제</button>
+                            <a th:href="@{/news/{id}/edit(id=${news.id})}" class="btn-action">수정</a>
+                            <form th:action="@{/news/{id}/delete(id=${news.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn-action" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
                             </form>
                         </div>
                     </div>
