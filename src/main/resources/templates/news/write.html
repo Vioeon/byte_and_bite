@@ -17,8 +17,8 @@
             <h1 th:text="${newsForm.id == 0} ? '소식 등록' : '소식 수정'">리뷰 작성</h1>
             <div class="write-nav">
                 <a th:href="@{/news}">목록으로</a>
-                <span class="divider">|</span>
-                <a th:href="@{/news/write}">새 글 쓰기</a>
+                <span class="divider" th:if="${newsForm.id != 0}">|</span>
+                <a th:if="${newsForm.id != 0}" th:href="@{/news/write}">새 글 쓰기</a>
             </div>
         </div>
 
