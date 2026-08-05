@@ -41,9 +41,11 @@
         <input type="text" class="search-input" name="keyword" placeholder="식당 이름을 입력해주세요.">
 
         <button type="submit" class="btn-search">검색</button>
+        <th:block th:if="${session.loginMember == null or session.loginMember.role == 'USER'}">
             <a th:href="@{/posts/write}" class="btn-write-link">
                 <button type="button" class="btn-write">리뷰작성</button>
             </a>
+        </th:block>
     </form>
 
     <!-- 3x3 카드 그리드 -->
