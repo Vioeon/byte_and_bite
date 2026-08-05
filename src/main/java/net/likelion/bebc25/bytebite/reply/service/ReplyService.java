@@ -3,8 +3,6 @@ package net.likelion.bebc25.bytebite.reply.service;
 import net.likelion.bebc25.bytebite.post.dto.NewPageDto;
 import net.likelion.bebc25.bytebite.reply.dto.ReplyDto;
 
-import java.util.List;
-
 public interface ReplyService {
 
     NewPageDto<ReplyDto> findByPostId(int postId, int page, int size);

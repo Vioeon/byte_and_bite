@@ -2,7 +2,6 @@ package net.likelion.bebc25.bytebite.mypage.repository;
 
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.mypage.dto.mypagePostDto;
-import net.likelion.bebc25.bytebite.post.dto.PostDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;

@@ -3,8 +3,6 @@ package net.likelion.bebc25.bytebite.member.repository;
 import net.likelion.bebc25.bytebite.member.dto.MemberDto;
 import net.likelion.bebc25.bytebite.member.dto.SignupDto;
 
-import java.util.List;
-
 
 public interface MemberRepository {
 

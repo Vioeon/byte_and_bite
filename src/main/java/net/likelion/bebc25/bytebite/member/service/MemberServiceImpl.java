@@ -9,7 +9,6 @@ import net.likelion.bebc25.bytebite.member.repository.MemberRepository;
 import net.likelion.bebc25.bytebite.member.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,12 +24,10 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
-    private final FileService fileService;
 
-    public MemberServiceImpl(@Qualifier("jdbcMemberRepository") MemberRepository memberRepository, RestaurantRepository restaurantRepository, FileService fileService) {
+    public MemberServiceImpl(@Qualifier("jdbcMemberRepository") MemberRepository memberRepository, RestaurantRepository restaurantRepository) {
         this.memberRepository = memberRepository;
         this.restaurantRepository = restaurantRepository;
-        this.fileService = fileService;
     }
 
     @Override
