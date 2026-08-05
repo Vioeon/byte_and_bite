@@ -12,7 +12,7 @@ CREATE TABLE member (
                         password VARCHAR(255) NOT NULL,
                         nickname VARCHAR(50) NOT NULL,
                         role VARCHAR(7) NOT NULL DEFAULT 'USER',
-                        status VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
+                        status VARCHAR(7) NOT NULL DEFAULT 'ACTIVE',
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -55,6 +55,3 @@ CREATE TABLE reply (
                        CONSTRAINT fk_reply_post FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE,
                        CONSTRAINT fk_reply_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
 );
-
-ALTER TABLE post
-    MODIFY COLUMN image TEXT;
