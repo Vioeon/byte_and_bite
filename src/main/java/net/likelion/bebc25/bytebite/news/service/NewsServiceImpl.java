@@ -141,7 +141,7 @@ public class NewsServiceImpl implements NewsService {
             }
         } else {
             // 없으면 기존 이미지 경로 유지
-            post.setImage(origin.getImage());
+            post.setImage(origin.getNewsImage());
         }
 
         postRepository.updateNews(post);
