@@ -46,30 +46,3 @@ VALUES (6, 6, '음식 사진 보니까 정말 맛있어 보이네요.', '2026-08
        (6, 8, '가격대가 어느 정도인지 궁금합니다.', '2026-08-04 12:10:00'),
        (6, 9, '후기 보고 다음 주에 가려고 합니다.', '2026-08-04 12:15:00'),
        (6, 10, '저도 만족했던 식당입니다.', '2026-08-04 12:20:00');
-
-# SELECT *
-# FROM post
-# WHERE type = 'NEWS';
-#
-# SELECT post_id, title, created_at
-# FROM post
-# WHERE type = 'NEWS';
-#
-# SELECT *
-# FROM reply
-# WHERE post_id = 9;
-#
-# SELECT r.rname,
-#        r.category,
-#        r.address,
-#        r.phone,
-#        p.title,
-#        m.nickname,
-#        p.view_count,
-#        p.created_at,
-#        p.content
-# FROM post p
-#          JOIN member m ON p.member_id = m.member_id
-#          JOIN restaurant r ON p.restaurant_id = r.restaurant_id
-# WHERE p.type = 'NEWS'
-# LIMIT 5;
