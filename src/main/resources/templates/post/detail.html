@@ -128,7 +128,7 @@
         <div class="pagination" th:if="${pageResponse != null and not #lists.isEmpty(replyList)}">
             <!-- 이전 -->
             <a th:if="${pageResponse.hasPrev}"
-               th:href="@{/posts/{postId}(postId=${post.id}, page=${pageResponse.page - 1})}">
+               th:href="@{'/posts/' + ${post.id} + '?page=' + ${pageResponse.page - 1} + '#reply-section'}">
                 &laquo; 이전
             </a>
 
@@ -146,7 +146,7 @@
 
             <!-- 다음 -->
             <a th:if="${pageResponse.hasNext}"
-               th:href="@{/posts/{postId}(postId=${post.id}, page=${pageResponse.page + 1})}">
+               th:href="@{'/posts/' + ${post.id} + '?page=' + ${pageResponse.page + 1} + '#reply-section'}">
                 다음 &raquo;
             </a>
         </div>
